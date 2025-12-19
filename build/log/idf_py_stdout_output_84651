@@ -1,0 +1,196 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 18 2025 21:30:29[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=20a4ch (133708) map[0m
+[0;32mI (134) esp_image: segment 1: paddr=00030a74 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (134) esp_image: segment 2: paddr=00030a98 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (146) esp_image: segment 3: paddr=00035bec vaddr=40080000 size=0a42ch ( 42028) load[0m
+[0;32mI (162) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=60128h (393512) map[0m
+[0;32mI (297) esp_image: segment 5: paddr=000a0150 vaddr=4008a42c size=12a18h ( 76312) load[0m
+[0;32mI (341) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (341) boot: Disabling RNG early entropy source...[0m
+[0;32mI (351) cpu_start: Multicore app[0m
+[0;32mI (360) cpu_start: Pro cpu start user code[0m
+[0;32mI (360) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (360) app_init: Application information:[0m
+[0;32mI (363) app_init: Project name:     gnarl[0m
+[0;32mI (367) app_init: App version:      1[0m
+[0;32mI (372) app_init: Compile time:     Dec 18 2025 21:30:22[0m
+[0;32mI (378) app_init: ELF file SHA256:  136f05bfbc78e897...[0m
+[0;32mI (383) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (388) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (393) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (398) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (403) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (410) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (416) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (422) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (428) heap_init: At 3FFC6810 len 000197F0 (101 KiB): DRAM[0m
+[0;32mI (435) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (441) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (447) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (456) spi_flash: detected chip: generic[0m
+[0;32mI (458) spi_flash: flash io: dio[0m
+[0;33mW (463) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (485) coexist: coex firmware version: e727207[0m
+[0;32mI (486) main_task: Started on CPU0[0m
+[0;32mI (486) main_task: Calling app_main()[0m
+[0;32mI (486) GNARL: ==== GNARL boot ====[0m
+[0;32mI (486) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (496) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (496) GNARL: heap free: 233780[0m
+[0;32mI (496) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (506) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: DISABLED[0m
+[0;32mI (516) GNARL: PM configured: min=20 max=80 light_sleep=0[0m
+[0;32mI (536) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (536) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (536) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (536) GNARL: display_init: starting[0m
+[0;32mI (546) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (556) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (556) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (566) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (576) GNARL: pump_active_probe: started (interval=30000ms)[0m
+[0;32mI (576) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (596) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (596) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:ae[0m
+[0;32mI (606) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (946) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (996) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (1256) GNARL: BLE server_init[0m
+[0;32mI (1256) GNARL: BLE services registered[0m
+[0;32mI (1256) GNARL: BLE device name set to 'GNARL'[0m
+[0;32mI (1266) GNARL: NimBLE host task started[0m
+[0;32mI (1266) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1276) main_task: Returned from app_main()[0m
+[0;32mI (1316) GNARL: BLE sync_callback[0m
+[0;32mI (1316) GNARL: BLE addr: 88:13:bf:fd:32:ae[0m
+[0;32mI (1326) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (1326) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (1326) NimBLE: disc_mode=2[0m
+[0;32mI (1326) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (1336) NimBLE: 
+[0m
+[0;32mI (1406) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (1536) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (1556) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (1776) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (1806) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (2156) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (2206) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (2456) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (2526) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (2576) GNARL: CmdGetVersion[0m
+[0;32mI (2606) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (2766) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (3006) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (3406) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (3496) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (3626) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (3756) GNARL: CmdGetVersion[0m
+[0;32mI (3806) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (3836) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (4206) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (4476) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (4606) ADC: ADC voltage: 1933 mV (3866 mV scaled)[0m
+[0;32mI (5516) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (6456) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (7496) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (8036) GNARL: CmdGetVersion[0m
+[0;32mI (8136) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (8466) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;31mE (8496) medtronic: command CE required 2 tries[0m
+[0;32mI (8496) GNARL: pump_active_probe: ok (rssi=-76 status=0x03)[0m
+[0;32mI (8706) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (9026) GNARL: CmdSendAndListen[0m
+[0;32mI (9446) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (10206) rfm95: transmit still not done; mode = 3[0m
+[0;32mI (10486) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (11516) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (12456) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (13496) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (14436) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (15476) ADC: (Conv) Battery voltage: 3866 mV, percentage: 72%[0m
+[0;32mI (18306) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (18306) GNARL: BLE subscribe: attr=0x0012 notify=0[0m
+[0;32mI (18306) GNARL: BLE subscribe: attr=0x0015 notify=0[0m
+[0;32mI (18306) GNARL: BLE disconnected, reason=0x213[0m
+[0;32mI (18316) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (18326) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (18326) NimBLE: disc_mode=2[0m
+[0;32mI (18326) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (18336) NimBLE: 
+[0m
+[0;32mI (21206) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (21886) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (22246) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (23456) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (35286) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (35286) GNARL: BLE subscribe: attr=0x0012 notify=0[0m
+[0;32mI (35286) GNARL: BLE subscribe: attr=0x0015 notify=0[0m
+[0;32mI (35296) GNARL: BLE disconnected, reason=0x213[0m
+[0;32mI (35306) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (35306) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (35316) NimBLE: disc_mode=2[0m
+[0;32mI (35316) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (35326) NimBLE: 
+[0m
+[0;32mI (37156) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (38466) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (39186) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (40366) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (60536) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (60936) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (61336) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (61746) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (62156) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (62556) rfm95: transmit still not done; mode = 3[0m
+[0;32mI (62556) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (62956) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (63356) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (63756) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (64156) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (64556) ADC: ADC voltage: 1933 mV (3866 mV scaled)[0m
+[0;31mE (101136) GNARL: rfspy_command: cannot queue request for command 5[0m
+[0;31mE (104336) GNARL: rfspy_command: cannot queue request for command 2[0m
+[0;31mE (105336) GNARL: rfspy_command: cannot queue request for command 6[0m
+[0;31mE (107366) GNARL: rfspy_command: cannot queue request for command 6[0m
+[0;31mE (109516) GNARL: rfspy_command: cannot queue request for command 2[0m
+[0;31mE (110516) GNARL: rfspy_command: cannot queue request for command 5[0m
+[0;31mE (113026) GNARL: rfspy_command: cannot queue request for command 5[0m
+[0;32mI (114906) rfm95: transmit still not done; mode = 3[0m
+[0;32mI (120536) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (120936) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;31mE (120946) GNARL: rfspy_command: cannot queue request for command 5[0m
+[0;32mI (121336) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (121736) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (122136) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (122536) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (122936) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (123336) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (123736) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (124136) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (124536) ADC: ADC voltage: 1933 mV (3866 mV scaled)[0m

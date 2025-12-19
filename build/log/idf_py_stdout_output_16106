@@ -1,0 +1,102 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader/esp-idf/esptool_py && /Volumes/DataEx/esp/.espressif/python_env/idf5.4_py3.13_env/bin/python /Volumes/DataEx/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader/bootloader.bin
+Bootloader binary size 0x6580 bytes. 0xa80 bytes (9%) free.
+[2/10] No install step for 'bootloader'
+[3/10] Completed 'bootloader'
+[4/10] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/gnarl.c.obj
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c: In function 'get_packet':
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:226:28: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  226 |         reverse_four_bytes(&p->timeout_ms);
+      |                            ^~~~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c: In function 'send_packet':
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:246:27: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  246 |         reverse_two_bytes(&p->delay_ms);
+      |                           ^~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c: In function 'send_and_listen':
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:269:27: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  269 |         reverse_two_bytes(&p->delay_ms);
+      |                           ^~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:270:28: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  270 |         reverse_four_bytes(&p->timeout_ms);
+      |                            ^~~~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:271:27: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  271 |         reverse_two_bytes(&p->preamble_ms);
+      |                           ^~~~~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c: In function 'send_stats':
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:489:28: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  489 |         reverse_four_bytes(&statistics.uptime);
+      |                            ^~~~~~~~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:490:27: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  490 |         reverse_two_bytes(&statistics.packet_rx_count);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c:491:27: warning: taking address of packed member of 'struct <anonymous>' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  491 |         reverse_two_bytes(&statistics.packet_tx_count);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[5/10] Linking C static library esp-idf/main/libmain.a
+[6/10] Generating ld/sections.ld
+[7/10] Linking CXX executable gnarl.elf
+[8/10] Generating binary image from built executable
+esptool.py v4.10.0
+Creating esp32 image...
+Merged 2 ELF sections
+Successfully created esp32 image.
+Generated /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/gnarl.bin
+[9/10] cd /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/esp-idf/esptool_py && /Volumes/DataEx/esp/.espressif/python_env/idf5.4_py3.13_env/bin/python /Volumes/DataEx/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/partition_table/partition-table.bin /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/gnarl.bin
+gnarl.bin binary size 0xa21d0 bytes. Smallest app partition is 0x200000 bytes. 0x15de30 bytes (68%) free.
+[9/10] cd /Volumes/DataEx/esp/esp-idf/components/esptool_py && /opt/homebrew/bin/cmake -D IDF_PATH=/Volumes/DataEx/esp/esp-idf -D "SERIAL_TOOL=/Volumes/DataEx/esp/.espressif/python_env/idf5.4_py3.13_env/bin/python;;/Volumes/DataEx/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build -P /Volumes/DataEx/esp/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32 -p /dev/cu.usbserial-0001 -b 1500000 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 8MB 0x1000 bootloader/bootloader.bin 0x10000 gnarl.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.10.0
+Serial port /dev/cu.usbserial-0001
+Connecting....
+Chip is ESP32-D0WDQ6 (revision v1.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: 88:13:bf:fd:32:ac
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 1500000
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x000b2fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 25984 bytes to 16372...
+Writing at 0x00001000... (100 %)
+Wrote 25984 bytes (16372 compressed) at 0x00001000 in 0.6 seconds (effective 320.1 kbit/s)...
+Hash of data verified.
+Compressed 664016 bytes to 389437...
+Writing at 0x00010000... (4 %)
+Writing at 0x0001ceac... (8 %)
+Writing at 0x00024da0... (12 %)
+Writing at 0x0002b003... (16 %)
+Writing at 0x00037ef4... (20 %)
+Writing at 0x0003d9c4... (25 %)
+Writing at 0x00043557... (29 %)
+Writing at 0x00048cc1... (33 %)
+Writing at 0x0004ef29... (37 %)
+Writing at 0x00054e50... (41 %)
+Writing at 0x0005ab4f... (45 %)
+Writing at 0x00060c11... (50 %)
+Writing at 0x00066a8a... (54 %)
+Writing at 0x0006ca76... (58 %)
+Writing at 0x00073265... (62 %)
+Writing at 0x000793c8... (66 %)
+Writing at 0x0007ec48... (70 %)
+Writing at 0x000849c2... (75 %)
+Writing at 0x0008ac17... (79 %)
+Writing at 0x0009143e... (83 %)
+Writing at 0x0009b399... (87 %)
+Writing at 0x000a1416... (91 %)
+Writing at 0x000a702f... (95 %)
+Writing at 0x000ad30d... (100 %)
+Wrote 664016 bytes (389437 compressed) at 0x00010000 in 5.7 seconds (effective 924.1 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 104...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (104 compressed) at 0x00008000 in 0.1 seconds (effective 345.5 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

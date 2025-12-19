@@ -1,0 +1,583 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 18 2025 21:30:29[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=20420h (132128) map[0m
+[0;32mI (134) esp_image: segment 1: paddr=00030448 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (134) esp_image: segment 2: paddr=0003046c vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (145) esp_image: segment 3: paddr=000355c0 vaddr=40080000 size=0aa58h ( 43608) load[0m
+[0;32mI (162) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=5f4c4h (390340) map[0m
+[0;32mI (296) esp_image: segment 5: paddr=0009f4ec vaddr=4008aa58 size=123ech ( 74732) load[0m
+[0;32mI (339) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (339) boot: Disabling RNG early entropy source...[0m
+[0;32mI (350) cpu_start: Multicore app[0m
+[0;32mI (358) cpu_start: Pro cpu start user code[0m
+[0;32mI (358) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (358) app_init: Application information:[0m
+[0;32mI (361) app_init: Project name:     gnarl[0m
+[0;32mI (366) app_init: App version:      1[0m
+[0;32mI (370) app_init: Compile time:     Dec 18 2025 21:30:22[0m
+[0;32mI (376) app_init: ELF file SHA256:  0300474a38dd708f...[0m
+[0;32mI (382) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (387) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (391) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (396) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (402) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (408) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (414) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (420) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (427) heap_init: At 3FFC66F0 len 00019910 (102 KiB): DRAM[0m
+[0;32mI (433) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (439) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (446) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (454) spi_flash: detected chip: generic[0m
+[0;32mI (456) spi_flash: flash io: dio[0m
+[0;33mW (461) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (483) coexist: coex firmware version: e727207[0m
+[0;32mI (485) main_task: Started on CPU0[0m
+[0;32mI (485) main_task: Calling app_main()[0m
+[0;32mI (485) GNARL: ==== GNARL boot ====[0m
+[0;32mI (485) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (495) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (495) GNARL: heap free: 234068[0m
+[0;32mI (495) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (505) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: DISABLED[0m
+[0;32mI (515) GNARL: PM configured: min=20 max=80 light_sleep=0[0m
+[0;32mI (535) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (535) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (535) GNARL: display_init: starting[0m
+[0;32mI (545) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (555) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (555) GNARL: display_init: shutdown timer started (5s)[0m
+[0;32mI (565) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (585) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (585) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:ae[0m
+[0;32mI (595) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (865) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (945) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (1205) GNARL: BLE server_init[0m
+[0;32mI (1205) GNARL: BLE services registered[0m
+[0;32mI (1205) GNARL: BLE device name set to 'GNARL'[0m
+[0;32mI (1205) GNARL: NimBLE host task started[0m
+[0;32mI (1215) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1215) main_task: Returned from app_main()[0m
+[0;32mI (1265) GNARL: BLE sync_callback[0m
+[0;32mI (1265) GNARL: BLE addr: 88:13:bf:fd:32:ae[0m
+[0;32mI (1275) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (1275) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (1275) NimBLE: disc_mode=2[0m
+[0;32mI (1275) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (1285) NimBLE: 
+[0m
+[0;32mI (1365) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (1375) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (1775) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (1995) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (2175) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (2575) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (2655) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (2845) GNARL: CmdGetVersion[0m
+[0;32mI (2845) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (2845) NimBLE: att_handle=18
+[0m
+[0;32mI (2975) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (3025) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (3375) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (3775) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (4175) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (4575) ADC: ADC voltage: 1933 mV (6185 mV scaled)[0m
+[0;32mI (5705) GNARL: CmdResetRadioConfig[0m
+[0;32mI (5705) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (5705) NimBLE: att_handle=18
+[0m
+[0;32mI (5825) GNARL: CmdUpdateRegister[0m
+[0;32mI (5825) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (5825) NimBLE: att_handle=18
+[0m
+[0;32mI (5945) GNARL: CmdUpdateRegister[0m
+[0;32mI (5945) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (5945) NimBLE: att_handle=18
+[0m
+[0;32mI (6065) GNARL: CmdUpdateRegister[0m
+[0;32mI (6065) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (6065) NimBLE: att_handle=18
+[0m
+[0;32mI (6185) GNARL: CmdUpdateRegister[0m
+[0;32mI (6185) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (6185) NimBLE: att_handle=18
+[0m
+[0;32mI (6305) GNARL: CmdUpdateRegister[0m
+[0;32mI (6305) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (6305) NimBLE: att_handle=18
+[0m
+[0;32mI (6425) GNARL: CmdUpdateRegister[0m
+[0;32mI (6425) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (6425) NimBLE: att_handle=18
+[0m
+[0;32mI (6545) GNARL: CmdUpdateRegister[0m
+[0;32mI (6545) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (6545) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (6545) NimBLE: att_handle=18
+[0m
+[0;32mI (6665) GNARL: CmdSendAndListen[0m
+[0;31mE (6685) gpio: gpio_install_isr_service(502): GPIO isr service already installed[0m
+[0;32mI (7105) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (7105) NimBLE: att_handle=18
+[0m
+[0;32mI (7205) GNARL: CmdSendAndListen[0m
+[0;32mI (12565) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (12575) NimBLE: att_handle=18
+[0m
+[0;32mI (12595) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (12595) GNARL: BLE subscribe: attr=0x0012 notify=0[0m
+[0;32mI (12595) GNARL: BLE subscribe: attr=0x0015 notify=0[0m
+[0;32mI (12595) GNARL: BLE disconnected, reason=0x208[0m
+[0;32mI (12615) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (12615) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (12615) NimBLE: disc_mode=2[0m
+[0;32mI (12625) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (12635) NimBLE: 
+[0m
+[0;32mI (12655) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (13235) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (15345) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (15475) GNARL: CmdGetVersion[0m
+[0;32mI (15475) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (15475) NimBLE: att_handle=18
+[0m
+[0;32mI (15645) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (15775) GNARL: CmdResetRadioConfig[0m
+[0;32mI (15775) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (15775) NimBLE: att_handle=18
+[0m
+[0;32mI (15895) GNARL: CmdUpdateRegister[0m
+[0;32mI (15895) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (15895) NimBLE: att_handle=18
+[0m
+[0;32mI (16015) GNARL: CmdUpdateRegister[0m
+[0;32mI (16015) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16015) NimBLE: att_handle=18
+[0m
+[0;32mI (16165) GNARL: CmdUpdateRegister[0m
+[0;32mI (16165) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16165) NimBLE: att_handle=18
+[0m
+[0;32mI (16315) GNARL: CmdUpdateRegister[0m
+[0;32mI (16315) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16315) NimBLE: att_handle=18
+[0m
+[0;32mI (16465) GNARL: CmdUpdateRegister[0m
+[0;32mI (16465) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (16465) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16465) NimBLE: att_handle=18
+[0m
+[0;32mI (16585) GNARL: CmdUpdateRegister[0m
+[0;32mI (16585) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (16585) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16585) NimBLE: att_handle=18
+[0m
+[0;32mI (16705) GNARL: CmdUpdateRegister[0m
+[0;32mI (16705) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (16705) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16715) NimBLE: att_handle=18
+[0m
+[0;32mI (16825) GNARL: CmdUpdateRegister[0m
+[0;32mI (16825) GNARL: setting frequency to 868356079 Hz[0m
+[0;32mI (16825) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16835) NimBLE: att_handle=18
+[0m
+[0;32mI (16945) GNARL: CmdUpdateRegister[0m
+[0;32mI (16945) GNARL: setting frequency to 868449829 Hz[0m
+[0;32mI (16945) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16955) NimBLE: att_handle=18
+[0m
+[0;32mI (17095) GNARL: CmdUpdateRegister[0m
+[0;32mI (17095) GNARL: setting frequency to 868449829 Hz[0m
+[0;32mI (17095) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17105) NimBLE: att_handle=18
+[0m
+[0;32mI (17215) GNARL: CmdSendAndListen[0m
+[0;32mI (17355) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17365) NimBLE: att_handle=18
+[0m
+[0;32mI (17735) GNARL: CmdUpdateRegister[0m
+[0;32mI (17735) GNARL: setting frequency to 868437377 Hz[0m
+[0;32mI (17735) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17735) NimBLE: att_handle=18
+[0m
+[0;32mI (17855) GNARL: CmdUpdateRegister[0m
+[0;32mI (17855) GNARL: setting frequency to 868249877 Hz[0m
+[0;32mI (17855) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17855) NimBLE: att_handle=18
+[0m
+[0;32mI (17975) GNARL: CmdUpdateRegister[0m
+[0;32mI (17975) GNARL: setting frequency to 868249877 Hz[0m
+[0;32mI (17975) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17975) NimBLE: att_handle=18
+[0m
+[0;32mI (18095) GNARL: CmdSendAndListen[0m
+[0;32mI (18235) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (18235) NimBLE: att_handle=18
+[0m
+[0;32mI (18365) GNARL: CmdUpdateRegister[0m
+[0;32mI (18365) GNARL: setting frequency to 868299682 Hz[0m
+[0;32mI (18365) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (18375) NimBLE: att_handle=18
+[0m
+[0;32mI (18485) GNARL: CmdUpdateRegister[0m
+[0;32mI (18485) GNARL: setting frequency to 868299682 Hz[0m
+[0;32mI (18485) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (18495) NimBLE: att_handle=18
+[0m
+[0;32mI (18605) GNARL: CmdUpdateRegister[0m
+[0;32mI (18605) GNARL: setting frequency to 868299682 Hz[0m
+[0;32mI (18605) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (18615) NimBLE: att_handle=18
+[0m
+[0;32mI (18735) GNARL: CmdSendAndListen[0m
+[0;32mI (18875) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (18875) NimBLE: att_handle=18
+[0m
+[0;32mI (19035) GNARL: CmdUpdateRegister[0m
+[0;32mI (19035) GNARL: setting frequency to 868256103 Hz[0m
+[0;32mI (19035) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (19035) NimBLE: att_handle=18
+[0m
+[0;32mI (19185) GNARL: CmdUpdateRegister[0m
+[0;32mI (19185) GNARL: setting frequency to 868349853 Hz[0m
+[0;32mI (19185) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (19185) NimBLE: att_handle=18
+[0m
+[0;32mI (19305) GNARL: CmdUpdateRegister[0m
+[0;32mI (19305) GNARL: setting frequency to 868349853 Hz[0m
+[0;32mI (19305) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (19305) NimBLE: att_handle=18
+[0m
+[0;32mI (19455) GNARL: CmdSendAndListen[0m
+[0;32mI (19595) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (19595) NimBLE: att_handle=18
+[0m
+[0;32mI (19785) GNARL: CmdUpdateRegister[0m
+[0;32mI (19785) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (19785) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (19795) NimBLE: att_handle=18
+[0m
+[0;32mI (19905) GNARL: CmdUpdateRegister[0m
+[0;32mI (19905) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (19905) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (19915) NimBLE: att_handle=18
+[0m
+[0;32mI (20025) GNARL: CmdUpdateRegister[0m
+[0;32mI (20025) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (20025) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20035) NimBLE: att_handle=18
+[0m
+[0;32mI (20145) GNARL: CmdSendAndListen[0m
+[0;32mI (20285) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20285) NimBLE: att_handle=18
+[0m
+[0;32mI (20425) GNARL: CmdUpdateRegister[0m
+[0;32mI (20425) GNARL: setting frequency to 868356079 Hz[0m
+[0;32mI (20425) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20425) NimBLE: att_handle=18
+[0m
+[0;32mI (20545) GNARL: CmdUpdateRegister[0m
+[0;32mI (20545) GNARL: setting frequency to 868449829 Hz[0m
+[0;32mI (20545) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20545) NimBLE: att_handle=18
+[0m
+[0;32mI (20665) GNARL: CmdUpdateRegister[0m
+[0;32mI (20665) GNARL: setting frequency to 868449829 Hz[0m
+[0;32mI (20665) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20665) NimBLE: att_handle=18
+[0m
+[0;32mI (20785) GNARL: CmdSendAndListen[0m
+[0;32mI (20925) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20925) NimBLE: att_handle=18
+[0m
+[0;32mI (21055) GNARL: CmdUpdateRegister[0m
+[0;32mI (21055) GNARL: setting frequency to 868406250 Hz[0m
+[0;32mI (21055) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21055) NimBLE: att_handle=18
+[0m
+[0;32mI (21205) GNARL: CmdUpdateRegister[0m
+[0;32mI (21205) GNARL: setting frequency to 868500000 Hz[0m
+[0;32mI (21205) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21205) NimBLE: att_handle=18
+[0m
+[0;32mI (21325) GNARL: CmdUpdateRegister[0m
+[0;32mI (21325) GNARL: setting frequency to 868500000 Hz[0m
+[0;32mI (21325) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21325) NimBLE: att_handle=18
+[0m
+[0;32mI (21475) GNARL: CmdSendAndListen[0m
+[0;32mI (21615) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21615) NimBLE: att_handle=18
+[0m
+[0;32mI (21745) GNARL: CmdUpdateRegister[0m
+[0;32mI (21745) GNARL: setting frequency to 868549804 Hz[0m
+[0;32mI (21745) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21755) NimBLE: att_handle=18
+[0m
+[0;32mI (21895) GNARL: CmdUpdateRegister[0m
+[0;32mI (21895) GNARL: setting frequency to 868549804 Hz[0m
+[0;32mI (21895) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21905) NimBLE: att_handle=18
+[0m
+[0;32mI (22015) GNARL: CmdUpdateRegister[0m
+[0;32mI (22015) GNARL: setting frequency to 868549804 Hz[0m
+[0;32mI (22015) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22025) NimBLE: att_handle=18
+[0m
+[0;32mI (22135) GNARL: CmdSendAndListen[0m
+[0;32mI (22275) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22275) NimBLE: att_handle=18
+[0m
+[0;32mI (22405) GNARL: CmdUpdateRegister[0m
+[0;32mI (22405) GNARL: setting frequency to 868506225 Hz[0m
+[0;32mI (22405) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22415) NimBLE: att_handle=18
+[0m
+[0;32mI (22525) GNARL: CmdUpdateRegister[0m
+[0;32mI (22525) GNARL: setting frequency to 868599975 Hz[0m
+[0;32mI (22525) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22535) NimBLE: att_handle=18
+[0m
+[0;32mI (22645) GNARL: CmdUpdateRegister[0m
+[0;32mI (22645) GNARL: setting frequency to 868599975 Hz[0m
+[0;32mI (22655) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22655) NimBLE: att_handle=18
+[0m
+[0;32mI (22765) GNARL: CmdSendAndListen[0m
+[0;32mI (23375) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (23375) NimBLE: att_handle=18
+[0m
+[0;32mI (23495) GNARL: CmdUpdateRegister[0m
+[0;32mI (23495) GNARL: setting frequency to 868649780 Hz[0m
+[0;32mI (23495) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (23495) NimBLE: att_handle=18
+[0m
+[0;32mI (23615) GNARL: CmdUpdateRegister[0m
+[0;32mI (23615) GNARL: setting frequency to 868649780 Hz[0m
+[0;32mI (23615) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (23615) NimBLE: att_handle=18
+[0m
+[0;32mI (23735) GNARL: CmdUpdateRegister[0m
+[0;32mI (23735) GNARL: setting frequency to 868649780 Hz[0m
+[0;32mI (23735) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (23735) NimBLE: att_handle=18
+[0m
+[0;32mI (23855) GNARL: CmdSendAndListen[0m
+[0;32mI (24455) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (24455) NimBLE: att_handle=18
+[0m
+[0;32mI (24575) GNARL: CmdUpdateRegister[0m
+[0;32mI (24575) GNARL: setting frequency to 868680908 Hz[0m
+[0;32mI (24575) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (24585) NimBLE: att_handle=18
+[0m
+[0;32mI (24695) GNARL: CmdUpdateRegister[0m
+[0;32mI (24695) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (24695) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (24705) NimBLE: att_handle=18
+[0m
+[0;32mI (24815) GNARL: CmdUpdateRegister[0m
+[0;32mI (24815) GNARL: setting frequency to 868399658 Hz[0m
+[0;32mI (24815) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (24825) NimBLE: att_handle=18
+[0m
+[0;32mI (24935) GNARL: CmdSendAndListen[0m
+[0;32mI (25025) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (25025) NimBLE: att_handle=18
+[0m
+[0;32mI (25365) GNARL: CmdSendAndListen[0m
+[0;32mI (25605) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (25605) NimBLE: att_handle=18
+[0m
+[0;32mI (27865) GNARL: CmdSendAndListen[0m
+[0;32mI (27945) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (27945) NimBLE: att_handle=18
+[0m
+[0;32mI (28315) GNARL: CmdSendAndListen[0m
+[0;32mI (28505) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (28505) NimBLE: att_handle=18
+[0m
+[0;32mI (33685) GNARL: CmdSendAndListen[0m
+[0;32mI (33815) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (33825) NimBLE: att_handle=18
+[0m
+[0;32mI (34135) GNARL: CmdSendAndListen[0m
+[0;32mI (34275) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (34275) NimBLE: att_handle=18
+[0m
+[0;32mI (34615) GNARL: CmdSendAndListen[0m
+[0;32mI (34755) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (34755) NimBLE: att_handle=18
+[0m
+[0;32mI (35065) GNARL: CmdSendAndListen[0m
+[0;32mI (35175) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (35185) NimBLE: att_handle=18
+[0m
+[0;32mI (35545) GNARL: CmdSendAndListen[0m
+[0;32mI (35635) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (35635) NimBLE: att_handle=18
+[0m
+[0;32mI (35975) GNARL: CmdSendAndListen[0m
+[0;32mI (36185) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (36185) NimBLE: att_handle=18
+[0m
+[0;32mI (36515) GNARL: CmdSendAndListen[0m
+[0;32mI (36655) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (36655) NimBLE: att_handle=18
+[0m
+[0;32mI (36965) GNARL: CmdSendAndListen[0m
+[0;32mI (37105) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (37105) NimBLE: att_handle=18
+[0m
+[0;32mI (37445) GNARL: CmdSendAndListen[0m
+[0;32mI (37585) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (37585) NimBLE: att_handle=18
+[0m
+[0;32mI (37895) GNARL: CmdSendAndListen[0m
+[0;32mI (38035) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (38035) NimBLE: att_handle=18
+[0m
+[0;32mI (38355) GNARL: CmdSendAndListen[0m
+[0;32mI (38495) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (38495) NimBLE: att_handle=18
+[0m
+[0;32mI (38805) GNARL: CmdSendAndListen[0m
+[0;32mI (38945) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (38945) NimBLE: att_handle=18
+[0m
+[0;32mI (39255) GNARL: CmdSendAndListen[0m
+[0;32mI (39395) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (39395) NimBLE: att_handle=18
+[0m
+[0;32mI (39705) GNARL: CmdSendAndListen[0m
+[0;32mI (39845) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (39845) NimBLE: att_handle=18
+[0m
+[0;32mI (40155) GNARL: CmdSendAndListen[0m
+[0;32mI (40295) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (40295) NimBLE: att_handle=18
+[0m
+[0;32mI (40615) GNARL: CmdSendAndListen[0m
+[0;32mI (40755) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (40755) NimBLE: att_handle=18
+[0m
+[0;32mI (41065) GNARL: CmdSendAndListen[0m
+[0;32mI (41205) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (41205) NimBLE: att_handle=18
+[0m
+[0;32mI (41515) GNARL: CmdSendAndListen[0m
+[0;32mI (41655) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (41655) NimBLE: att_handle=18
+[0m
+[0;32mI (41965) GNARL: CmdSendAndListen[0m
+[0;32mI (42105) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (42105) NimBLE: att_handle=18
+[0m
+[0;32mI (42415) GNARL: CmdSendAndListen[0m
+[0;32mI (42555) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (42555) NimBLE: att_handle=18
+[0m
+[0;32mI (42905) GNARL: CmdSendAndListen[0m
+[0;32mI (43045) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (43045) NimBLE: att_handle=18
+[0m
+[0;32mI (43385) GNARL: CmdSendPacket[0m
+[0;32mI (43405) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (43405) NimBLE: att_handle=18
+[0m
+[0;32mI (43985) GNARL: CmdSendAndListen[0m
+[0;32mI (44065) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (44065) NimBLE: att_handle=18
+[0m
+[0;32mI (44435) GNARL: CmdSendAndListen[0m
+[0;32mI (44965) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (44965) NimBLE: att_handle=18
+[0m
+[0;32mI (45075) GNARL: CmdSendAndListen[0m
+[0;32mI (45215) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (45215) NimBLE: att_handle=18
+[0m
+[0;32mI (60535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (60935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (60995) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (60995) NimBLE: att_handle=21
+[0m
+[0;32mI (61335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (61735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (62135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (62535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (62935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (63335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (63735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (64135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (64535) ADC: ADC voltage: 1933 mV (6185 mV scaled)[0m
+[0;32mI (120535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (120625) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (120625) NimBLE: att_handle=21
+[0m
+[0;32mI (120935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (121335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (121735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (122135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (122535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (122935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (123335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (123735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (124135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (124535) ADC: ADC voltage: 1933 mV (6185 mV scaled)[0m
+[0;32mI (180315) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (180315) NimBLE: att_handle=21
+[0m
+[0;32mI (180535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (180935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (181335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (181735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (182135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (182535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (182935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (183335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (183735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (184135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (184535) ADC: ADC voltage: 1933 mV (6185 mV scaled)[0m
+[0;32mI (240035) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (240035) NimBLE: att_handle=21
+[0m
+[0;32mI (240535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (240935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (241335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (241735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (242135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (242535) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (242935) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (243335) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (243735) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (244135) ADC: ADC raw: 4095, voltage: 1933 mV[0m
+[0;32mI (244535) ADC: ADC voltage: 1933 mV (6185 mV scaled)[0m
