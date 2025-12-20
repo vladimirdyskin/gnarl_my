@@ -7,6 +7,11 @@
 
 #include <driver/gpio.h>
 
+// Runtime brownout disable (ESP32). Prefer fixing power integrity, but this
+// prevents brownout-triggered resets when voltage dips are expected.
+#include "soc/rtc_cntl_reg.h"
+#include "soc/soc.h"
+
 #include "adc.h"
 #include "display.h"
 #include "gnarl.h"
@@ -49,6 +54,12 @@ static const char *reset_reason_str(esp_reset_reason_t reason)
 void app_main(void)
 {
 	esp_log_level_set("*", ESP_LOG_INFO);
+
+	// Disable brownout detector early to avoid resets.
+	// Note: This can mask real power problems. If you can, keep it enabled and
+	// fix the supply/battery/decoupling instead.
+	WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+
 	ESP_LOGI(TAG, "==== GNARL boot ====");
 	esp_reset_reason_t reason = esp_reset_reason();
 	ESP_LOGI(TAG, "reset reason: %d (%s)", (int)reason, reset_reason_str(reason));
