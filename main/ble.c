@@ -9,6 +9,7 @@
 #include <host/util/util.h>
 #include <nimble/nimble_port.h>
 #include <nimble/nimble_port_freertos.h>
+#include <os/os_mbuf.h>
 #include <nvs.h>
 #include <nvs_flash.h>
 #include <services/gap/ble_svc_gap.h>
@@ -76,6 +77,9 @@ static int timer_tick_notify_state;
 static uint8_t timer_tick;
 static void timer_tick_callback(void *);
 
+static uint16_t battery_level_notify_handle;
+static int battery_level_notify_state;
+
 static const struct ble_gatt_svc_def service_list[] = {
 	{
 		.type = BLE_GATT_SVC_TYPE_PRIMARY,
@@ -122,7 +126,8 @@ static const struct ble_gatt_svc_def service_list[] = {
 			{
 				.uuid = &battery_level_uuid.u,
 				.access_cb = battery_level_access,
-				.flags = BLE_GATT_CHR_F_READ,
+				.val_handle = &battery_level_notify_handle,
+				.flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_NOTIFY,
 			},
 			{.uuid = NULL},
 		},
@@ -161,6 +166,7 @@ static void server_init(void)
 
 static void advertise(void)
 {
+	// Make advertising restart resilient: don't rely on asserts.
 	struct ble_hs_adv_fields fields, fields_ext;
 	char short_name[6]; // 5 plus zero byte
 	memset(&fields, 0, sizeof(fields));
@@ -194,8 +200,8 @@ static void advertise(void)
 	if (err)
 	{
 		ESP_LOGE(TAG, "ble_gap_adv_set_fields err %d", err);
+		return;
 	}
-	assert(!err);
 
 	if (!fields.name_is_complete)
 	{
@@ -219,7 +225,13 @@ static void advertise(void)
 	adv.disc_mode = BLE_GAP_DISC_MODE_GEN;
 
 	err = ble_gap_adv_start(addr_type, 0, BLE_HS_FOREVER, &adv, handle_gap_event, 0);
-	assert(!err);
+	if (err)
+	{
+		// Common after quick reconnects: stack is still unwinding previous state.
+		ESP_LOGW(TAG, "ble_gap_adv_start failed err=%d; stopping adv and will retry on ADV_COMPLETE", err);
+		ble_gap_adv_stop();
+		return;
+	}
 
 	ESP_LOGD(TAG, "advertising started");
 }
@@ -236,6 +248,10 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 			return 0;
 		}
 		connected = true;
+		// Force client to re-subscribe each connection.
+		response_count_notify_state = 0;
+		timer_tick_notify_state = 0;
+		battery_level_notify_state = 0;
 		int8_t rssi;
 		ble_gap_conn_rssi(e->connect.conn_handle, &rssi);
 		set_ble_rssi(rssi);
@@ -248,6 +264,11 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 		break;
 	case BLE_GAP_EVENT_DISCONNECT:
 		connected = false;
+		connection_handle = 0;
+		response_count_notify_state = 0;
+		timer_tick_notify_state = 0;
+		battery_level_notify_state = 0;
+		gnarl_cancel_current_command();
 		set_ble_disconnected();
 		ESP_LOGI(TAG, "BLE disconnected, reason=0x%x", e->disconnect.reason);
 		advertise();
@@ -268,6 +289,12 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 		{
 			ESP_LOGD(TAG, "notify %d for timer tick", e->subscribe.cur_notify);
 			timer_tick_notify_state = e->subscribe.cur_notify;
+			break;
+		}
+		if (e->subscribe.attr_handle == battery_level_notify_handle)
+		{
+			ESP_LOGD(TAG, "notify %d for battery level", e->subscribe.cur_notify);
+			battery_level_notify_state = e->subscribe.cur_notify;
 			break;
 		}
 		ESP_LOGD(TAG, "notify %d for unknown handle %04X", e->subscribe.cur_notify, e->subscribe.attr_handle);
@@ -310,14 +337,19 @@ static uint16_t data_out_len;
 static void response_notify(void)
 {
 	response_count++;
-	if (!response_count_notify_state)
+	if (!connected || !response_count_notify_state)
 	{
 		ESP_LOGD(TAG, "not notifying for response count %d", response_count);
 		return;
 	}
 	struct os_mbuf *om = ble_hs_mbuf_from_flat(&response_count, sizeof(response_count));
 	int err = ble_gattc_notify_custom(connection_handle, response_count_notify_handle, om);
-	assert(!err);
+	if (err)
+	{
+		os_mbuf_free_chain(om);
+		ESP_LOGW(TAG, "response notify failed err=%d (connected=%d)", err, connected);
+		return;
+	}
 	ESP_LOGD(TAG, "notify for response count %d", response_count);
 }
 
@@ -341,7 +373,21 @@ static void timer_tick_callback(void *arg)
 {
 	timer_tick++;
 	ESP_LOGD(TAG, "timer tick %d", timer_tick);
-	if (!timer_tick_notify_state)
+
+	// Periodic battery level notification (standard Battery Service 0x180F).
+	if (connected && battery_level_notify_state)
+	{
+		uint8_t battery_level = battery_percent(get_battery_voltage());
+		struct os_mbuf *om_batt = ble_hs_mbuf_from_flat(&battery_level, sizeof(battery_level));
+		int err_batt = ble_gattc_notify_custom(connection_handle, battery_level_notify_handle, om_batt);
+		if (err_batt)
+		{
+			os_mbuf_free_chain(om_batt);
+			ESP_LOGW(TAG, "battery level notify failed err=%d (connected=%d)", err_batt, connected);
+		}
+	}
+
+	if (!connected || !timer_tick_notify_state)
 	{
 		if (connected)
 		{
@@ -351,7 +397,12 @@ static void timer_tick_callback(void *arg)
 	}
 	struct os_mbuf *om = ble_hs_mbuf_from_flat(&timer_tick, sizeof(timer_tick));
 	int err = ble_gattc_notify_custom(connection_handle, timer_tick_notify_handle, om);
-	assert(!err);
+	if (err)
+	{
+		os_mbuf_free_chain(om);
+		ESP_LOGW(TAG, "timer tick notify failed err=%d (connected=%d)", err, connected);
+		return;
+	}
 	ESP_LOGD(TAG, "notify for timer tick");
 }
 

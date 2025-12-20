@@ -23,9 +23,14 @@
 // Battery sense ADC pin (Heltec WiFi LoRa 32 V2)
 #define BATTERY_ADC	GPIO_NUM_37
 
+// Heltec WiFi LoRa 32 V2.x routes VBAT sense through a switch controlled by GPIO21.
+// Keeping GPIO21 LOW enables VEXT (3V3) and connects the VBAT divider to the ADC.
+#define BATTERY_SENSE_EN		GPIO_NUM_21
+#define BATTERY_SENSE_EN_ACTIVE	0
+
 // VBAT voltage divider (in kΩ): R1 from VBAT to ADC, R2 from ADC to GND.
-// Heltec WiFi LoRa 32 V2 uses ~100k/100k => VBAT ~= ADC * 2.
-#define VDIV_R1_KOHM	100
+// Heltec WiFi LoRa 32 V2.x uses ~220k/100k => VBAT ~= ADC * 3.2.
+#define VDIV_R1_KOHM	220
 #define VDIV_R2_KOHM	100
 
 // Comment out the following line for a TTGO ESP LoRa v1 module w/o OLED

@@ -11,6 +11,7 @@
 #include <freertos/task.h>
 
 #include "4b6b.h"
+#include "adc.h"
 #include "commands.h"
 #include "display.h"
 #include "medtronic.h"
@@ -44,6 +45,17 @@ static QueueHandle_t request_queue;
 static TaskHandle_t gnarl_loop_handle = NULL;
 
 static TaskHandle_t pump_probe_handle = NULL;
+
+static volatile bool cancel_current_command;
+
+void gnarl_cancel_current_command(void)
+{
+	cancel_current_command = true;
+	if (gnarl_loop_handle != NULL)
+	{
+		xTaskNotifyGive(gnarl_loop_handle);
+	}
+}
 
 static SemaphoreHandle_t radio_mutex;
 
@@ -248,7 +260,10 @@ static void get_packet(const uint8_t *buf, int len)
 
 	in_get_packet = 1;
 	int n = receive(rx_buf.packet, sizeof(rx_buf.packet), p->timeout_ms);
-	rx_common(n, read_rssi());
+	if (!cancel_current_command)
+	{
+		rx_common(n, read_rssi());
+	}
 	in_get_packet = 0;
 
 	radio_unlock();
@@ -316,9 +331,21 @@ static void send_and_listen(const uint8_t *buf, int len)
 	for (int retries = p->retry_count + 1; retries > 0; retries--)
 	{
 		tries_used++;
+		if (cancel_current_command)
+		{
+			break;
+		}
 		send(p->packet, len, repeat_count, delay_ms);
+		if (cancel_current_command)
+		{
+			break;
+		}
 		n = receive(rx_buf.packet, sizeof(rx_buf.packet), p->timeout_ms);
 		rssi = read_rssi();
+		if (cancel_current_command)
+		{
+			break;
+		}
 		if (n != 0)
 		{
 			break;
@@ -344,7 +371,10 @@ static void send_and_listen(const uint8_t *buf, int len)
 				 (unsigned long)p->timeout_ms,
 				 n);
 	}
-	rx_common(n, rssi);
+	if (!cancel_current_command)
+	{
+		rx_common(n, rssi);
+	}
 }
 
 static void pump_bg_listen_task(void *unused)
@@ -531,7 +561,14 @@ static void update_register(const uint8_t *buf, int len)
 	{
 	case 0x09 ... 0x0B:
 		fr[addr - 0x09] = value;
+		// set_frequency() hits SPI; serialize with other radio users (pump probe, bg listen, etc).
+		if (!radio_lock(portMAX_DELAY))
+		{
+			ESP_LOGW(TAG, "update_register: radio mutex unavailable");
+			break;
+		}
 		check_frequency();
+		radio_unlock();
 		break;
 	default:
 		ESP_LOGD(TAG, "update_register: addr %02X ignored", addr);
@@ -587,12 +624,18 @@ static void send_stats()
 	// From rfm95:
 	statistics.packet_rx_count = rx_packet_count();
 	statistics.packet_tx_count = tx_packet_count();
+	// Use placeholders for battery info (keeps protocol size stable).
+	// placeholder0: battery voltage in mV, placeholder1: battery percent (0..100).
+	statistics.placeholder0 = (uint16_t)get_battery_voltage();
+	statistics.placeholder1 = (uint16_t)battery_percent(get_battery_voltage());
 	ESP_LOGD(TAG, "send_stats len %d uptime %lu rx %d tx %d",
 			 sizeof(statistics), statistics.uptime,
 			 statistics.packet_rx_count, statistics.packet_tx_count);
 	reverse_four_bytes(&statistics.uptime);
 	reverse_two_bytes(&statistics.packet_rx_count);
 	reverse_two_bytes(&statistics.packet_tx_count);
+	reverse_two_bytes(&statistics.placeholder0);
+	reverse_two_bytes(&statistics.placeholder1);
 	send_bytes((const uint8_t *)&statistics, sizeof(statistics));
 }
 
@@ -653,6 +696,9 @@ static void gnarl_loop(void *unused)
 	{
 		rfspy_request_t req;
 		xQueueReceive(request_queue, &req, portMAX_DELAY);
+
+		// New command begins; clear any previous cancellation request.
+		cancel_current_command = false;
 
 		switch (req.command)
 		{

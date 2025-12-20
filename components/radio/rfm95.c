@@ -23,6 +23,18 @@
 
 static uint16_t current_preamble_bytes = DEFAULT_PREAMBLE_BYTES;
 
+void rfm95_set_tx_power_dbm(int8_t dbm) {
+	// PA_BOOST output: 2..17 dBm range (SX1276 typical).
+	if (dbm < 2) {
+		dbm = 2;
+	}
+	if (dbm > 17) {
+		dbm = 17;
+	}
+	uint8_t output_power = (uint8_t)(dbm - 2) & 0x0F;
+	write_register(REG_PA_CONFIG, PA_BOOST | PA_MAX_POWER_7 | output_power);
+}
+
 void rfm95_set_preamble_bytes(uint16_t preamble_bytes) {
 	if (preamble_bytes == 0) {
 		preamble_bytes = DEFAULT_PREAMBLE_BYTES;
@@ -175,7 +187,7 @@ void rfm95_init(void) {
 	write_register(REG_PACKET_CONFIG_2, PACKET_MODE | 0);
 
 	// use PA_BOOST output pin
-	write_register(REG_PA_CONFIG, PA_BOOST | 8);
+	rfm95_set_tx_power_dbm(17);
 }
 
 static inline bool fifo_empty(void) {

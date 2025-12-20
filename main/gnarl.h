@@ -39,6 +39,11 @@ void send_bytes(const uint8_t *buf, int count);
 connection_stats_t* get_connection_stats(void);
 void set_rssi(int value, connection_stat radio);
 
+// Called by the BLE layer when the connection drops.
+// Used to abort long-running commands (e.g. CmdSendAndListen timeouts)
+// so the system becomes responsive immediately after reconnect.
+void gnarl_cancel_current_command(void);
+
 // ISR-safe: request an immediate active pump probe (updates pump RSSI).
 // Returns 1 if a higher-priority task was woken.
 int gnarl_request_pump_probe_isr(void);

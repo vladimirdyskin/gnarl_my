@@ -1,0 +1,488 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 18 2025 21:30:29[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (42) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (50) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (59) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=20d3ch (134460) map[0m
+[0;32mI (135) esp_image: segment 1: paddr=00030d64 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (135) esp_image: segment 2: paddr=00030d88 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (146) esp_image: segment 3: paddr=00035edc vaddr=40080000 size=0a13ch ( 41276) load[0m
+[0;32mI (163) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=60644h (394820) map[0m
+[0;32mI (298) esp_image: segment 5: paddr=000a066c vaddr=4008a13c size=12d08h ( 77064) load[0m
+[0;32mI (342) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (342) boot: Disabling RNG early entropy source...[0m
+[0;32mI (352) cpu_start: Multicore app[0m
+[0;32mI (361) cpu_start: Pro cpu start user code[0m
+[0;32mI (361) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (361) app_init: Application information:[0m
+[0;32mI (364) app_init: Project name:     gnarl[0m
+[0;32mI (368) app_init: App version:      1[0m
+[0;32mI (373) app_init: Compile time:     Dec 18 2025 21:30:22[0m
+[0;32mI (379) app_init: ELF file SHA256:  71e6e9e9aac7fa48...[0m
+[0;32mI (385) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (389) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (394) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (399) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (404) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (411) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (417) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (423) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (429) heap_init: At 3FFC6820 len 000197E0 (101 KiB): DRAM[0m
+[0;32mI (436) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (442) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (448) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (457) spi_flash: detected chip: generic[0m
+[0;32mI (459) spi_flash: flash io: dio[0m
+[0;33mW (464) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (486) coexist: coex firmware version: e727207[0m
+[0;32mI (487) main_task: Started on CPU0[0m
+[0;32mI (487) main_task: Calling app_main()[0m
+[0;32mI (487) GNARL: ==== GNARL boot ====[0m
+[0;32mI (487) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (497) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (497) GNARL: heap free: 233764[0m
+[0;32mI (507) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (507) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: DISABLED[0m
+[0;32mI (517) GNARL: PM configured: min=20 max=80 light_sleep=0[0m
+[0;32mI (537) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (537) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (537) ADC: probe GPIO36: raw=0 mv=107 scaled=342[0m
+[0;32mI (537) ADC: probe GPIO37: raw=2289 mv=1147 scaled=3670[0m
+[0;32mI (547) ADC: probe GPIO38: raw=115 mv=159 scaled=508[0m
+[0;32mI (547) ADC: probe GPIO39: raw=0 mv=107 scaled=342[0m
+[0;32mI (557) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (557) GNARL: display_init: starting[0m
+[0;32mI (567) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (577) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (577) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (587) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (597) GNARL: pump_active_probe: started (interval=30000ms)[0m
+[0;32mI (597) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (627) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (627) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:aa[0m
+[0;32mI (637) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (967) ADC: ADC raw: 2287, voltage: 1146 mV[0m
+[0;32mI (1017) ADC: (Conv) Battery voltage: 3667 mV, percentage: 55%[0m
+[0;32mI (1257) GNARL: BLE server_init[0m
+[0;32mI (1257) GNARL: BLE services registered[0m
+[0;32mI (1257) GNARL: BLE device name set to 'GNARL'[0m
+[0;32mI (1257) GNARL: NimBLE host task started[0m
+[0;32mI (1267) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1267) main_task: Returned from app_main()[0m
+[0;32mI (1317) GNARL: BLE sync_callback[0m
+[0;32mI (1317) GNARL: BLE addr: 88:13:bf:fd:32:aa[0m
+[0;32mI (1327) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (1327) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (1327) NimBLE: disc_mode=2[0m
+[0;32mI (1327) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (1337) NimBLE: 
+[0m
+[0;32mI (1427) ADC: ADC raw: 2283, voltage: 1144 mV[0m
+[0;32mI (1457) ADC: (Conv) Battery voltage: 3667 mV, percentage: 55%[0m
+[0;32mI (1827) ADC: ADC raw: 2289, voltage: 1147 mV[0m
+[0;32mI (2227) ADC: ADC raw: 2286, voltage: 1145 mV[0m
+[0;32mI (2487) ADC: (Conv) Battery voltage: 3667 mV, percentage: 55%[0m
+[0;32mI (2627) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (3027) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (3427) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (3517) ADC: (Conv) Battery voltage: 3667 mV, percentage: 55%[0m
+[0;32mI (3827) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (4227) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (4447) ADC: (Conv) Battery voltage: 3667 mV, percentage: 55%[0m
+[0;32mI (4627) ADC: ADC voltage: 1145 mV (3664 mV scaled; chosen=3664 mV)[0m
+[0;32mI (4677) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (5507) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (5737) GNARL: pump_bg_listen: got packet len=11 rssi=-41[0m
+[0;32mI (5837) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (6467) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (7497) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;31mE (8327) medtronic: command 8D required 2 tries[0m
+[0;32mI (8427) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;31mE (9067) medtronic: command CE required 2 tries[0m
+[0;32mI (9077) GNARL: pump_active_probe: ok (rssi=-66 status=0x03)[0m
+[0;32mI (9157) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (9487) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (10517) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (10557) ADC: ADC raw: 2288, voltage: 1146 mV[0m
+[0;32mI (10957) ADC: ADC raw: 2352, voltage: 1175 mV[0m
+[0;32mI (11357) ADC: ADC raw: 2354, voltage: 1176 mV[0m
+[0;32mI (11447) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (11757) ADC: ADC raw: 2352, voltage: 1175 mV[0m
+[0;32mI (12157) ADC: ADC raw: 2355, voltage: 1177 mV[0m
+[0;32mI (12477) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (12557) ADC: ADC raw: 2354, voltage: 1176 mV[0m
+[0;32mI (12957) ADC: ADC raw: 2355, voltage: 1177 mV[0m
+[0;32mI (13357) ADC: ADC raw: 2354, voltage: 1176 mV[0m
+[0;32mI (13407) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (13757) ADC: ADC raw: 2427, voltage: 1209 mV[0m
+[0;32mI (14157) ADC: ADC raw: 2421, voltage: 1207 mV[0m
+[0;32mI (14437) ADC: (Conv) Battery voltage: 3664 mV, percentage: 55%[0m
+[0;32mI (14557) ADC: ADC voltage: 1179 mV (3772 mV scaled; chosen=3772 mV)[0m
+[0;32mI (14667) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (15497) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (18207) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (18437) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (19467) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (20397) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (20557) ADC: ADC raw: 2496, voltage: 1241 mV[0m
+[0;32mI (20957) ADC: ADC raw: 2495, voltage: 1240 mV[0m
+[0;32mI (21357) ADC: ADC raw: 2497, voltage: 1241 mV[0m
+[0;32mI (21427) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (21757) ADC: ADC raw: 2487, voltage: 1237 mV[0m
+[0;32mI (22157) ADC: ADC raw: 2497, voltage: 1241 mV[0m
+[0;32mI (22457) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (22557) ADC: ADC raw: 2493, voltage: 1239 mV[0m
+[0;32mI (22957) ADC: ADC raw: 2489, voltage: 1238 mV[0m
+[0;32mI (23357) ADC: ADC raw: 2486, voltage: 1236 mV[0m
+[0;32mI (23387) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (23757) ADC: ADC raw: 2480, voltage: 1234 mV[0m
+[0;32mI (24157) ADC: ADC raw: 2496, voltage: 1241 mV[0m
+[0;32mI (24417) ADC: (Conv) Battery voltage: 3772 mV, percentage: 64%[0m
+[0;32mI (24557) ADC: ADC voltage: 1238 mV (3961 mV scaled; chosen=3961 mV)[0m
+[0;32mI (24647) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (25377) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (26407) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (27437) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (28367) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (29397) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (30427) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (30557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (30957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (31357) ADC: ADC raw: 2708, voltage: 1337 mV[0m
+[0;32mI (31357) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (31757) ADC: ADC raw: 2700, voltage: 1333 mV[0m
+[0;32mI (32157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (32387) ADC: (Conv) Battery voltage: 3961 mV, percentage: 80%[0m
+[0;32mI (32557) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (32957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (33357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (33757) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (34157) ADC: ADC raw: 2701, voltage: 1334 mV[0m
+[0;32mI (34557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (35747) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (36387) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;31mE (36657) medtronic: command CE required 2 tries[0m
+[0;32mI (36667) GNARL: pump_active_probe: ok (rssi=-63 status=0x03)[0m
+[0;32mI (36717) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (37347) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (38237) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (38377) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (39307) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (40337) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (40557) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (40957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (41357) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (41367) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (41757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (42157) ADC: ADC raw: 2701, voltage: 1334 mV[0m
+[0;32mI (42297) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (42557) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (42957) ADC: ADC raw: 2701, voltage: 1334 mV[0m
+[0;32mI (43327) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (43357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (43757) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (44157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (44357) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (44557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (45287) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (46317) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (47347) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (48277) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (49307) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (50337) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (50557) ADC: ADC raw: 2001, voltage: 1016 mV[0m
+[0;32mI (50957) ADC: ADC raw: 1999, voltage: 1015 mV[0m
+[0;32mI (51357) ADC: ADC raw: 2001, voltage: 1016 mV[0m
+[0;32mI (51757) ADC: ADC raw: 2001, voltage: 1016 mV[0m
+[0;32mI (52157) ADC: ADC raw: 2001, voltage: 1016 mV[0m
+[0;32mI (52557) ADC: ADC raw: 2001, voltage: 1016 mV[0m
+[0;32mI (52957) ADC: ADC raw: 2000, voltage: 1015 mV[0m
+[0;32mI (53357) ADC: ADC raw: 2000, voltage: 1015 mV[0m
+[0;32mI (53507) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (53757) ADC: ADC raw: 2000, voltage: 1015 mV[0m
+[0;32mI (54157) ADC: ADC raw: 2001, voltage: 1016 mV[0m
+[0;32mI (54247) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;31mE (54427) medtronic: command CE required 2 tries[0m
+[0;32mI (54427) GNARL: pump_active_probe: ok (rssi=-64 status=0x03)[0m
+[0;32mI (54487) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (54557) ADC: ADC voltage: 1015 mV (3248 mV scaled; chosen=3248 mV)[0m
+[0;32mI (54717) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (55247) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (56277) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (57307) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (58237) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (59267) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (60297) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (60557) ADC: ADC raw: 1882, voltage: 962 mV[0m
+[0;32mI (60957) ADC: ADC raw: 1865, voltage: 954 mV[0m
+[0;32mI (61227) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (61357) ADC: ADC raw: 1869, voltage: 956 mV[0m
+[0;32mI (61757) ADC: ADC raw: 1872, voltage: 957 mV[0m
+[0;32mI (62157) ADC: ADC raw: 1866, voltage: 955 mV[0m
+[0;32mI (62257) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (62557) ADC: ADC raw: 1872, voltage: 957 mV[0m
+[0;32mI (62957) ADC: ADC raw: 1871, voltage: 957 mV[0m
+[0;32mI (63287) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (63357) ADC: ADC raw: 1871, voltage: 957 mV[0m
+[0;32mI (63757) ADC: ADC raw: 1865, voltage: 954 mV[0m
+[0;32mI (64157) ADC: ADC raw: 1859, voltage: 951 mV[0m
+[0;32mI (64217) ADC: (Conv) Battery voltage: 3248 mV, percentage: 20%[0m
+[0;32mI (64557) ADC: ADC voltage: 956 mV (3059 mV scaled; chosen=3059 mV)[0m
+[0;32mI (64647) ADC: (Conv) Battery voltage: 3059 mV, percentage: 4%[0m
+[0;32mI (65277) ADC: (Conv) Battery voltage: 3059 mV, percentage: 4%[0m
+[0;32mI (66207) ADC: (Conv) Battery voltage: 3059 mV, percentage: 4%[0m
+[0;32mI (67237) ADC: (Conv) Battery voltage: 3059 mV, percentage: 4%[0m
+[0;32mI (68267) ADC: (Conv) Battery voltage: 3059 mV, percentage: 4%[0m
+[0;32mI (70557) ADC: ADC raw: 1862, voltage: 953 mV[0m
+[0;32mI (70957) ADC: ADC raw: 1870, voltage: 956 mV[0m
+[0;32mI (71357) ADC: ADC raw: 1859, voltage: 951 mV[0m
+[0;32mI (71757) ADC: ADC raw: 1866, voltage: 955 mV[0m
+[0;32mI (72157) ADC: ADC raw: 1869, voltage: 956 mV[0m
+[0;32mI (72557) ADC: ADC raw: 1871, voltage: 957 mV[0m
+[0;32mI (72957) ADC: ADC raw: 1869, voltage: 956 mV[0m
+[0;32mI (73357) ADC: ADC raw: 1863, voltage: 953 mV[0m
+[0;32mI (73757) ADC: ADC raw: 1861, voltage: 952 mV[0m
+[0;32mI (74157) ADC: ADC raw: 1862, voltage: 953 mV[0m
+[0;32mI (74557) ADC: ADC voltage: 954 mV (3052 mV scaled; chosen=3052 mV)[0m
+[0;32mI (77237) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (80557) ADC: ADC raw: 2640, voltage: 1306 mV[0m
+[0;32mI (80957) ADC: ADC raw: 2640, voltage: 1306 mV[0m
+[0;32mI (81357) ADC: ADC raw: 2699, voltage: 1333 mV[0m
+[0;32mI (81757) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (82157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (82557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (82957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (83357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (83757) ADC: ADC raw: 2703, voltage: 1335 mV[0m
+[0;32mI (84157) ADC: ADC raw: 2702, voltage: 1334 mV[0m
+[0;32mI (84557) ADC: ADC voltage: 1329 mV (4252 mV scaled; chosen=4252 mV)[0m
+[0;31mE (85337) medtronic: command CE required 2 tries[0m
+[0;32mI (85337) GNARL: pump_active_probe: ok (rssi=-67 status=0x03)[0m
+[0;32mI (89897) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (90127) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (90557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (90957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (91057) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (91357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (91757) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (92087) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (92157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (92557) ADC: ADC raw: 2702, voltage: 1334 mV[0m
+[0;32mI (92957) ADC: ADC raw: 2694, voltage: 1331 mV[0m
+[0;32mI (93017) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (93357) ADC: ADC raw: 2703, voltage: 1335 mV[0m
+[0;32mI (93757) ADC: ADC raw: 2700, voltage: 1333 mV[0m
+[0;32mI (94047) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (94157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (94557) ADC: ADC voltage: 1334 mV (4268 mV scaled; chosen=4268 mV)[0m
+[0;32mI (94577) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (95007) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (96037) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (97067) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (97997) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (99027) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (99957) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (100557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (100957) ADC: ADC raw: 2702, voltage: 1334 mV[0m
+[0;32mI (100987) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (101357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (101757) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (102017) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (102157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (102557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (102947) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (102957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (103357) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (103757) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (103977) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (104157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (104557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (104607) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (104937) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (110557) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (110957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (111357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (111757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (112157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (112557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (112957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (113357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (113757) ADC: ADC raw: 2709, voltage: 1338 mV[0m
+[0;32mI (114157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (114557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (116237) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (120557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;31mE (120787) medtronic: command CE required 2 tries[0m
+[0;32mI (120787) GNARL: pump_active_probe: ok (rssi=-80 status=0x03)[0m
+[0;32mI (120957) ADC: ADC raw: 2703, voltage: 1335 mV[0m
+[0;32mI (121357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (121757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (122157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (122557) ADC: ADC raw: 2699, voltage: 1333 mV[0m
+[0;32mI (122957) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (123357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (123757) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (124157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (124557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (130557) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (130957) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (131357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (131757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (132157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (132557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (132957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (133357) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (133757) ADC: ADC raw: 2708, voltage: 1337 mV[0m
+[0;32mI (134157) ADC: ADC raw: 2699, voltage: 1333 mV[0m
+[0;32mI (134557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (140557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (140957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (141357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (141757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (142157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (142557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (142957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (143357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (143757) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (144157) ADC: ADC raw: 2701, voltage: 1334 mV[0m
+[0;32mI (144557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (150557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (150957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (151367) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;31mE (151697) medtronic: command CE required 2 tries[0m
+[0;32mI (151707) GNARL: pump_active_probe: ok (rssi=-90 status=0x03)[0m
+[0;32mI (151767) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (152167) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (152567) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (152967) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (153367) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (153767) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (154167) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (154567) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (155237) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (160557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (160957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (161357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (161757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (162157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (162557) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (162957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (163357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (163757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (164157) ADC: ADC raw: 2693, voltage: 1330 mV[0m
+[0;32mI (164557) ADC: ADC voltage: 1334 mV (4268 mV scaled; chosen=4268 mV)[0m
+[0;32mI (170557) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (170957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (171357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (171757) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (172157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (172557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (172957) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (173357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (173757) ADC: ADC raw: 2703, voltage: 1335 mV[0m
+[0;32mI (174157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (174557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (180557) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (180957) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (181357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (181767) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (182167) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (182577) ADC: ADC raw: 2697, voltage: 1332 mV[0m
+[0;31mE (182607) medtronic: command CE required 2 tries[0m
+[0;32mI (182617) GNARL: pump_active_probe: ok (rssi=-86 status=0x03)[0m
+[0;32mI (182977) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (183377) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (183777) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (184177) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (184577) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (190557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (190957) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (191357) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (191757) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (192157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (192557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (192957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (193357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (193757) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (194157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (194237) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (194557) ADC: ADC voltage: 1336 mV (4275 mV scaled; chosen=4275 mV)[0m
+[0;32mI (200557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (200957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (201357) ADC: ADC raw: 2697, voltage: 1332 mV[0m
+[0;32mI (201757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (202157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (202557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (202957) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (203357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (203757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (204157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (204557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (210557) ADC: ADC raw: 2708, voltage: 1337 mV[0m
+[0;32mI (210957) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (211357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (211757) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (212157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (212557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (212957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (213357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (213757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (214157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (214557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (220557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (220957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (221357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (221757) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (222157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (222557) ADC: ADC raw: 2699, voltage: 1333 mV[0m
+[0;32mI (222957) ADC: ADC raw: 2697, voltage: 1332 mV[0m
+[0;32mI (223357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (223757) ADC: ADC raw: 2699, voltage: 1333 mV[0m
+[0;32mI (224157) ADC: ADC raw: 2701, voltage: 1334 mV[0m
+[0;32mI (224557) ADC: ADC voltage: 1334 mV (4268 mV scaled; chosen=4268 mV)[0m
+[0;32mI (230557) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (230957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (231357) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (231757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (232157) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (232557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (232957) ADC: ADC raw: 2698, voltage: 1333 mV[0m
+[0;32mI (233237) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (233357) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (233757) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (234157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (234557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;32mI (240557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (240957) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (241357) ADC: ADC raw: 2695, voltage: 1331 mV[0m
+[0;32mI (241757) ADC: ADC raw: 2707, voltage: 1337 mV[0m
+[0;32mI (242157) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (242557) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (242957) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;32mI (243357) ADC: ADC raw: 2706, voltage: 1336 mV[0m
+[0;31mE (243527) medtronic: command CE required 2 tries[0m
+[0;32mI (243537) GNARL: pump_active_probe: ok (rssi=0 status=0x03)[0m
+[0;32mI (243757) ADC: ADC raw: 2704, voltage: 1335 mV[0m
+[0;32mI (244157) ADC: ADC raw: 2705, voltage: 1336 mV[0m
+[0;32mI (244557) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m

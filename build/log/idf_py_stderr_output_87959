@@ -1,0 +1,39 @@
+[0;33m--- esp-idf-monitor 1.8.0 on /dev/cu.usbserial-0001 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x40080400: [0;33m_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40082079: [0;33mpanic_abort[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m454[0m
+[0m--- 0x4009390d: [0;33mesp_system_abort[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_system/port/esp_system_chip.c[0m[0m:[1;31m87[0m
+[0m--- 0x4009afc5: [0;33m__assert_func[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/newlib/assert.c[0m[0m:[1;31m80[0m
+[0m--- 0x400879dd: [0;33mspi_device_transmit[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_driver_spi/src/gpspi/spi_master.c[0m[0m:[1;31m1289[0m
+[0m--- 0x400dbc9a: [0;33mwrite_burst[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/spi.c[0m[0m:[1;31m79[0m
+[0m--- 0x400dbafd: [0;33mset_frequency[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/rfm95.c[0m[0m:[1;31m445[0m
+[0m--- 0x400dabcd: [0;33mcheck_frequency[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m511[0m
+[0m--- 0x400dac5a: [0;33mupdate_register[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m534[0m
+[0m--- 0x400db389: [0;33mgnarl_loop[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m681[0m
+[0m--- 0x400943e5: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m139[0m
+[0m--- 0x40080400: [0;33m_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40080400: [0;33m_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x40082079: [0;33mpanic_abort[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m454[0m
+[0m--- 0x4009390d: [0;33mesp_system_abort[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_system/port/esp_system_chip.c[0m[0m:[1;31m87[0m
+[0m--- 0x4009afc5: [0;33m__assert_func[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/newlib/assert.c[0m[0m:[1;31m80[0m
+[0m--- 0x400879dd: [0;33mspi_device_transmit[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_driver_spi/src/gpspi/spi_master.c[0m[0m:[1;31m1289[0m
+[0m--- 0x400dbc9a: [0;33mwrite_burst[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/spi.c[0m[0m:[1;31m79[0m
+[0m--- 0x400dbafd: [0;33mset_frequency[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/rfm95.c[0m[0m:[1;31m445[0m
+[0m--- 0x400dabcd: [0;33mcheck_frequency[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m511[0m
+[0m--- 0x400dac5a: [0;33mupdate_register[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m534[0m
+[0m--- 0x400db389: [0;33mgnarl_loop[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m681[0m
+[0m--- 0x400943e5: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m139[0m
+[0m--- 0x40082079: [0;33mpanic_abort[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_system/panic.c[0m[0m:[1;31m454[0m
+[0m--- 0x4009390d: [0;33mesp_system_abort[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_system/port/esp_system_chip.c[0m[0m:[1;31m87[0m
+[0m--- 0x4009afc5: [0;33m__assert_func[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/newlib/assert.c[0m[0m:[1;31m80[0m
+[0m--- 0x400879dd: [0;33mspi_device_transmit[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/esp_driver_spi/src/gpspi/spi_master.c[0m[0m:[1;31m1289[0m
+[0m--- 0x400dbbc2: [0;33mread_register[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/spi.c[0m[0m:[1;31m45[0m
+[0m--- 0x400db6d1: [0;33mread_mode[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/rfm95.c[0m[0m:[1;31m72[0m
+[0m--- (inlined by) [0;33mwait_for_transmit_done[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/rfm95.c[0m[0m:[1;31m238[0m
+[0m--- 0x400dba42: [0;33mtransmit[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/radio/rfm95.c[0m[0m:[1;31m286[0m
+[0m--- 0x400dbf35: [0;33mperform[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/medtronic/commands.c[0m[0m:[1;31m151[0m
+[0m--- 0x400dc0e8: [0;33mpump_wakeup[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/medtronic/commands.c[0m[0m:[1;31m344[0m
+[0m--- 0x400dae86: [0;33mpump_active_probe_task[0m[0m at [0;32m/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/main/gnarl.c[0m[0m:[1;31m440[0m
+[0m--- 0x400943e5: [0;33mvPortTaskWrapper[0m[0m at [0;32m/Volumes/DataEx/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m139[0m
+[0m--- 0x40080400: [0;33m_init[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m

@@ -59,6 +59,11 @@
 
 // REG_PA_CONFIG
 #define PA_BOOST            (1 << 7)
+#define PA_MAX_POWER_7      (7 << 4)
+
+// Set TX output power in dBm (PA_BOOST path).
+// For SX1276/RFM95, valid range is typically 2..17 dBm.
+void rfm95_set_tx_power_dbm(int8_t dbm);
 
 // REG_LNA
 #define LNA_GAIN_MAX		(1 << 5)
