@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include <esp_nimble_hci.h>
+#include <esp_pm.h>
 #include <esp_timer.h>
 #include <host/ble_gap.h>
 #include <host/util/util.h>
@@ -67,6 +68,33 @@ static ble_gatt_access_fn battery_level_access;
 
 static bool connected;
 static uint16_t connection_handle;
+
+static esp_pm_lock_handle_t ble_no_light_sleep_lock;
+
+static void ble_set_no_light_sleep(bool enabled)
+{
+	if (ble_no_light_sleep_lock == NULL)
+	{
+		return;
+	}
+
+	if (enabled)
+	{
+		esp_err_t err = esp_pm_lock_acquire(ble_no_light_sleep_lock);
+		if (err != ESP_OK)
+		{
+			ESP_LOGW(TAG, "esp_pm_lock_acquire(NO_LIGHT_SLEEP) failed: %s", esp_err_to_name(err));
+		}
+	}
+	else
+	{
+		esp_err_t err = esp_pm_lock_release(ble_no_light_sleep_lock);
+		if (err != ESP_OK)
+		{
+			ESP_LOGW(TAG, "esp_pm_lock_release(NO_LIGHT_SLEEP) failed: %s", esp_err_to_name(err));
+		}
+	}
+}
 
 static uint16_t response_count_notify_handle;
 static int response_count_notify_state;
@@ -166,6 +194,9 @@ static void server_init(void)
 
 static void advertise(void)
 {
+	// While advertising, keep light sleep disabled so iAPS can reliably discover us.
+	ble_set_no_light_sleep(true);
+
 	// Make advertising restart resilient: don't rely on asserts.
 	struct ble_hs_adv_fields fields, fields_ext;
 	char short_name[6]; // 5 plus zero byte
@@ -200,6 +231,8 @@ static void advertise(void)
 	if (err)
 	{
 		ESP_LOGE(TAG, "ble_gap_adv_set_fields err %d", err);
+		// Don't hold the lock if we aren't actually advertising.
+		ble_set_no_light_sleep(false);
 		return;
 	}
 
@@ -230,6 +263,8 @@ static void advertise(void)
 		// Common after quick reconnects: stack is still unwinding previous state.
 		ESP_LOGW(TAG, "ble_gap_adv_start failed err=%d; stopping adv and will retry on ADV_COMPLETE", err);
 		ble_gap_adv_stop();
+		// Don't hold the lock if adv did not start.
+		ble_set_no_light_sleep(false);
 		return;
 	}
 
@@ -248,6 +283,8 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 			return 0;
 		}
 		connected = true;
+		// Once connected, allow light sleep again.
+		ble_set_no_light_sleep(false);
 		// Force client to re-subscribe each connection.
 		response_count_notify_state = 0;
 		timer_tick_notify_state = 0;
@@ -325,6 +362,7 @@ static void sync_callback(void)
 	ESP_LOGI(TAG, "BLE addr: %02x:%02x:%02x:%02x:%02x:%02x",
 			 addr[5], addr[4], addr[3], addr[2], addr[1], addr[0]);
 
+	ESP_LOGI(TAG, "BLE starting advertising");
 	advertise();
 }
 
@@ -586,6 +624,15 @@ void gnarl_init(void)
 {
 	start_gnarl_task();
 	ESP_LOGI(TAG, "gnarl_init: NVS + NimBLE");
+
+	// Create a PM lock to keep advertising discoverable while still allowing
+	// light sleep when connected/idle.
+	esp_err_t pm_err = esp_pm_lock_create(ESP_PM_NO_LIGHT_SLEEP, 0, "ble_adv", &ble_no_light_sleep_lock);
+	if (pm_err != ESP_OK)
+	{
+		ble_no_light_sleep_lock = NULL;
+		ESP_LOGW(TAG, "esp_pm_lock_create(NO_LIGHT_SLEEP) failed: %s", esp_err_to_name(pm_err));
+	}
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 	nimble_port_init();

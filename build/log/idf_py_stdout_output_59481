@@ -1,0 +1,466 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 18 2025 21:30:29[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (42) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (50) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (59) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (82) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=20d9ch (134556) map[0m
+[0;32mI (135) esp_image: segment 1: paddr=00030dc4 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (135) esp_image: segment 2: paddr=00030de8 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (147) esp_image: segment 3: paddr=00035f3c vaddr=40080000 size=0a0dch ( 41180) load[0m
+[0;32mI (163) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=60638h (394808) map[0m
+[0;32mI (298) esp_image: segment 5: paddr=000a0660 vaddr=4008a0dc size=12d68h ( 77160) load[0m
+[0;32mI (342) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (342) boot: Disabling RNG early entropy source...[0m
+[0;32mI (353) cpu_start: Multicore app[0m
+[0;32mI (361) cpu_start: Pro cpu start user code[0m
+[0;32mI (361) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (361) app_init: Application information:[0m
+[0;32mI (364) app_init: Project name:     gnarl[0m
+[0;32mI (369) app_init: App version:      1[0m
+[0;32mI (373) app_init: Compile time:     Dec 18 2025 21:30:22[0m
+[0;32mI (379) app_init: ELF file SHA256:  432b46372d25666d...[0m
+[0;32mI (385) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (390) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (394) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (399) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (404) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (411) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (417) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (423) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (430) heap_init: At 3FFC6828 len 000197D8 (101 KiB): DRAM[0m
+[0;32mI (436) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (442) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (449) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (457) spi_flash: detected chip: generic[0m
+[0;32mI (459) spi_flash: flash io: dio[0m
+[0;33mW (464) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (486) coexist: coex firmware version: e727207[0m
+[0;32mI (488) main_task: Started on CPU0[0m
+[0;32mI (488) main_task: Calling app_main()[0m
+[0;32mI (488) GNARL: ==== GNARL boot ====[0m
+[0;32mI (488) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (498) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (498) GNARL: heap free: 233756[0m
+[0;32mI (498) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (508) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: ENABLED[0m
+[0;32mI (518) GNARL: PM configured: min=20 max=80 light_sleep=1[0m
+[0;32mI (538) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (538) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (538) GNARL: display_init: starting[0m
+[0;32mI (538) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (548) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (558) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (558) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (568) GNARL: pump_active_probe: started (interval=30000ms)[0m
+[0;32mI (578) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (598) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (598) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:aa[0m
+[0;32mI (598) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (988) ADC: (Conv) Battery voltage: 3846 mV, percentage: 70%[0m
+[0;32mI (1238) GNARL: BLE server_init[0m
+[0;32mI (1248) GNARL: BLE services registered[0m
+[0;32mI (1248) GNARL: BLE device name set to 'GNARL'[0m
+[0;32mI (1248) GNARL: NimBLE host task started[0m
+[0;32mI (1248) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1258) main_task: Returned from app_main()[0m
+[0;32mI (1298) GNARL: BLE sync_callback[0m
+[0;32mI (1308) GNARL: BLE addr: 88:13:bf:fd:32:aa[0m
+[0;32mI (1308) GNARL: BLE starting advertising[0m
+[0;32mI (1308) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (1318) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (1318) NimBLE: disc_mode=2[0m
+[0;32mI (1318) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (1328) NimBLE: 
+[0m
+[0;32mI (1538) ADC: ADC voltage: 1182 mV (3782 mV scaled; chosen=3782 mV)[0m
+[0;32mI (1688) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (2138) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (2308) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (2608) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (2738) GNARL: CmdGetVersion[0m
+[0;32mI (2738) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (2738) NimBLE: att_handle=18
+[0m
+[0;32mI (2938) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (3278) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (4408) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (5538) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (6668) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (7808) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;31mE (8488) medtronic: command CE required 2 tries[0m
+[0;32mI (8498) GNARL: pump_active_probe: ok (rssi=-106 status=0x03)[0m
+[0;32mI (8948) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (10078) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (11208) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (11388) GNARL: CmdResetRadioConfig[0m
+[0;32mI (11388) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11388) NimBLE: att_handle=18
+[0m
+[0;32mI (11538) GNARL: CmdUpdateRegister[0m
+[0;32mI (11538) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11538) NimBLE: att_handle=18
+[0m
+[0;32mI (11658) GNARL: CmdUpdateRegister[0m
+[0;32mI (11658) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11658) NimBLE: att_handle=18
+[0m
+[0;32mI (11778) GNARL: CmdUpdateRegister[0m
+[0;32mI (11778) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11778) NimBLE: att_handle=18
+[0m
+[0;32mI (11898) GNARL: CmdUpdateRegister[0m
+[0;32mI (11898) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11898) NimBLE: att_handle=18
+[0m
+[0;32mI (12018) GNARL: CmdUpdateRegister[0m
+[0;32mI (12028) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (12028) NimBLE: att_handle=18
+[0m
+[0;32mI (12148) GNARL: CmdUpdateRegister[0m
+[0;32mI (12348) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (13488) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (13568) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (13568) NimBLE: att_handle=18
+[0m
+[0;32mI (13678) GNARL: CmdUpdateRegister[0m
+[0;32mI (13678) GNARL: setting frequency to 868349853 Hz[0m
+[0;32mI (13678) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (13688) NimBLE: att_handle=18
+[0m
+[0;32mI (13798) GNARL: CmdSendAndListen[0m
+[0;32mI (13948) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (13948) NimBLE: att_handle=18
+[0m
+[0;32mI (14318) GNARL: CmdSendAndListen[0m
+[0;32mI (14398) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (14398) NimBLE: att_handle=18
+[0m
+[0;32mI (14628) ADC: (Conv) Battery voltage: 3782 mV, percentage: 65%[0m
+[0;32mI (14738) GNARL: CmdSendAndListen[0m
+[0;32mI (14988) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (14988) NimBLE: att_handle=18
+[0m
+[0;32mI (17058) GNARL: CmdSendAndListen[0m
+[0;32mI (17138) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17138) NimBLE: att_handle=18
+[0m
+[0;32mI (17478) GNARL: CmdSendAndListen[0m
+[0;32mI (17678) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17678) NimBLE: att_handle=18
+[0m
+[0;32mI (31538) ADC: ADC voltage: 1193 mV (3817 mV scaled; chosen=3817 mV)[0m
+[0;32mI (39568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (47078) GNARL: CmdSendAndListen[0m
+[0;32mI (47168) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (47168) NimBLE: att_handle=18
+[0m
+[0;32mI (47538) GNARL: CmdSendAndListen[0m
+[0;32mI (48068) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (48068) NimBLE: att_handle=18
+[0m
+[0;32mI (48228) GNARL: CmdSendAndListen[0m
+[0;32mI (48368) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (48368) NimBLE: att_handle=18
+[0m
+[0;32mI (60968) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (60968) NimBLE: att_handle=21
+[0m
+[0;32mI (61538) ADC: ADC voltage: 1198 mV (3833 mV scaled; chosen=3833 mV)[0m
+[0;31mE (69408) medtronic: command CE required 2 tries[0m
+[0;32mI (69408) GNARL: pump_active_probe: ok (rssi=-69 status=0x03)[0m
+[0;32mI (78568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (91538) ADC: ADC voltage: 1188 mV (3801 mV scaled; chosen=3801 mV)[0m
+[0;32mI (94958) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;31mE (95878) medtronic: command CE required 2 tries[0m
+[0;32mI (95888) GNARL: pump_active_probe: ok (rssi=-58 status=0x03)[0m
+[0;32mI (96098) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (97238) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (98378) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (99518) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (100648) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (101778) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (102908) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (104048) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (105188) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (106328) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (107458) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (108598) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (109208) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (109208) GNARL: BLE subscribe: attr=0x0012 notify=0[0m
+[0;32mI (109208) GNARL: BLE subscribe: attr=0x0015 notify=0[0m
+[0;32mI (109218) GNARL: BLE disconnected, reason=0x208[0m
+[0;32mI (109228) GNARL: BLE advertising: name='GNARL' short='GNARL'[0m
+[0;32mI (109228) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (109228) NimBLE: disc_mode=2[0m
+[0;32mI (109238) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (109248) NimBLE: 
+[0m
+[0;32mI (109268) GNARL: BLE connected, handle=0x0000[0m
+[0;32mI (109728) ADC: (Conv) Battery voltage: 3801 mV, percentage: 66%[0m
+[0;32mI (109888) GNARL: BLE subscribe: attr=0x0008 notify=0[0m
+[0;32mI (110218) GNARL: BLE subscribe: attr=0x0012 notify=1[0m
+[0;32mI (110348) GNARL: CmdGetVersion[0m
+[0;32mI (110348) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (110348) NimBLE: att_handle=18
+[0m
+[0;32mI (110518) GNARL: BLE subscribe: attr=0x0015 notify=1[0m
+[0;32mI (117568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (120688) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (120688) NimBLE: att_handle=21
+[0m
+[0;32mI (121538) ADC: ADC voltage: 1280 mV (4096 mV scaled; chosen=4096 mV)[0m
+[0;31mE (126798) medtronic: command CE required 2 tries[0m
+[0;32mI (126808) GNARL: pump_active_probe: ok (rssi=-72 status=0x03)[0m
+[0;32mI (151538) ADC: ADC voltage: 1296 mV (4147 mV scaled; chosen=4147 mV)[0m
+[0;32mI (156568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;31mE (157718) medtronic: command CE required 2 tries[0m
+[0;32mI (157718) GNARL: pump_active_probe: ok (rssi=-92 status=0x03)[0m
+[0;32mI (180378) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (180378) NimBLE: att_handle=21
+[0m
+[0;32mI (181538) ADC: ADC voltage: 1319 mV (4220 mV scaled; chosen=4220 mV)[0m
+[0;32mI (195568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (211538) ADC: ADC voltage: 1333 mV (4265 mV scaled; chosen=4265 mV)[0m
+[0;31mE (218638) medtronic: command CE required 2 tries[0m
+[0;32mI (218638) GNARL: pump_active_probe: ok (rssi=-104 status=0x03)[0m
+[0;32mI (234568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (240018) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (240018) NimBLE: att_handle=21
+[0m
+[0;32mI (241538) ADC: ADC voltage: 1329 mV (4252 mV scaled; chosen=4252 mV)[0m
+[0;31mE (249938) medtronic: command 8D required 3 tries[0m
+[0;31mE (250678) medtronic: command CE required 2 tries[0m
+[0;32mI (250688) GNARL: pump_active_probe: ok (rssi=-86 status=0x03)[0m
+[0;32mI (271538) ADC: ADC voltage: 1336 mV (4275 mV scaled; chosen=4275 mV)[0m
+[0;32mI (273568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;31mE (281598) medtronic: command CE required 2 tries[0m
+[0;32mI (281598) GNARL: pump_active_probe: ok (rssi=-103 status=0x03)[0m
+[0;32mI (299678) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (299678) NimBLE: att_handle=21
+[0m
+[0;32mI (301538) ADC: ADC voltage: 1333 mV (4265 mV scaled; chosen=4265 mV)[0m
+[0;32mI (312568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (331538) ADC: ADC voltage: 1334 mV (4268 mV scaled; chosen=4268 mV)[0m
+[0;31mE (342508) medtronic: command CE required 2 tries[0m
+[0;32mI (342518) GNARL: pump_active_probe: ok (rssi=-78 status=0x03)[0m
+[0;32mI (351568) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (359398) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (359398) NimBLE: att_handle=21
+[0m
+[0;32mI (359938) GNARL: CmdResetRadioConfig[0m
+[0;32mI (359938) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (359938) NimBLE: att_handle=18
+[0m
+[0;32mI (360058) GNARL: CmdUpdateRegister[0m
+[0;32mI (360058) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360058) NimBLE: att_handle=18
+[0m
+[0;32mI (360178) GNARL: CmdUpdateRegister[0m
+[0;32mI (360178) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360178) NimBLE: att_handle=18
+[0m
+[0;32mI (360298) GNARL: CmdUpdateRegister[0m
+[0;32mI (360298) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360298) NimBLE: att_handle=18
+[0m
+[0;32mI (360418) GNARL: CmdUpdateRegister[0m
+[0;32mI (360418) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360418) NimBLE: att_handle=18
+[0m
+[0;32mI (360538) GNARL: CmdUpdateRegister[0m
+[0;32mI (360538) GNARL: setting frequency to 868349853 Hz[0m
+[0;32mI (360538) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360538) NimBLE: att_handle=18
+[0m
+[0;32mI (360658) GNARL: CmdUpdateRegister[0m
+[0;32mI (360658) GNARL: setting frequency to 868349853 Hz[0m
+[0;32mI (360658) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360668) NimBLE: att_handle=18
+[0m
+[0;32mI (360778) GNARL: CmdUpdateRegister[0m
+[0;32mI (360778) GNARL: setting frequency to 868349853 Hz[0m
+[0;32mI (360778) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (360788) NimBLE: att_handle=18
+[0m
+[0;32mI (360898) GNARL: CmdSendAndListen[0m
+[0;32mI (361048) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (361048) NimBLE: att_handle=18
+[0m
+[0;32mI (361408) GNARL: CmdSendAndListen[0m
+[0;32mI (361548) ADC: ADC voltage: 1338 mV (4281 mV scaled; chosen=4281 mV)[0m
+[0;32mI (361558) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (361558) NimBLE: att_handle=18
+[0m
+[0;32mI (361928) GNARL: CmdSendAndListen[0m
+[0;32mI (362068) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (362068) NimBLE: att_handle=18
+[0m
+[0;32mI (362498) GNARL: CmdSendAndListen[0m
+[0;32mI (362638) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (362648) NimBLE: att_handle=18
+[0m
+[0;32mI (363008) GNARL: CmdSendAndListen[0m
+[0;32mI (363148) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (363158) NimBLE: att_handle=18
+[0m
+[0;32mI (363618) GNARL: CmdSendAndListen[0m
+[0;32mI (363698) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (363698) NimBLE: att_handle=18
+[0m
+[0;32mI (364068) GNARL: CmdSendAndListen[0m
+[0;32mI (364278) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (364278) NimBLE: att_handle=18
+[0m
+[0;32mI (364608) GNARL: CmdSendAndListen[0m
+[0;32mI (364748) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (364748) NimBLE: att_handle=18
+[0m
+[0;32mI (365178) GNARL: CmdSendAndListen[0m
+[0;32mI (365318) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (365328) NimBLE: att_handle=18
+[0m
+[0;32mI (365698) GNARL: CmdSendAndListen[0m
+[0;32mI (365838) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (365838) NimBLE: att_handle=18
+[0m
+[0;32mI (366178) GNARL: CmdSendAndListen[0m
+[0;32mI (366318) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (366318) NimBLE: att_handle=18
+[0m
+[0;32mI (366658) GNARL: CmdSendAndListen[0m
+[0;32mI (366798) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (366798) NimBLE: att_handle=18
+[0m
+[0;32mI (367138) GNARL: CmdSendAndListen[0m
+[0;32mI (367278) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (367278) NimBLE: att_handle=18
+[0m
+[0;32mI (367648) GNARL: CmdSendAndListen[0m
+[0;32mI (367798) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (367798) NimBLE: att_handle=18
+[0m
+[0;32mI (368108) GNARL: CmdSendAndListen[0m
+[0;32mI (369698) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (369708) NimBLE: att_handle=18
+[0m
+[0;32mI (370038) GNARL: CmdSendAndListen[0m
+[0;32mI (370178) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (370178) NimBLE: att_handle=18
+[0m
+[0;32mI (370518) GNARL: CmdSendAndListen[0m
+[0;32mI (370658) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (370658) NimBLE: att_handle=18
+[0m
+[0;32mI (370998) GNARL: CmdSendAndListen[0m
+[0;32mI (371138) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (371148) NimBLE: att_handle=18
+[0m
+[0;32mI (371478) GNARL: CmdSendAndListen[0m
+[0;32mI (371628) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (371628) NimBLE: att_handle=18
+[0m
+[0;32mI (371968) GNARL: CmdSendAndListen[0m
+[0;32mI (372108) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (372108) NimBLE: att_handle=18
+[0m
+[0;32mI (372448) GNARL: CmdSendAndListen[0m
+[0;32mI (372588) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (372588) NimBLE: att_handle=18
+[0m
+[0;32mI (372958) GNARL: CmdSendAndListen[0m
+[0;32mI (373098) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (373098) NimBLE: att_handle=18
+[0m
+[0;32mI (373438) GNARL: CmdSendPacket[0m
+[0;32mI (373468) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (373468) NimBLE: att_handle=18
+[0m
+[0;32mI (389068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (391538) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;31mE (403418) medtronic: command CE required 2 tries[0m
+[0;32mI (403428) GNARL: pump_active_probe: ok (rssi=-65 status=0x03)[0m
+[0;32mI (419098) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (419098) NimBLE: att_handle=21
+[0m
+[0;32mI (421538) ADC: ADC voltage: 1334 mV (4268 mV scaled; chosen=4268 mV)[0m
+[0;32mI (428068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (451538) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;31mE (464158) medtronic: command 8D required 2 tries[0m
+[0;31mE (465458) medtronic: command CE required 3 tries[0m
+[0;32mI (465458) GNARL: pump_active_probe: ok (rssi=-88 status=0x03)[0m
+[0;32mI (467068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (478788) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (478788) NimBLE: att_handle=21
+[0m
+[0;32mI (481538) ADC: ADC voltage: 1332 mV (4262 mV scaled; chosen=4262 mV)[0m
+[0;31mE (496378) medtronic: command CE required 2 tries[0m
+[0;32mI (496388) GNARL: pump_active_probe: ok (rssi=-81 status=0x03)[0m
+[0;32mI (506068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (511538) ADC: ADC voltage: 1335 mV (4272 mV scaled; chosen=4272 mV)[0m
+[0;31mE (527298) medtronic: command CE required 2 tries[0m
+[0;32mI (527298) GNARL: pump_active_probe: ok (rssi=-68 status=0x03)[0m
+[0;32mI (538448) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (538448) NimBLE: att_handle=21
+[0m
+[0;32mI (541538) ADC: ADC voltage: 1333 mV (4265 mV scaled; chosen=4265 mV)[0m
+[0;32mI (545068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (571538) ADC: ADC voltage: 1332 mV (4262 mV scaled; chosen=4262 mV)[0m
+[0;32mI (584068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;31mE (588198) medtronic: command CE required 2 tries[0m
+[0;32mI (588208) GNARL: pump_active_probe: ok (rssi=-65 status=0x03)[0m
+[0;32mI (598128) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (598128) NimBLE: att_handle=21
+[0m
+[0;32mI (601538) ADC: ADC voltage: 1333 mV (4265 mV scaled; chosen=4265 mV)[0m
+[0;31mE (619118) medtronic: command CE required 2 tries[0m
+[0;32mI (619128) GNARL: pump_active_probe: ok (rssi=-103 status=0x03)[0m
+[0;32mI (623068) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (631538) ADC: ADC voltage: 1334 mV (4268 mV scaled; chosen=4268 mV)[0m
+[0;31mE (650028) medtronic: command CE required 2 tries[0m
+[0;32mI (650038) GNARL: pump_active_probe: ok (rssi=-126 status=0x03)[0m
+[0;32mI (654338) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (655468) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (656608) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (657748) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (657858) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (657858) NimBLE: att_handle=21
+[0m
+[0;32mI (658648) GNARL: CmdSendAndListen[0m
+[0;32mI (658788) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (658788) NimBLE: att_handle=18
+[0m
+[0;32mI (658878) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (659218) GNARL: CmdSendAndListen[0m
+[0;32mI (659358) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (659358) NimBLE: att_handle=18
+[0m
+[0;32mI (659728) GNARL: CmdSendAndListen[0m
+[0;32mI (659878) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (659878) NimBLE: att_handle=18
+[0m
+[0;32mI (660018) ADC: (Conv) Battery voltage: 4200 mV, percentage: 100%[0m
+[0;32mI (660298) GNARL: CmdSendAndListen[0m
+[0;32mI (660448) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (660448) NimBLE: att_handle=18
+[0m

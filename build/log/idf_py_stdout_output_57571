@@ -1,0 +1,116 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 18 2025 21:30:29[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v1.1[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (42) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (50) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (59) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (82) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=20c8ch (134284) map[0m
+[0;32mI (135) esp_image: segment 1: paddr=00030cb4 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (135) esp_image: segment 2: paddr=00030cd8 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (147) esp_image: segment 3: paddr=00035e2c vaddr=40080000 size=0a1ech ( 41452) load[0m
+[0;32mI (163) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=60570h (394608) map[0m
+[0;32mI (298) esp_image: segment 5: paddr=000a0598 vaddr=4008a1ec size=12c58h ( 76888) load[0m
+[0;32mI (342) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (342) boot: Disabling RNG early entropy source...[0m
+[0;32mI (353) cpu_start: Multicore app[0m
+[0;32mI (361) cpu_start: Pro cpu start user code[0m
+[0;32mI (361) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (361) app_init: Application information:[0m
+[0;32mI (364) app_init: Project name:     gnarl[0m
+[0;32mI (369) app_init: App version:      1[0m
+[0;32mI (373) app_init: Compile time:     Dec 18 2025 21:30:22[0m
+[0;32mI (379) app_init: ELF file SHA256:  daa357607930aa8c...[0m
+[0;32mI (385) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (390) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (394) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (399) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (404) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (411) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (417) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (423) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (430) heap_init: At 3FFC6820 len 000197E0 (101 KiB): DRAM[0m
+[0;32mI (436) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (442) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (449) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (457) spi_flash: detected chip: generic[0m
+[0;32mI (459) spi_flash: flash io: dio[0m
+[0;33mW (464) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (486) coexist: coex firmware version: e727207[0m
+[0;32mI (488) main_task: Started on CPU0[0m
+[0;32mI (488) main_task: Calling app_main()[0m
+[0;32mI (488) GNARL: ==== GNARL boot ====[0m
+[0;32mI (488) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (498) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (498) GNARL: heap free: 233764[0m
+[0;32mI (498) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (508) pm: Frequency switching config: CPU_MAX: 40, APB_MAX: 40, APB_MIN: 20, Light sleep: ENABLED[0m
+[0;32mI (518) GNARL: PM configured: min=20 max=40 light_sleep=1[0m
+[0;32mI (538) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (538) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (548) GNARL: display_init: starting[0m
+[0;32mI (548) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (558) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (558) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (568) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (568) GNARL: pump_active_probe: started (interval=30000ms)[0m
+[0;32mI (578) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (618) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (628) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:aa[0m
+[0;32mI (1118) ADC: (Conv) Battery voltage: 3923 mV, percentage: 76%[0m
+[0;32mI (1858) ADC: ADC voltage: 1225 mV (3920 mV scaled; chosen=3920 mV)[0m
+[0;32mI (2358) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (3608) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (4848) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (6088) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (7328) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;31mE (8508) medtronic: command CE required 2 tries[0m
+[0;32mI (8508) GNARL: pump_active_probe: ok (rssi=-127 status=0x03)[0m
+[0;32mI (8568) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (9808) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (11048) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (12288) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (13528) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (14768) ADC: (Conv) Battery voltage: 3920 mV, percentage: 76%[0m
+[0;32mI (31538) ADC: ADC voltage: 1219 mV (3900 mV scaled; chosen=3900 mV)[0m
+[0;32mI (37788) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;31mE (38948) medtronic: command CE required 2 tries[0m
+[0;32mI (38948) GNARL: pump_active_probe: ok (rssi=-62 status=0x03)[0m
+[0;32mI (39038) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (40278) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (41518) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (42758) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (43998) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (45238) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (46478) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (47718) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (48958) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (50198) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (51438) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (52678) ADC: (Conv) Battery voltage: 3900 mV, percentage: 75%[0m
+[0;32mI (61538) ADC: ADC voltage: 1215 mV (3888 mV scaled; chosen=3888 mV)[0m
+[0;31mE (69868) medtronic: command CE required 2 tries[0m
+[0;32mI (69868) GNARL: pump_active_probe: ok (rssi=-60 status=0x03)[0m
+[0;32mI (75758) GNARL: pump_bg_listen: no packets yet (listening on 868350000 Hz, window=1500ms)[0m
+[0;32mI (91538) ADC: ADC voltage: 1213 mV (3881 mV scaled; chosen=3881 mV)[0m
+[0;31mE (100788) medtronic: command CE required 2 tries[0m
+[0;32mI (100788) GNARL: pump_active_probe: ok (rssi=-59 status=0x03)[0m

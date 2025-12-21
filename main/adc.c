@@ -21,7 +21,7 @@ const static char *TAG = "ADC";
 #define DUMMY_READS (2)
 
 // How often to refresh the cached battery voltage.
-#define UPDATE_PERIOD_MS (10000)
+#define UPDATE_PERIOD_MS (30000)
 // Scale the ADC input voltage back to the actual battery voltage using the
 // board's resistor divider (see include/module.h).
 #define SCALE_VOLTAGE(raw_mv) ((int)((int64_t)(raw_mv) * (VDIV_R1_KOHM + VDIV_R2_KOHM) / VDIV_R2_KOHM))

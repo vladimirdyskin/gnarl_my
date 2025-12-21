@@ -71,10 +71,12 @@ void app_main(void)
 	ESP_LOGI(TAG, "firmware: %s / %s", SUBG_RFSPY_VERSION, BLE_RFSPY_VERSION);
 
 	esp_pm_config_t pm_config = {
+		// BLE/NimBLE can become unreliable with too-low max CPU frequency.
 		.max_freq_mhz = 80,
 		.min_freq_mhz = 20,
-		// For BLE stability while debugging, keep light sleep off.
-		.light_sleep_enable = false,
+		// Enable light sleep for lower idle power. BLE code holds a NO_LIGHT_SLEEP
+		// lock while advertising to remain discoverable.
+		.light_sleep_enable = true,
 	};
 
 	ESP_ERROR_CHECK(esp_pm_configure(&pm_config));

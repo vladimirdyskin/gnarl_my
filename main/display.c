@@ -332,7 +332,8 @@ static void display_loop(void *unused)
 		}
 		else
 		{
-			timeout = pdMS_TO_TICKS(100);
+			// Lower periodic wakeups to reduce power; notifications still trigger immediate redraw.
+			timeout = pdMS_TO_TICKS(1000);
 			draw_data();
 			oled_on();
 		}
