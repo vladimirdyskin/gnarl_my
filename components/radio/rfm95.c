@@ -77,10 +77,11 @@ static inline uint8_t read_mode(void) {
 static void set_mode(uint8_t mode) {
 	uint8_t cur_mode = read_mode();
 	if (mode == cur_mode) {
+		ESP_LOGD(TAG, "RADIO: Already in mode %d, skipping", mode);
 		return;
 	}
+	ESP_LOGI(TAG, "RADIO: Changing mode %d -> %d", cur_mode, mode);
 	write_register(REG_OP_MODE, FSK_OOK_MODE | MODULATION_OOK | mode);
-	ESP_LOGD(TAG, "set_mode %d -> %d", cur_mode, mode);
 	if (cur_mode == MODE_SLEEP) {
 		usleep(100);
 	}
@@ -120,12 +121,13 @@ static inline void sequencer_stop(void) {
 // except while resetting the chip, unlike the RFM69 for example.
 
 void rfm95_reset(void) {
-	ESP_LOGD(TAG, "reset");
+	ESP_LOGI(TAG, "RADIO: Resetting RFM95 module");
 	gpio_set_direction(LORA_RST, GPIO_MODE_OUTPUT);
 	gpio_set_level(LORA_RST, 0);
 	usleep(100);
 	gpio_set_direction(LORA_RST, GPIO_MODE_INPUT);
 	usleep(5*MILLISECOND);
+	ESP_LOGI(TAG, "RADIO: Reset complete, waiting for module to stabilize");
 }
 
 static volatile int rx_packets;
@@ -141,8 +143,11 @@ int tx_packet_count(void) {
 }
 
 void rfm95_init(void) {
+	ESP_LOGI(TAG, "RADIO: Initializing RFM95 radio module");
 	spi_init();
+	ESP_LOGD(TAG, "RADIO: SPI initialized");
 	rfm95_reset();
+	ESP_LOGD(TAG, "RADIO: Reset complete");
 
 	gpio_set_direction(LORA_DIO2, GPIO_MODE_INPUT);
 	gpio_set_intr_type(LORA_DIO2, GPIO_INTR_POSEDGE);
@@ -188,6 +193,9 @@ void rfm95_init(void) {
 
 	// use PA_BOOST output pin
 	rfm95_set_tx_power_dbm(17);
+	int version = read_version();
+	ESP_LOGI(TAG, "RADIO: RFM95 Version: 0x%02X", version);
+	ESP_LOGI(TAG, "RADIO: RFM95 initialization complete, TX power=17 dBm, Bitrate=16384 bps, BW=200 kHz");
 }
 
 static inline bool fifo_empty(void) {
@@ -221,14 +229,17 @@ static inline void xmit(uint8_t* data, int len) {
 static bool wait_for_fifo_room(void) {
 	for (int w = 0; w < MAX_WAIT; w++) {
 		if (!fifo_full()) {
+			if (w > 0) {
+				ESP_LOGD(TAG, "RADIO TX: FIFO room available after %d waits", w);
+			}
 			return true;
 		}
 		// Avoid burning CPU while waiting for FIFO to drain.
 		taskYIELD();
 	}
+	ESP_LOGE(TAG, "RADIO TX: FIFO timeout! Still full after %d waits, flags = %02X", MAX_WAIT, read_fifo_flags());
 	sequencer_stop();
 	set_mode_sleep();
-	ESP_LOGI(TAG, "FIFO still full; flags = %02X", read_fifo_flags());
 	return false;
 }
 
@@ -237,31 +248,37 @@ static void wait_for_transmit_done(void) {
 	for (int w = 0; w < MAX_WAIT; w++) {
 		mode = read_mode();
 		if (mode == MODE_STDBY) {
-			ESP_LOGD(TAG, "transmit done; waits = %d", w);
+			ESP_LOGI(TAG, "RADIO TX: Transmission completed after %d iterations", w);
 			return;
 		}
 		usleep(1*MILLISECOND);
 	}
+	ESP_LOGE(TAG, "RADIO TX: Transmission timeout! Still in mode %d", mode);
 	sequencer_stop();
 	set_mode_sleep();
-	ESP_LOGI(TAG, "transmit still not done; mode = %d", mode);
 }
 
 void transmit(uint8_t *buf, int count) {
-	ESP_LOGD(TAG, "transmit %d-byte packet", count);
+	ESP_LOGI(TAG, "RADIO TX: Starting transmission of %d-byte packet", count);
+	if (count > 0) {
+		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, count, ESP_LOG_INFO);
+	}
 	clear_fifo();
+	ESP_LOGD(TAG, "RADIO TX: FIFO cleared");
 	set_mode_standby();
+	ESP_LOGD(TAG, "RADIO TX: Mode set to standby");
 	// Automatically enter Transmit state on FifoLevel interrupt.
 	write_register(REG_FIFO_THRESH, TX_START_CONDITION | FIFO_THRESHOLD);
 	write_register(REG_SEQ_CONFIG_1, SEQUENCER_START | IDLE_MODE_STANDBY | FROM_START_TO_TX);
+	ESP_LOGI(TAG, "RADIO TX: Sequencer configured, FIFO threshold=%d", FIFO_THRESHOLD);
 	int avail = FIFO_SIZE;
 	for (;;) {
 		if (avail > count) {
 			avail = count;
 		}
-		ESP_LOGD(TAG, "writing %d bytes to TX FIFO", avail);
+		ESP_LOGI(TAG, "RADIO TX: Writing %d bytes to TX FIFO (remaining: %d)", avail, count);
 		xmit(buf, avail);
-		ESP_LOGD(TAG, "after xmit: mode = %d", read_mode());
+		ESP_LOGD(TAG, "RADIO TX: After xmit: mode = %d", read_mode());
 		buf += avail;
 		count -= avail;
 		if (count == 0) {
@@ -282,16 +299,19 @@ void transmit(uint8_t *buf, int count) {
 	if (!wait_for_fifo_room()) {
 		return;
 	}
+	ESP_LOGD(TAG, "RADIO TX: Sending terminating byte");
 	xmit_byte(0);
+	ESP_LOGD(TAG, "RADIO TX: Waiting for transmission to complete");
 	wait_for_transmit_done();
 	set_mode_standby();
 	tx_packets++;
+	ESP_LOGI(TAG, "RADIO TX: Transmission complete. Total TX packets: %d", tx_packets);
 }
 
 static bool packet_seen(void) {
 	bool seen = (read_register(REG_IRQ_FLAGS_1) & SYNC_ADDRESS_MATCH) != 0;
 	if (seen) {
-		ESP_LOGD(TAG, "incoming packet seen");
+		ESP_LOGI(TAG, "RADIO RX: Incoming packet detected (SyncAddress match)");
 	}
 	return seen;
 }
@@ -314,21 +334,27 @@ int read_rssi(void) {
 typedef void wait_fn_t(int);
 
 static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
-	ESP_LOGD(TAG, "starting receive");
+	ESP_LOGI(TAG, "RADIO RX: Starting receive (buffer size: %d, timeout: %d ms)", count, timeout);
 	gpio_intr_enable(LORA_DIO2);
+	ESP_LOGD(TAG, "RADIO RX: GPIO interrupt enabled on DIO2");
 	set_mode_receive();
+	ESP_LOGD(TAG, "RADIO RX: Mode set to receive");
 	if (!packet_seen()) {
 		// Stay in RX mode.
+		ESP_LOGD(TAG, "RADIO RX: No packet detected yet, waiting...");
 		wait_fn(timeout);
 		if (!packet_seen()) {
 			set_mode_sleep();
-			ESP_LOGD(TAG, "receive timeout");
+			ESP_LOGI(TAG, "RADIO RX: Receive timeout after %d ms", timeout);
 			return 0;
 		}
 	}
+	ESP_LOGI(TAG, "RADIO RX: Packet detected, reading data");
 	last_rssi = read_register(REG_RSSI);
+	ESP_LOGI(TAG, "RADIO RX: RSSI = %d dBm", read_rssi());
 	int n = 0;
 	int w = 0;
+	ESP_LOGD(TAG, "RADIO RX: Reading bytes from FIFO");
 	while (n < count) {
 		if (fifo_empty()) {
 			usleep(500);
@@ -347,8 +373,10 @@ static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
 		w = 0;
 	}
 	set_mode_sleep();
+	ESP_LOGD(TAG, "RADIO RX: Mode set to sleep");
 	clear_fifo();
 	gpio_intr_disable(LORA_DIO2);
+	ESP_LOGD(TAG, "RADIO RX: GPIO interrupt disabled");
 	if (n > 0) {
 		// Remove spurious final byte consisting of just one or two high bits.
 		uint8_t b = buf[n-1];
@@ -359,6 +387,10 @@ static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
 	}
 	if (n > 0) {
 		rx_packets++;
+		ESP_LOGI(TAG, "RADIO RX: Received %d bytes, RSSI: %d dBm, Total RX packets: %d", n, read_rssi(), rx_packets);
+		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, n, ESP_LOG_INFO);
+	} else {
+		ESP_LOGI(TAG, "RADIO RX: No data received");
 	}
 	return n;
 }
@@ -437,12 +469,14 @@ uint32_t read_frequency(void) {
 }
 
 void set_frequency(uint32_t freq_hz) {
+	ESP_LOGI(TAG, "RADIO: Setting frequency to %lu Hz", (unsigned long)freq_hz);
 	uint32_t f = (((uint64_t)freq_hz << 19) + FXOSC/2) / FXOSC;
 	uint8_t frf[3];
 	frf[0] = f >> 16;
 	frf[1] = f >> 8;
 	frf[2] = f;
 	write_burst(REG_FRF_MSB, frf, sizeof(frf));
+	ESP_LOGD(TAG, "RADIO: Frequency set complete");
 }
 
 int read_version(void) {

@@ -194,8 +194,10 @@ static void server_init(void)
 
 static void advertise(void)
 {
+	ESP_LOGI(TAG, "BLE advertise(): starting advertisement setup");
 	// While advertising, keep light sleep disabled so iAPS can reliably discover us.
 	ble_set_no_light_sleep(true);
+	ESP_LOGD(TAG, "BLE light sleep disabled for advertising");
 
 	// Make advertising restart resilient: don't rely on asserts.
 	struct ble_hs_adv_fields fields, fields_ext;
@@ -227,10 +229,12 @@ static void advertise(void)
 	fields.num_uuids128 = 1;
 	fields.uuids128_is_complete = 1;
 
+	ESP_LOGD(TAG, "BLE setting advertisement fields");
 	int err = ble_gap_adv_set_fields(&fields);
 	if (err)
 	{
 		ESP_LOGE(TAG, "ble_gap_adv_set_fields err %d", err);
+		ESP_LOGE(TAG, "BLE advertisement setup failed, releasing light sleep lock");
 		// Don't hold the lock if we aren't actually advertising.
 		ble_set_no_light_sleep(false);
 		return;
@@ -375,12 +379,15 @@ static uint16_t data_out_len;
 static void response_notify(void)
 {
 	response_count++;
+	ESP_LOGD(TAG, "BLE response_notify(): response_count=%d, connected=%d, notify_state=%d", 
+	         response_count, connected, response_count_notify_state);
 	if (!connected || !response_count_notify_state)
 	{
 		ESP_LOGD(TAG, "not notifying for response count %d", response_count);
 		return;
 	}
 	struct os_mbuf *om = ble_hs_mbuf_from_flat(&response_count, sizeof(response_count));
+	ESP_LOGD(TAG, "BLE sending notification for response count %d", response_count);
 	int err = ble_gattc_notify_custom(connection_handle, response_count_notify_handle, om);
 	if (err)
 	{
@@ -388,22 +395,26 @@ static void response_notify(void)
 		ESP_LOGW(TAG, "response notify failed err=%d (connected=%d)", err, connected);
 		return;
 	}
-	ESP_LOGD(TAG, "notify for response count %d", response_count);
+	ESP_LOGI(TAG, "BLE notification sent successfully: response_count=%d", response_count);
 }
 
 void send_code(const uint8_t code)
 {
-	ESP_LOGD(TAG, "send_code %02X", code);
+	ESP_LOGI(TAG, "BLE send_code(): sending code 0x%02X to client", code);
 	data_out[0] = code;
 	data_out_len = 1;
+	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_INFO);
 	response_notify();
 }
 
 void send_bytes(const uint8_t *buf, int count)
 {
+	ESP_LOGI(TAG, "BLE send_bytes(): sending %d bytes to client", count);
 	data_out[0] = RESPONSE_CODE_SUCCESS;
 	memcpy(data_out + 1, buf, count);
 	data_out_len = count + 1;
+	ESP_LOGI(TAG, "BLE total data length with response code: %d bytes", data_out_len);
+	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_INFO);
 	response_notify();
 }
 
@@ -452,17 +463,25 @@ static int data_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_ga
 	switch (ctxt->op)
 	{
 	case BLE_GATT_ACCESS_OP_READ_CHR:
-		ESP_LOGD(TAG, "data_access: sending %d bytes from pump to phone", data_out_len);
+		ESP_LOGI(TAG, "BLE data_access READ: sending %d bytes from pump to phone", data_out_len);
+		if (data_out_len > 0) {
+			ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_INFO);
+		}
 		if (os_mbuf_append(ctxt->om, data_out, data_out_len) != 0)
 		{
+			ESP_LOGE(TAG, "BLE data_access: insufficient resources for %d bytes", data_out_len);
 			return BLE_ATT_ERR_INSUFFICIENT_RES;
 		}
+		ESP_LOGI(TAG, "BLE data sent successfully");
 		return 0;
 	case BLE_GATT_ACCESS_OP_WRITE_CHR:
 		err = ble_hs_mbuf_to_flat(ctxt->om, data_in, sizeof(data_in), &data_in_len);
 		assert(!err);
-		ESP_LOGD(TAG, "data_access: command received");
+		ESP_LOGI(TAG, "BLE data_access WRITE: command received, %d bytes", data_in_len);
+		ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_in, data_in_len, ESP_LOG_INFO);
 		ble_gap_conn_rssi(conn_handle, &rssi);
+		ESP_LOGI(TAG, "BLE RSSI: %d dBm", (int)rssi);
+		ESP_LOGI(TAG, "BLE calling rfspy_command with %d bytes", data_in_len);
 		rfspy_command(data_in, data_in_len, (int)rssi);
 		return 0;
 	default:
