@@ -1,0 +1,1389 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 28 2025 14:32:02[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (50) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=218bch (137404) map[0m
+[0;32mI (136) esp_image: segment 1: paddr=000318e4 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (136) esp_image: segment 2: paddr=00031908 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (147) esp_image: segment 3: paddr=00036a5c vaddr=40080000 size=095bch ( 38332) load[0m
+[0;32mI (162) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=60c20h (396320) map[0m
+[0;32mI (298) esp_image: segment 5: paddr=000a0c48 vaddr=400895bc size=13888h ( 80008) load[0m
+[0;32mI (343) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (343) boot: Disabling RNG early entropy source...[0m
+[0;32mI (354) cpu_start: Multicore app[0m
+[0;32mI (362) cpu_start: Pro cpu start user code[0m
+[0;32mI (362) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (362) app_init: Application information:[0m
+[0;32mI (365) app_init: Project name:     gnarl[0m
+[0;32mI (370) app_init: App version:      ca38555-dirty[0m
+[0;32mI (375) app_init: Compile time:     Dec 28 2025 14:31:55[0m
+[0;32mI (381) app_init: ELF file SHA256:  a5e1701aae50145f...[0m
+[0;32mI (387) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (392) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (397) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (402) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (407) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (414) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (420) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (426) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (432) heap_init: At 3FFC6720 len 000198E0 (102 KiB): DRAM[0m
+[0;32mI (438) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (444) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (451) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (459) spi_flash: detected chip: generic[0m
+[0;32mI (462) spi_flash: flash io: dio[0m
+[0;33mW (466) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (488) coexist: coex firmware version: e727207[0m
+[0;32mI (490) main_task: Started on CPU0[0m
+[0;32mI (490) main_task: Calling app_main()[0m
+[0;32mI (490) GNARL: ==== GNARL boot ====[0m
+[0;32mI (490) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (500) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (500) GNARL: heap free: 234020[0m
+[0;32mI (500) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (510) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: ENABLED[0m
+[0;32mI (520) GNARL: PM configured: min=20 max=80 light_sleep=1[0m
+[0;32mI (530) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (530) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (550) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (550) rfm95: RADIO: RFM95 Version: 0x12[0m
+[0;32mI (550) rfm95: RADIO: RFM95 initialization complete[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (560) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (560) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (570) GNARL: display_init: starting[0m
+[0;32mI (570) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (580) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (590) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (600) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (600) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (630) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (630) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:ae[0m
+[0;32mI (640) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (1270) GNARL: BLE server_init[0m
+[0;32mI (1270) GNARL: BLE services registered[0m
+[0;32mI (1270) GNARL: BLE device name set to 'GNARL-32AE'[0m
+[0;32mI (1270) GNARL: NimBLE host task started[0m
+[0;32mI (1280) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1280) main_task: Returned from app_main()[0m
+[0;32mI (1330) GNARL: BLE sync_callback[0m
+[0;32mI (1330) GNARL: BLE addr: 88:13:bf:fd:32:ae[0m
+[0;32mI (1330) GNARL: BLE starting advertising[0m
+[0;32mI (1330) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (1350) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (1350) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (1350) NimBLE: disc_mode=2[0m
+[0;32mI (1360) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (1370) NimBLE: 
+[0m
+[0;32mI (1380) GNARL: BLE advertising started successfully[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (5600) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (5600) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (7100) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (7100) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: Overriding 868349975 Hz to 868350000 Hz
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (12100) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (12100) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (13540) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (13540) GNARL: BLE connected successfully: handle=0x0000, RSSI=-60 dBm[0m
+[0;32mI (13600) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (13600) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: Overriding 868349975 Hz to 868350000 Hz
+[0;32mI (14110) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (14440) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=1[0m
+[0;32mI (14440) GNARL: BLE: Client enabled response count notifications[0m
+[0;32mI (14560) GNARL: BLE data_access WRITE: command received, 2 bytes[0m
+[0;32mI (14560) GNARL: 01 02[0m
+[0;32mI (14570) GNARL: BLE RSSI: -49 dBm[0m
+[0;32mI (14570) GNARL: BLE calling rfspy_command with 2 bytes[0m
+[0;32mI (14570) GNARL: CmdGetVersion[0m
+[0;32mI (14570) GNARL: BLE send_bytes(): sending 14 bytes to client[0m
+[0;32mI (14580) GNARL: BLE total data length with response code: 15 bytes[0m
+[0;32mI (14590) GNARL: dd 73 75 62 67 5f 72 66 73 70 79 20 32 2e 32[0m
+[0;32mI (14590) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (14600) NimBLE: att_handle=18
+[0m
+[0;32mI (14610) GNARL: BLE notification sent successfully: response_count=1[0m
+[0;32mI (14680) GNARL: BLE data_access READ: sending 15 bytes from pump to phone[0m
+[0;32mI (14680) GNARL: dd 73 75 62 67 5f 72 66 73 70 79 20 32 2e 32[0m
+[0;32mI (14690) GNARL: BLE data sent successfully[0m
+[0;32mI (14800) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=1[0m
+[0;32mI (14800) GNARL: BLE: Client enabled timer tick notifications[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (18600) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (18600) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (20100) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (20100) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: Overriding 868349975 Hz to 868350000 Hz
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (25100) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (25100) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (25430) GNARL: BLE data_access WRITE: command received, 2 bytes[0m
+[0;32mI (25430) GNARL: 01 0d[0m
+[0;32mI (25440) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (25440) GNARL: BLE calling rfspy_command with 2 bytes[0m
+[0;32mI (25440) GNARL: CmdResetRadioConfig[0m
+[0;32mI (25440) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (25450) GNARL: dd[0m
+[0;32mI (25450) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (25460) NimBLE: att_handle=18
+[0m
+[0;32mI (25470) GNARL: BLE notification sent successfully: response_count=2[0m
+[0;32mI (25520) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (25520) GNARL: dd[0m
+[0;32mI (25520) GNARL: BLE data sent successfully[0m
+[0;32mI (25580) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (25580) GNARL: 03 06 0c 59[0m
+[0;32mI (25590) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (25590) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (25590) GNARL: CmdUpdateRegister[0m
+[0;32mI (25600) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (25600) GNARL: dd[0m
+[0;32mI (25610) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (25610) NimBLE: att_handle=18
+[0m
+[0;32mI (25620) GNARL: BLE notification sent successfully: response_count=3[0m
+[0;32mI (25670) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (25670) GNARL: dd[0m
+[0;32mI (25670) GNARL: BLE data sent successfully[0m
+[0;32mI (25730) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (25730) GNARL: 03 06 0f 62[0m
+[0;32mI (25740) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (25740) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (25740) GNARL: CmdUpdateRegister[0m
+[0;32mI (25750) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (25750) GNARL: dd[0m
+[0;32mI (25760) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (25760) NimBLE: att_handle=18
+[0m
+[0;32mI (25770) GNARL: BLE notification sent successfully: response_count=4[0m
+[0;32mI (25820) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (25820) GNARL: dd[0m
+[0;32mI (25820) GNARL: BLE data sent successfully[0m
+[0;32mI (25880) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (25880) GNARL: 03 06 10 1a[0m
+[0;32mI (25890) GNARL: BLE RSSI: -49 dBm[0m
+[0;32mI (25890) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (25890) GNARL: CmdUpdateRegister[0m
+[0;32mI (25900) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (25900) GNARL: dd[0m
+[0;32mI (25910) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (25910) NimBLE: att_handle=18
+[0m
+[0;32mI (25920) GNARL: BLE notification sent successfully: response_count=5[0m
+[0;32mI (25970) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (25970) GNARL: dd[0m
+[0;32mI (25970) GNARL: BLE data sent successfully[0m
+[0;32mI (26030) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (26040) GNARL: 03 06 11 13[0m
+[0;32mI (26040) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (26040) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (26040) GNARL: CmdUpdateRegister[0m
+[0;32mI (26050) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (26050) GNARL: dd[0m
+[0;32mI (26060) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (26060) NimBLE: att_handle=18
+[0m
+[0;32mI (26070) GNARL: BLE notification sent successfully: response_count=6[0m
+[0;32mI (26120) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (26130) GNARL: dd[0m
+[0;32mI (26130) GNARL: BLE data sent successfully[0m
+[0;32mI (26190) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (26190) GNARL: 03 06 0b 77[0m
+[0;32mI (26190) GNARL: BLE RSSI: -50 dBm[0m
+[0;32mI (26190) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (26190) GNARL: CmdUpdateRegister[0m
+[0;32mI (26600) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (26600) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: Overriding 868349975 Hz to 868350000 Hz
+[0;32mI (26600) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (26610) GNARL: dd[0m
+[0;32mI (26610) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (26620) NimBLE: att_handle=18
+[0m
+[0;32mI (26620) GNARL: BLE notification sent successfully: response_count=7[0m
+[0;32mI (26670) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (26670) GNARL: dd[0m
+[0;32mI (26670) GNARL: BLE data sent successfully[0m
+[0;32mI (26730) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (26730) GNARL: 03 06 0a 2f[0m
+[0;32mI (26730) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (26730) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (26740) GNARL: CmdUpdateRegister[0m
+[0;32mI (26740) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (26750) GNARL: dd[0m
+[0;32mI (26750) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (26760) NimBLE: att_handle=18
+[0m
+[0;32mI (26760) GNARL: BLE notification sent successfully: response_count=8[0m
+[0;32mI (26820) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (26820) GNARL: dd[0m
+[0;32mI (26820) GNARL: BLE data sent successfully[0m
+[0;32mI (26880) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (26880) GNARL: 03 06 09 24[0m
+[0;32mI (26880) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (26880) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (26890) GNARL: CmdUpdateRegister[0m
+[0;32mI (26890) GNARL: setting frequency to 868449829 Hz[0m
+set_frequency: Overriding 868449829 Hz to 868350000 Hz
+[0;32mI (26900) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (26910) GNARL: dd[0m
+[0;32mI (26910) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (26920) NimBLE: att_handle=18
+[0m
+[0;32mI (26920) GNARL: BLE notification sent successfully: response_count=9[0m
+[0;32mI (26970) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (26970) GNARL: dd[0m
+[0;32mI (26970) GNARL: BLE data sent successfully[0m
+[0;32mI (27030) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (27030) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (27030) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (27040) GNARL: BLE RSSI: -49 dBm[0m
+[0;32mI (27040) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (27050) GNARL: CmdSendAndListen[0m
+[0;32mI (27050) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (27060) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (27060) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (27070) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (27070) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (27100) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (27100) rfm95: RADIO TX: Transmission complete. Total TX packets: 1[0m
+[0;32mI (27110) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (27110) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (27320) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (27320) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;32mI (27320) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (27320) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (27330) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (27330) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (27340) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (27370) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (27370) rfm95: RADIO TX: Transmission complete. Total TX packets: 2[0m
+[0;32mI (27370) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (27380) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (27590) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (27590) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;33mW (27590) GNARL: RX: timeout (failure #1)[0m
+[0;32mI (27590) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (27600) GNARL: aa[0m
+[0;32mI (27600) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (27600) NimBLE: att_handle=18
+[0m
+[0;32mI (27610) GNARL: BLE notification sent successfully: response_count=10[0m
+[0;32mI (27660) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (27660) GNARL: aa[0m
+[0;32mI (27660) GNARL: BLE data sent successfully[0m
+[0;32mI (27720) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (27720) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (27720) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (27730) GNARL: BLE RSSI: -49 dBm[0m
+[0;32mI (27730) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (27740) GNARL: CmdSendAndListen[0m
+[0;32mI (27740) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (27750) rfm95: a9 66 55 5a 56 71 94 d5 55 d3 20[0m
+[0;32mI (27760) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (27760) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (27770) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (27790) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (27800) rfm95: RADIO TX: Transmission complete. Total TX packets: 3[0m
+[0;32mI (27800) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1 ms)[0m
+[0;32mI (27810) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (27810) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (27820) rfm95: RADIO RX: Receive timeout after 1 ms[0m
+[0;33mW (27820) GNARL: RX: timeout (failure #2)[0m
+[0;32mI (27830) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (27830) GNARL: aa[0m
+[0;32mI (27840) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (27840) NimBLE: att_handle=18
+[0m
+[0;32mI (27850) GNARL: BLE notification sent successfully: response_count=11[0m
+[0;32mI (27900) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (27900) GNARL: aa[0m
+[0;32mI (27900) GNARL: BLE data sent successfully[0m
+[0;32mI (27960) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (27960) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (27960) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (27970) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (27970) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (27980) GNARL: CmdSendAndListen[0m
+[0;32mI (27980) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (27990) rfm95: a9 66 55 5a 56 71 94 d5 55 d3 20[0m
+[0;32mI (28000) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (28000) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (28010) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (28030) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (28040) rfm95: RADIO TX: Transmission complete. Total TX packets: 4[0m
+[0;32mI (28040) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 12000 ms)[0m
+[0;32mI (28050) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (40050) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (40050) rfm95: RADIO RX: Receive timeout after 12000 ms[0m
+[0;33mW (40050) GNARL: RX: timeout (failure #3)[0m
+[0;32mI (40050) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (40060) GNARL: aa[0m
+[0;32mI (40060) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (40070) NimBLE: att_handle=18
+[0m
+[0;32mI (40070) GNARL: BLE notification sent successfully: response_count=12[0m
+[0;33mW (40080) GNARL: CmdSendAndListen took 12174 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=0)[0m
+[0;32mI (40110) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (40110) GNARL: aa[0m
+[0;32mI (40110) GNARL: BLE data sent successfully[0m
+[0;32mI (40170) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (40170) GNARL: 03 06 0b 55[0m
+[0;32mI (40180) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (40180) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (40180) GNARL: CmdUpdateRegister[0m
+[0;32mI (40190) GNARL: setting frequency to 868437377 Hz[0m
+set_frequency: Overriding 868437377 Hz to 868350000 Hz
+[0;32mI (40200) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (40200) GNARL: dd[0m
+[0;32mI (40210) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (40210) NimBLE: att_handle=18
+[0m
+[0;32mI (40220) GNARL: BLE notification sent successfully: response_count=13[0m
+[0;32mI (40260) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (40260) GNARL: dd[0m
+[0;32mI (40260) GNARL: BLE data sent successfully[0m
+[0;32mI (40320) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (40330) GNARL: 03 06 0a 2d[0m
+[0;32mI (40330) GNARL: BLE RSSI: -49 dBm[0m
+[0;32mI (40330) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (40330) GNARL: CmdUpdateRegister[0m
+[0;32mI (40340) GNARL: setting frequency to 868249877 Hz[0m
+set_frequency: Overriding 868249877 Hz to 868350000 Hz
+[0;32mI (40350) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (40350) GNARL: dd[0m
+[0;32mI (40360) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (40360) NimBLE: att_handle=18
+[0m
+[0;32mI (40370) GNARL: BLE notification sent successfully: response_count=14[0m
+[0;32mI (40450) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (40450) GNARL: dd[0m
+[0;32mI (40450) GNARL: BLE data sent successfully[0m
+[0;32mI (40510) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (40510) GNARL: 03 06 09 24[0m
+[0;32mI (40510) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (40510) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (40520) GNARL: CmdUpdateRegister[0m
+[0;32mI (40520) GNARL: setting frequency to 868249877 Hz[0m
+set_frequency: Overriding 868249877 Hz to 868350000 Hz
+[0;32mI (40530) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (40540) GNARL: dd[0m
+[0;32mI (40540) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (40540) NimBLE: att_handle=18
+[0m
+[0;32mI (40550) GNARL: BLE notification sent successfully: response_count=15[0m
+[0;32mI (40600) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (40600) GNARL: dd[0m
+[0;32mI (40600) GNARL: BLE data sent successfully[0m
+[0;32mI (40660) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (40660) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (40660) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (40670) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (40670) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (40670) GNARL: CmdSendAndListen[0m
+[0;32mI (40680) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (40690) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (40690) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (40700) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (40700) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (40730) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (40730) rfm95: RADIO TX: Transmission complete. Total TX packets: 5[0m
+[0;32mI (40730) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (40740) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (40880) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (40880) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (40880) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (40880) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (40890) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (40890) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (40900) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (40930) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (40930) rfm95: RADIO TX: Transmission complete. Total TX packets: 6[0m
+[0;32mI (40930) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (40940) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (41070) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (41070) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (41070) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (41070) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (41080) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (41080) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (41090) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (41120) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (41120) rfm95: RADIO TX: Transmission complete. Total TX packets: 7[0m
+[0;32mI (41120) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (41130) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (41260) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (41260) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (41260) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (41260) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (41270) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (41270) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (41280) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (41310) rfm95: RADIO TX: Transmission completed after 18 iterations[0m
+[0;32mI (41310) rfm95: RADIO TX: Transmission complete. Total TX packets: 8[0m
+[0;32mI (41310) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (41320) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (41450) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (41450) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (41450) GNARL: RX: timeout (failure #4)[0m
+[0;32mI (41450) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (41460) GNARL: aa[0m
+[0;32mI (41460) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (41470) NimBLE: att_handle=18
+[0m
+[0;32mI (41470) GNARL: BLE notification sent successfully: response_count=16[0m
+[0;32mI (41560) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (41560) GNARL: aa[0m
+[0;32mI (41560) GNARL: BLE data sent successfully[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (41610) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (41610) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (41620) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (41620) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (41630) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (41640) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (41640) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (41640) GNARL: CmdSendAndListen[0m
+[0;32mI (43110) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (43110) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: Overriding 868349975 Hz to 868350000 Hz
+[0;32mI (43110) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (43120) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (43120) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (43130) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (43130) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (43160) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (43160) rfm95: RADIO TX: Transmission complete. Total TX packets: 9[0m
+[0;32mI (43170) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (43170) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (43310) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (43310) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (43310) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (43310) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (43320) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (43320) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (43330) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (43360) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (43360) rfm95: RADIO TX: Transmission complete. Total TX packets: 10[0m
+[0;32mI (43360) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (43370) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (43500) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (43500) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (43500) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (43500) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (43510) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (43510) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (43520) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (43550) rfm95: RADIO TX: Transmission completed after 18 iterations[0m
+[0;32mI (43550) rfm95: RADIO TX: Transmission complete. Total TX packets: 11[0m
+[0;32mI (43550) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (43560) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (43690) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (43690) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (43690) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (43690) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (43700) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (43700) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (43710) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (43740) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (43740) rfm95: RADIO TX: Transmission complete. Total TX packets: 12[0m
+[0;32mI (43740) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (43750) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (43880) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (43880) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (43880) GNARL: RX: timeout (failure #5)[0m
+[0;33mW (43880) GNARL: RADIO: 5 consecutive RX failures - approaching reset threshold[0m
+[0;32mI (43890) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (43890) GNARL: aa[0m
+[0;32mI (43900) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (43900) NimBLE: att_handle=18
+[0m
+[0;32mI (43910) GNARL: BLE notification sent successfully: response_count=17[0m
+[0;32mI (43950) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (43950) GNARL: aa[0m
+[0;32mI (43950) GNARL: BLE data sent successfully[0m
+[0;32mI (44010) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (44010) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (44010) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (44020) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (44020) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (44030) GNARL: CmdSendAndListen[0m
+[0;32mI (44030) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (44040) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (44040) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (44050) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (44050) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (44080) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (44080) rfm95: RADIO TX: Transmission complete. Total TX packets: 13[0m
+[0;32mI (44080) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (44090) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (44230) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (44230) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (44230) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (44230) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (44240) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (44240) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (44250) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (44280) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (44280) rfm95: RADIO TX: Transmission complete. Total TX packets: 14[0m
+[0;32mI (44280) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (44290) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (44420) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (44420) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (44420) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (44420) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (44430) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (44430) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (44440) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (44470) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (44470) rfm95: RADIO TX: Transmission complete. Total TX packets: 15[0m
+[0;32mI (44470) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (44480) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (44620) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (44620) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (44620) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (44620) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (44630) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (44630) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (44640) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (44670) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (44670) rfm95: RADIO TX: Transmission complete. Total TX packets: 16[0m
+[0;32mI (44670) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (44680) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (44810) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (44810) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (44810) GNARL: RX: timeout (failure #6)[0m
+[0;32mI (44810) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (44820) GNARL: aa[0m
+[0;32mI (44820) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (44820) NimBLE: att_handle=18
+[0m
+[0;32mI (44830) GNARL: BLE notification sent successfully: response_count=18[0m
+[0;32mI (44880) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (44880) GNARL: aa[0m
+[0;32mI (44880) GNARL: BLE data sent successfully[0m
+[0;32mI (44940) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (44940) GNARL: 03 06 0b dd[0m
+[0;32mI (44950) GNARL: BLE RSSI: -46 dBm[0m
+[0;32mI (44950) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (44950) GNARL: CmdUpdateRegister[0m
+[0;32mI (44950) GNARL: setting frequency to 868299682 Hz[0m
+set_frequency: Overriding 868299682 Hz to 868350000 Hz
+[0;32mI (44970) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (44970) GNARL: dd[0m
+[0;32mI (44970) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (44980) NimBLE: att_handle=18
+[0m
+[0;32mI (44990) GNARL: BLE notification sent successfully: response_count=19[0m
+[0;32mI (45030) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (45030) GNARL: dd[0m
+[0;32mI (45030) GNARL: BLE data sent successfully[0m
+[0;32mI (45090) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (45090) GNARL: 03 06 0a 2d[0m
+[0;32mI (45100) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (45100) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (45100) GNARL: CmdUpdateRegister[0m
+[0;32mI (45110) GNARL: setting frequency to 868299682 Hz[0m
+set_frequency: Overriding 868299682 Hz to 868350000 Hz
+[0;32mI (45120) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (45120) GNARL: dd[0m
+[0;32mI (45120) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (45130) NimBLE: att_handle=18
+[0m
+[0;32mI (45140) GNARL: BLE notification sent successfully: response_count=20[0m
+[0;32mI (45180) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (45180) GNARL: dd[0m
+[0;32mI (45180) GNARL: BLE data sent successfully[0m
+[0;32mI (45240) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (45240) GNARL: 03 06 09 24[0m
+[0;32mI (45250) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (45250) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (45250) GNARL: CmdUpdateRegister[0m
+[0;32mI (45260) GNARL: setting frequency to 868299682 Hz[0m
+set_frequency: Overriding 868299682 Hz to 868350000 Hz
+[0;32mI (45270) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (45270) GNARL: dd[0m
+[0;32mI (45280) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (45280) NimBLE: att_handle=18
+[0m
+[0;32mI (45290) GNARL: BLE notification sent successfully: response_count=21[0m
+[0;32mI (45330) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (45330) GNARL: dd[0m
+[0;32mI (45330) GNARL: BLE data sent successfully[0m
+[0;32mI (45390) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (45390) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (45400) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (45400) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (45400) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (45410) GNARL: CmdSendAndListen[0m
+[0;32mI (45410) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (45420) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (45430) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (45430) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (45440) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (45470) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (45470) rfm95: RADIO TX: Transmission complete. Total TX packets: 17[0m
+[0;32mI (45470) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (45480) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (45610) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (45610) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (45610) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (45610) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (45620) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (45620) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (45630) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (45660) rfm95: RADIO TX: Transmission completed after 18 iterations[0m
+[0;32mI (45660) rfm95: RADIO TX: Transmission complete. Total TX packets: 18[0m
+[0;32mI (45660) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (45670) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (45810) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (45810) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (45810) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (45810) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (45820) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (45820) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (45830) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (45860) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (45860) rfm95: RADIO TX: Transmission complete. Total TX packets: 19[0m
+[0;32mI (45860) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (45870) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (46010) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (46010) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (46010) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (46010) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (46020) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (46020) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (46030) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (46060) rfm95: RADIO TX: Transmission completed after 15 iterations[0m
+[0;32mI (46060) rfm95: RADIO TX: Transmission complete. Total TX packets: 20[0m
+[0;32mI (46060) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (46070) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (46200) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (46200) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (46200) GNARL: RX: timeout (failure #7)[0m
+[0;32mI (46200) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (46210) GNARL: aa[0m
+[0;32mI (46210) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (46210) NimBLE: att_handle=18
+[0m
+[0;32mI (46220) GNARL: BLE notification sent successfully: response_count=22[0m
+[0;32mI (46270) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (46270) GNARL: aa[0m
+[0;32mI (46270) GNARL: BLE data sent successfully[0m
+[0;32mI (46330) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (46330) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (46330) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (46340) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (46340) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (46340) GNARL: CmdSendAndListen[0m
+[0;32mI (46350) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (46350) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (46360) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (46370) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (46370) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (46400) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (46400) rfm95: RADIO TX: Transmission complete. Total TX packets: 21[0m
+[0;32mI (46400) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (46410) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (46550) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (46550) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (46550) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (46550) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (46560) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (46560) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (46570) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (46600) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (46600) rfm95: RADIO TX: Transmission complete. Total TX packets: 22[0m
+[0;32mI (46600) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (46610) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (46740) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (46740) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (46740) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (46740) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (46750) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (46750) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (46760) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (46790) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (46790) rfm95: RADIO TX: Transmission complete. Total TX packets: 23[0m
+[0;32mI (46790) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (46800) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (46930) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (46930) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (46930) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (46930) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (46940) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (46940) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (46950) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (46980) rfm95: RADIO TX: Transmission completed after 18 iterations[0m
+[0;32mI (46980) rfm95: RADIO TX: Transmission complete. Total TX packets: 24[0m
+[0;32mI (46980) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (46990) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (47120) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (47120) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (47120) GNARL: RX: timeout (failure #8)[0m
+[0;32mI (47120) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (47130) GNARL: aa[0m
+[0;32mI (47130) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (47130) NimBLE: att_handle=18
+[0m
+[0;32mI (47140) GNARL: BLE notification sent successfully: response_count=23[0m
+[0;32mI (47200) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (47200) GNARL: aa[0m
+[0;32mI (47200) GNARL: BLE data sent successfully[0m
+[0;32mI (47260) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (47260) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (47260) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (47270) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (47270) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (47280) GNARL: CmdSendAndListen[0m
+[0;32mI (47280) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (47290) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (47290) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (47300) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (47300) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (47330) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (47330) rfm95: RADIO TX: Transmission complete. Total TX packets: 25[0m
+[0;32mI (47340) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (47340) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (47480) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (47480) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (47480) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (47480) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (47490) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (47490) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (47500) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (47530) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (47530) rfm95: RADIO TX: Transmission complete. Total TX packets: 26[0m
+[0;32mI (47530) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (47540) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (47670) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (47670) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (47670) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (47670) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (47680) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (47680) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (47690) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (47720) rfm95: RADIO TX: Transmission completed after 16 iterations[0m
+[0;32mI (47720) rfm95: RADIO TX: Transmission complete. Total TX packets: 27[0m
+[0;32mI (47720) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (47730) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (47860) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (47860) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (47860) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (47860) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (47870) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (47870) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (47880) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (47910) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (47910) rfm95: RADIO TX: Transmission complete. Total TX packets: 28[0m
+[0;32mI (47910) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (47920) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (48050) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (48050) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (48050) GNARL: RX: timeout (failure #9)[0m
+[0;32mI (48050) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (48060) GNARL: aa[0m
+[0;32mI (48060) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (48060) NimBLE: att_handle=18
+[0m
+[0;32mI (48070) GNARL: BLE notification sent successfully: response_count=24[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (48120) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (48120) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (48130) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (48130) GNARL: aa[0m
+[0;32mI (48130) GNARL: BLE data sent successfully[0m
+[0;32mI (48190) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (48190) GNARL: 03 06 0b 66[0m
+[0;32mI (48200) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (48200) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (48200) GNARL: CmdUpdateRegister[0m
+[0;32mI (49620) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (49620) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: Overriding 868349975 Hz to 868350000 Hz
+[0;32mI (49620) GNARL: setting frequency to 868256103 Hz[0m
+set_frequency: Overriding 868256103 Hz to 868350000 Hz
+[0;32mI (49630) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (49640) GNARL: dd[0m
+[0;32mI (49640) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (49650) NimBLE: att_handle=18
+[0m
+[0;32mI (49650) GNARL: BLE notification sent successfully: response_count=25[0m
+[0;32mI (49700) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (49700) GNARL: dd[0m
+[0;32mI (49700) GNARL: BLE data sent successfully[0m
+[0;32mI (49760) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (49760) GNARL: 03 06 0a 2e[0m
+[0;32mI (49770) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (49770) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (49770) GNARL: CmdUpdateRegister[0m
+[0;32mI (49770) GNARL: setting frequency to 868349853 Hz[0m
+set_frequency: Overriding 868349853 Hz to 868350000 Hz
+[0;32mI (49790) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (49790) GNARL: dd[0m
+[0;32mI (49790) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (49800) NimBLE: att_handle=18
+[0m
+[0;32mI (49810) GNARL: BLE notification sent successfully: response_count=26[0m
+[0;32mI (49850) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (49850) GNARL: dd[0m
+[0;32mI (49850) GNARL: BLE data sent successfully[0m
+[0;32mI (49910) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (49910) GNARL: 03 06 09 24[0m
+[0;32mI (49920) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (49920) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (49920) GNARL: CmdUpdateRegister[0m
+[0;32mI (49930) GNARL: setting frequency to 868349853 Hz[0m
+set_frequency: Overriding 868349853 Hz to 868350000 Hz
+[0;32mI (49940) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (49940) GNARL: dd[0m
+[0;32mI (49940) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (49950) NimBLE: att_handle=18
+[0m
+[0;32mI (49960) GNARL: BLE notification sent successfully: response_count=27[0m
+[0;32mI (50000) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (50000) GNARL: dd[0m
+[0;32mI (50000) GNARL: BLE data sent successfully[0m
+[0;32mI (50090) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (50090) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (50090) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (50100) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (50100) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (50110) GNARL: CmdSendAndListen[0m
+[0;32mI (50110) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (50120) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (50130) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (50130) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (50140) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (50160) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (50170) rfm95: RADIO TX: Transmission complete. Total TX packets: 29[0m
+[0;32mI (50170) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (50180) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (50310) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (50310) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (50310) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (50310) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (50320) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (50320) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (50330) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (50360) rfm95: RADIO TX: Transmission completed after 18 iterations[0m
+[0;32mI (50360) rfm95: RADIO TX: Transmission complete. Total TX packets: 30[0m
+[0;32mI (50360) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (50370) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (50510) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (50510) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (50510) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (50510) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (50520) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (50520) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (50530) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (50560) rfm95: RADIO TX: Transmission completed after 17 iterations[0m
+[0;32mI (50560) rfm95: RADIO TX: Transmission complete. Total TX packets: 31[0m
+[0;32mI (50560) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (50570) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (50700) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (50700) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (50700) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (50700) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (50710) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (50710) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (50720) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (50750) rfm95: RADIO TX: Transmission completed after 18 iterations[0m
+[0;32mI (50750) rfm95: RADIO TX: Transmission complete. Total TX packets: 32[0m
+[0;32mI (50750) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (50760) rfm95: RADIO: Changing mode 1 -> 5[0m
+[0;32mI (50890) rfm95: RADIO: Changing mode 5 -> 0[0m
+[0;32mI (50890) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (50890) GNARL: RX: timeout (failure #10)[0m
+[0;33mW (50890) GNARL: RADIO: 10 consecutive RX failures - approaching reset threshold[0m
+[0;33mW (50900) GNARL: RADIO: Performing hard reset (RX failures=10, mode failures=0)[0m
+[0;32mI (50910) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (50920) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (50930) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (50930) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (50940) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (50940) rfm95: RADIO: RFM95 Version: 0x00[0m
+[0;32mI (50940) rfm95: RADIO: RFM95 initialization complete[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (50950) GNARL: RADIO: Hard reset complete, frequency restored to 868350000 Hz[0m
+[0;32mI (50960) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (50970) GNARL: aa[0m
+[0;32mI (50970) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (50970) NimBLE: att_handle=18
+[0m
+[0;32mI (50980) GNARL: BLE notification sent successfully: response_count=28[0m
+[0;32mI (51030) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (51030) GNARL: aa[0m
+[0;32mI (51030) GNARL: BLE data sent successfully[0m
+[0;32mI (51090) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (51090) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (51090) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (51100) GNARL: BLE RSSI: -46 dBm[0m
+[0;32mI (51100) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (51100) GNARL: CmdSendAndListen[0m
+[0;32mI (51110) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (51110) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (51120) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (51250) rfm95: set_mode(1) timeout in mode 0 (failure #1)[0m
+[0;32mI (51250) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (51250) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (52420) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (52420) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (52540) rfm95: set_mode(1) timeout in mode 0 (failure #2)[0m
+[0;32mI (52540) rfm95: RADIO TX: Transmission complete. Total TX packets: 33[0m
+[0;32mI (52540) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (52550) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (52680) rfm95: set_mode(5) timeout in mode 0 (failure #3)[0m
+[0;32mI (52810) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (52810) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (52810) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (52810) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (52940) rfm95: set_mode(1) timeout in mode 0 (failure #4)[0m
+[0;32mI (52950) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (52950) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (53700) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (53700) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (53700) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (53710) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (53710) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;31mE (54120) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (54120) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (54240) rfm95: set_mode(1) timeout in mode 0 (failure #5)[0m
+[0;32mI (54240) rfm95: RADIO TX: Transmission complete. Total TX packets: 34[0m
+[0;32mI (54250) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (54250) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (54390) rfm95: set_mode(5) timeout in mode 0 (failure #6)[0m
+[0;32mI (54520) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (54520) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (54520) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (54520) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (54650) rfm95: set_mode(1) timeout in mode 0 (failure #7)[0m
+[0;32mI (54650) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (54660) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (55820) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (55820) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (55940) rfm95: set_mode(1) timeout in mode 0 (failure #8)[0m
+[0;32mI (55950) rfm95: RADIO TX: Transmission complete. Total TX packets: 35[0m
+[0;32mI (55950) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (55960) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (56080) rfm95: set_mode(5) timeout in mode 0 (failure #9)[0m
+[0;32mI (56210) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (56210) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (56210) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (56210) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (56310) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (56310) GNARL: 03 06 0b ee[0m
+[0;32mI (56310) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (56310) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;31mE (56350) rfm95: set_mode(1) timeout in mode 0 (failure #10)[0m
+[0;32mI (56360) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (56360) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (57520) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (57520) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (57650) rfm95: set_mode(1) timeout in mode 0 (failure #11)[0m
+[0;32mI (57650) rfm95: RADIO TX: Transmission complete. Total TX packets: 36[0m
+[0;32mI (57650) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (57660) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (57790) rfm95: set_mode(5) timeout in mode 0 (failure #12)[0m
+[0;32mI (57920) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (57920) GNARL: RX: timeout (failure #1)[0m
+[0;33mW (57920) GNARL: RADIO: Performing hard reset (RX failures=1, mode failures=12)[0m
+[0;32mI (57920) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (57940) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (57950) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (57950) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (57960) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (57960) rfm95: RADIO: RFM95 Version: 0x00[0m
+[0;32mI (57960) rfm95: RADIO: RFM95 initialization complete[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (57970) GNARL: RADIO: Hard reset complete, frequency restored to 868350000 Hz[0m
+[0;32mI (57980) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (57980) GNARL: aa[0m
+[0;32mI (57990) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (57990) NimBLE: att_handle=18
+[0m
+[0;32mI (58000) GNARL: BLE notification sent successfully: response_count=29[0m
+[0;33mW (58000) GNARL: CmdSendAndListen took 6897 ms (tries=4, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=130, rx_len=0)[0m
+[0;32mI (58020) GNARL: CmdSendAndListen[0m
+[0;32mI (58020) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (58030) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (58030) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (58050) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (58050) GNARL: aa[0m
+[0;32mI (58050) GNARL: BLE data sent successfully[0m
+[0;31mE (58180) rfm95: set_mode(1) timeout in mode 0 (failure #1)[0m
+[0;32mI (58180) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (58180) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (59340) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (59340) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (59470) rfm95: set_mode(1) timeout in mode 0 (failure #2)[0m
+[0;32mI (59470) rfm95: RADIO TX: Transmission complete. Total TX packets: 37[0m
+[0;32mI (59470) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (59480) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (59610) rfm95: set_mode(5) timeout in mode 0 (failure #3)[0m
+[0;32mI (59740) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (59740) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (59740) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (59740) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (59870) rfm95: set_mode(1) timeout in mode 0 (failure #4)[0m
+[0;32mI (59880) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (59880) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (60990) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (60990) NimBLE: att_handle=21
+[0m
+[0;31mE (61040) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (61040) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (61170) rfm95: set_mode(1) timeout in mode 0 (failure #5)[0m
+[0;32mI (61170) rfm95: RADIO TX: Transmission complete. Total TX packets: 38[0m
+[0;32mI (61170) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (61180) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;32mI (61260) GNARL: BLE data_access WRITE: command received, 2 bytes[0m
+[0;32mI (61260) GNARL: 01 0d[0m
+[0;32mI (61260) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (61260) GNARL: BLE calling rfspy_command with 2 bytes[0m
+[0;31mE (61330) rfm95: set_mode(5) timeout in mode 0 (failure #6)[0m
+[0;32mI (61460) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (61460) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (61460) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (61460) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (61590) rfm95: set_mode(1) timeout in mode 0 (failure #7)[0m
+[0;32mI (61590) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (61600) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (62760) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (62760) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (62890) rfm95: set_mode(1) timeout in mode 0 (failure #8)[0m
+[0;32mI (62890) rfm95: RADIO TX: Transmission complete. Total TX packets: 39[0m
+[0;32mI (62890) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (62900) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (63030) rfm95: set_mode(5) timeout in mode 0 (failure #9)[0m
+[0;32mI (63160) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;32mI (63160) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (63160) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (63160) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (63240) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (63240) GNARL: 03 06 0b 77[0m
+[0;32mI (63240) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (63240) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;31mE (63310) rfm95: set_mode(1) timeout in mode 0 (failure #10)[0m
+[0;32mI (63310) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (63310) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (64470) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (64470) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (64600) rfm95: set_mode(1) timeout in mode 0 (failure #11)[0m
+[0;32mI (64600) rfm95: RADIO TX: Transmission complete. Total TX packets: 40[0m
+[0;32mI (64600) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 130 ms)[0m
+[0;32mI (64610) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (64740) rfm95: set_mode(5) timeout in mode 0 (failure #12)[0m
+[0;32mI (64870) rfm95: RADIO RX: Receive timeout after 130 ms[0m
+[0;33mW (64870) GNARL: RX: timeout (failure #1)[0m
+[0;33mW (64870) GNARL: RADIO: Performing hard reset (RX failures=1, mode failures=12)[0m
+[0;32mI (64870) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (64890) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (64900) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (64900) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (64910) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (64910) rfm95: RADIO: RFM95 Version: 0x00[0m
+[0;32mI (64910) rfm95: RADIO: RFM95 initialization complete[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (64920) GNARL: RADIO: Hard reset complete, frequency restored to 868350000 Hz[0m
+[0;32mI (64930) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (64930) GNARL: aa[0m
+[0;32mI (64940) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (64940) NimBLE: att_handle=18
+[0m
+[0;32mI (64950) GNARL: BLE notification sent successfully: response_count=30[0m
+[0;33mW (64950) GNARL: CmdSendAndListen took 6934 ms (tries=4, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=130, rx_len=0)[0m
+[0;32mI (64970) GNARL: CmdUpdateRegister[0m
+[0;32mI (64970) GNARL: setting frequency to 868399658 Hz[0m
+set_frequency: Overriding 868399658 Hz to 868350000 Hz
+[0;32mI (64980) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (64980) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (64990) GNARL: dd[0m
+[0;32mI (64990) GNARL: dd[0m
+[0;32mI (65000) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (65010) NimBLE: att_handle=18
+[0m
+[0;32mI (65000) GNARL: BLE data sent successfully[0m
+[0;32mI (65020) GNARL: BLE notification sent successfully: response_count=31[0m
+[0;32mI (65020) GNARL: CmdResetRadioConfig[0m
+[0;32mI (65030) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (65030) GNARL: dd[0m
+[0;32mI (65030) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (65040) NimBLE: att_handle=18
+[0m
+[0;32mI (65050) GNARL: BLE notification sent successfully: response_count=32[0m
+[0;32mI (65050) GNARL: CmdUpdateRegister[0m
+[0;32mI (65060) GNARL: setting frequency to 868356079 Hz[0m
+set_frequency: Overriding 868356079 Hz to 868350000 Hz
+[0;32mI (65070) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (65070) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (65070) GNARL: dd[0m
+[0;32mI (65080) GNARL: dd[0m
+[0;32mI (65080) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (65090) GNARL: BLE data sent successfully[0m
+[0;32mI (65090) NimBLE: att_handle=18
+[0m
+[0;32mI (65100) GNARL: BLE notification sent successfully: response_count=33[0m
+[0;32mI (65130) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (65130) GNARL: 03 06 0a 2f[0m
+[0;32mI (65140) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (65140) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (65140) GNARL: CmdUpdateRegister[0m
+[0;32mI (65140) GNARL: setting frequency to 868449829 Hz[0m
+set_frequency: Overriding 868449829 Hz to 868350000 Hz
+[0;32mI (65160) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (65160) GNARL: dd[0m
+[0;32mI (65160) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (65170) NimBLE: att_handle=18
+[0m
+[0;32mI (65180) GNARL: BLE notification sent successfully: response_count=34[0m
+[0;32mI (65190) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (65190) GNARL: dd[0m
+[0;32mI (65190) GNARL: BLE data sent successfully[0m
+[0;32mI (65250) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (65250) GNARL: dd[0m
+[0;32mI (65250) GNARL: BLE data sent successfully[0m
+[0;32mI (65310) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (65310) GNARL: 03 06 09 24[0m
+[0;32mI (65320) GNARL: BLE RSSI: -46 dBm[0m
+[0;32mI (65320) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;32mI (65320) GNARL: CmdUpdateRegister[0m
+[0;32mI (65330) GNARL: setting frequency to 868449829 Hz[0m
+set_frequency: Overriding 868449829 Hz to 868350000 Hz
+[0;32mI (65340) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (65340) GNARL: dd[0m
+[0;32mI (65340) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (65350) NimBLE: att_handle=18
+[0m
+[0;32mI (65360) GNARL: BLE notification sent successfully: response_count=35[0m
+[0;32mI (65370) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (65370) GNARL: dd[0m
+[0;32mI (65370) GNARL: BLE data sent successfully[0m
+[0;32mI (65430) GNARL: BLE data_access WRITE: command received, 26 bytes[0m
+[0;32mI (65430) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (65430) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (65440) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (65440) GNARL: BLE calling rfspy_command with 26 bytes[0m
+[0;32mI (65450) GNARL: CmdSendAndListen[0m
+[0;32mI (65450) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (65460) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (65470) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (65490) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (65490) GNARL: dd[0m
+[0;32mI (65490) GNARL: BLE data sent successfully[0m
+[0;31mE (65610) rfm95: set_mode(1) timeout in mode 0 (failure #1)[0m
+[0;32mI (65610) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (65610) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;31mE (66770) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (66770) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (66900) rfm95: set_mode(1) timeout in mode 0 (failure #2)[0m
+[0;32mI (66900) rfm95: RADIO TX: Transmission complete. Total TX packets: 41[0m
+[0;32mI (66900) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (66910) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (67040) rfm95: set_mode(5) timeout in mode 0 (failure #3)[0m
+[0;32mI (67240) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;32mI (67240) rfm95: RADIO TX: Starting transmission of 11-byte packet[0m
+[0;32mI (67240) rfm95: a9 66 55 5a 56 71 68 d5 55 d2 c0[0m
+[0;32mI (67240) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (67370) rfm95: set_mode(1) timeout in mode 0 (failure #4)[0m
+[0;32mI (67370) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (67370) rfm95: RADIO TX: Writing 11 bytes to TX FIFO (remaining: 11)[0m
+[0;32mI (67800) GNARL: BLE data_access WRITE: command received, 122 bytes[0m
+[0;32mI (67800) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (67810) GNARL: 55 5a 56 71 94 d5 72 57 15 71 55 55 55 55 55 55[0m
+[0;32mI (67810) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (67820) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (67830) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (67830) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (67840) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (67850) GNARL: 55 55 55 55 55 55 55 35 90 00[0m
+[0;32mI (67850) GNARL: BLE RSSI: -47 dBm[0m
+[0;32mI (67850) GNARL: BLE calling rfspy_command with 122 bytes[0m
+[0;31mE (68540) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (68540) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (68670) rfm95: set_mode(1) timeout in mode 0 (failure #5)[0m
+[0;32mI (68670) rfm95: RADIO TX: Transmission complete. Total TX packets: 42[0m
+[0;32mI (68670) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (68680) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (68810) rfm95: set_mode(5) timeout in mode 0 (failure #6)[0m
+[0;32mI (69010) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;33mW (69010) GNARL: RX: timeout (failure #1)[0m
+[0;33mW (69010) GNARL: RADIO: Performing hard reset (RX failures=1, mode failures=6)[0m
+[0;32mI (69010) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (69030) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (69040) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (69040) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (69050) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (69050) rfm95: RADIO: RFM95 Version: 0x00[0m
+[0;32mI (69050) rfm95: RADIO: RFM95 initialization complete[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (69060) GNARL: RADIO: Hard reset complete, frequency restored to 868350000 Hz[0m
+[0;32mI (69070) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (69070) GNARL: aa[0m
+[0;32mI (69080) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (69080) NimBLE: att_handle=18
+[0m
+[0;32mI (69090) GNARL: BLE notification sent successfully: response_count=36[0m
+[0;33mW (69090) GNARL: CmdSendAndListen took 3641 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (69110) GNARL: CmdSendAndListen[0m
+[0;32mI (69110) rfm95: RADIO TX: Starting transmission of 107-byte packet[0m
+[0;32mI (69120) rfm95: a9 66 55 5a 56 71 94 d5 72 57 15 71 55 55 55 55[0m
+[0;32mI (69120) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (69130) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (69140) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (69140) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (69150) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (69160) rfm95: 55 55 55 55 55 55 55 55 55 35 90[0m
+[0;32mI (69160) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;32mI (69120) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (69170) GNARL: aa[0m
+[0;32mI (69180) GNARL: BLE data sent successfully[0m
+[0;32mI (69240) GNARL: BLE data_access WRITE: command received, 4 bytes[0m
+[0;32mI (69240) GNARL: 03 06 0b 55[0m
+[0;32mI (69250) GNARL: BLE RSSI: -48 dBm[0m
+[0;32mI (69250) GNARL: BLE calling rfspy_command with 4 bytes[0m
+[0;31mE (69320) rfm95: set_mode(1) timeout in mode 0 (failure #1)[0m
+[0;32mI (69320) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (69320) rfm95: RADIO TX: Writing 64 bytes to TX FIFO (remaining: 107)[0m
+[0;32mI (69350) rfm95: RADIO TX: Writing 43 bytes to TX FIFO (remaining: 43)[0m
+[0;31mE (70500) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (70500) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (70630) rfm95: set_mode(1) timeout in mode 0 (failure #2)[0m
+[0;32mI (70630) rfm95: RADIO TX: Transmission complete. Total TX packets: 43[0m
+[0;32mI (70630) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (70640) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (70770) rfm95: set_mode(5) timeout in mode 0 (failure #3)[0m
+[0;32mI (70970) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;32mI (70970) rfm95: RADIO TX: Starting transmission of 107-byte packet[0m
+[0;32mI (70970) rfm95: a9 66 55 5a 56 71 94 d5 72 57 15 71 55 55 55 55[0m
+[0;32mI (70970) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (70980) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (70990) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (70990) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (71000) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (71010) rfm95: 55 55 55 55 55 55 55 55 55 35 90[0m
+[0;32mI (71010) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (71140) rfm95: set_mode(1) timeout in mode 0 (failure #4)[0m
+[0;32mI (71140) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (71140) rfm95: RADIO TX: Writing 64 bytes to TX FIFO (remaining: 107)[0m
+[0;32mI (71170) rfm95: RADIO TX: Writing 43 bytes to TX FIFO (remaining: 43)[0m
+[0;31mE (72320) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (72320) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (72450) rfm95: set_mode(1) timeout in mode 0 (failure #5)[0m
+[0;32mI (72450) rfm95: RADIO TX: Transmission complete. Total TX packets: 44[0m
+[0;32mI (72450) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (72460) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (72590) rfm95: set_mode(5) timeout in mode 0 (failure #6)[0m
+[0;32mI (72790) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;32mI (72790) rfm95: RADIO TX: Starting transmission of 107-byte packet[0m
+[0;32mI (72790) rfm95: a9 66 55 5a 56 71 94 d5 72 57 15 71 55 55 55 55[0m
+[0;32mI (72790) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (72800) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (72810) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (72810) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (72820) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (72830) rfm95: 55 55 55 55 55 55 55 55 55 35 90[0m
+[0;32mI (72830) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (72970) rfm95: set_mode(1) timeout in mode 0 (failure #7)[0m
+[0;32mI (72970) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (72970) rfm95: RADIO TX: Writing 64 bytes to TX FIFO (remaining: 107)[0m
+[0;32mI (72990) rfm95: RADIO TX: Writing 43 bytes to TX FIFO (remaining: 43)[0m
+[0;31mE (74140) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (74140) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (74270) rfm95: set_mode(1) timeout in mode 0 (failure #8)[0m
+[0;32mI (74270) rfm95: RADIO TX: Transmission complete. Total TX packets: 45[0m
+[0;32mI (74270) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (74280) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (74410) rfm95: set_mode(5) timeout in mode 0 (failure #9)[0m
+[0;32mI (74610) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;32mI (74610) rfm95: RADIO TX: Starting transmission of 107-byte packet[0m
+[0;32mI (74610) rfm95: a9 66 55 5a 56 71 94 d5 72 57 15 71 55 55 55 55[0m
+[0;32mI (74610) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (74620) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (74630) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (74630) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (74640) rfm95: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (74650) rfm95: 55 55 55 55 55 55 55 55 55 35 90[0m
+[0;32mI (74650) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (74780) rfm95: set_mode(1) timeout in mode 0 (failure #10)[0m
+[0;32mI (74780) rfm95: RADIO TX: Sequencer configured, FIFO threshold=20[0m
+[0;32mI (74790) rfm95: RADIO TX: Writing 64 bytes to TX FIFO (remaining: 107)[0m
+[0;32mI (74810) rfm95: RADIO TX: Writing 43 bytes to TX FIFO (remaining: 43)[0m
+[0;31mE (75960) rfm95: RADIO TX: Transmission timeout! Still in mode 0[0m
+[0;32mI (75960) rfm95: RADIO: Changing mode 0 -> 1[0m
+[0;31mE (76090) rfm95: set_mode(1) timeout in mode 0 (failure #11)[0m
+[0;32mI (76090) rfm95: RADIO TX: Transmission complete. Total TX packets: 46[0m
+[0;32mI (76090) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 200 ms)[0m
+[0;32mI (76100) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (76230) rfm95: set_mode(5) timeout in mode 0 (failure #12)[0m
+[0;32mI (76430) rfm95: RADIO RX: Receive timeout after 200 ms[0m
+[0;33mW (76430) GNARL: RX: timeout (failure #1)[0m
+[0;33mW (76430) GNARL: RADIO: Performing hard reset (RX failures=1, mode failures=12)[0m
+[0;32mI (76430) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (76450) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (76460) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (76460) rfm95: RADIO: Resetting RFM95 module[0m
+[0;32mI (76470) rfm95: RADIO: Reset complete, waiting for module to stabilize[0m
+[0;32mI (76470) rfm95: RADIO: RFM95 Version: 0x00[0m
+[0;32mI (76470) rfm95: RADIO: RFM95 initialization complete[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (76480) GNARL: RADIO: Hard reset complete, frequency restored to 868350000 Hz[0m
+[0;32mI (76490) GNARL: BLE send_code(): sending code 0xAA to client[0m
+[0;32mI (76490) GNARL: aa[0m
+[0;32mI (76500) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (76500) NimBLE: att_handle=18
+[0m
+[0;32mI (76510) GNARL: BLE notification sent successfully: response_count=37[0m
+[0;33mW (76510) GNARL: CmdSendAndListen took 7406 ms (tries=4, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (76530) GNARL: CmdUpdateRegister[0m
+[0;32mI (76530) GNARL: setting frequency to 868437377 Hz[0m
+set_frequency: Overriding 868437377 Hz to 868350000 Hz
+[0;32mI (76540) GNARL: BLE send_code(): sending code 0xDD to client[0m
+[0;32mI (76550) GNARL: dd[0m
+[0;32mI (76550) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (76560) NimBLE: att_handle=18
+[0m
+[0;32mI (76560) GNARL: BLE notification sent successfully: response_count=38[0m
+[0;32mI (76570) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (76570) GNARL: dd[0m
+[0;32mI (76580) GNARL: BLE data sent successfully[0m
+[0;32mI (76630) GNARL: BLE data_access READ: sending 1 bytes from pump to phone[0m
+[0;32mI (76630) GNARL: dd[0m
+[0;32mI (76630) GNARL: BLE data sent successfully[0m
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (79640) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (79640) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (79770) rfm95: set_mode(5) timeout in mode 0 (failure #1)[0m
+[0;32mI (81270) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: 0 Hz
+set_frequency: Overriding 868350000 Hz to 868350000 Hz
+[0;32mI (86270) rfm95: RADIO RX: Starting receive (buffer size: 107, timeout: 1500 ms)[0m
+[0;32mI (86270) rfm95: RADIO: Changing mode 0 -> 5[0m
+[0;31mE (86400) rfm95: set_mode(5) timeout in mode 0 (failure #2)[0m
+[0;32mI (87900) rfm95: RADIO RX: Receive timeout after 1500 ms[0m
+set_frequency: 0 Hz

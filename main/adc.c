@@ -11,6 +11,9 @@
 
 #include "adc.h"
 
+// Forward declaration to avoid including gnarl.h (which has TAG macro conflict)
+extern bool radio_is_busy(void);
+
 const static char *TAG = "ADC";
 
 // Keep ADC sampling lightweight to avoid impacting radio/BLE.
@@ -21,7 +24,7 @@ const static char *TAG = "ADC";
 #define DUMMY_READS (2)
 
 // How often to refresh the cached battery voltage.
-#define UPDATE_PERIOD_MS (30000)
+#define UPDATE_PERIOD_MS (60000)  // 60 seconds - avoid interfering with radio/BLE
 // Scale the ADC input voltage back to the actual battery voltage using the
 // board's resistor divider (see include/module.h).
 #define SCALE_VOLTAGE(raw_mv) ((int)((int64_t)(raw_mv) * (VDIV_R1_KOHM + VDIV_R2_KOHM) / VDIV_R2_KOHM))
@@ -132,7 +135,7 @@ uint8_t battery_percent(uint16_t battery_voltage)
 
     uint8_t percent = (battery_voltage - empty_bat) * 100 / (full_bat - empty_bat);
 
-    ESP_LOGI(TAG, "(Conv) Battery voltage: %d mV, percentage: %d%%", battery_voltage, percent);
+    ESP_LOGD(TAG, "(Conv) Battery voltage: %d mV, percentage: %d%%", battery_voltage, percent);
 
     return percent;
 }
@@ -206,6 +209,14 @@ static void adc_task(void *arg)
 
     for (;;)
     {
+        // Skip ADC reading if radio is busy to avoid interference
+        if (radio_is_busy())
+        {
+            ESP_LOGD(TAG, "ADC: Skipping read - radio busy");
+            vTaskDelayUntil(&last_wake_time, pdMS_TO_TICKS(UPDATE_PERIOD_MS));
+            continue;
+        }
+
         // Ensure VBAT divider is connected for this update window.
         gpio_set_level(BATTERY_SENSE_EN, BATTERY_SENSE_EN_ACTIVE);
 
@@ -249,7 +260,7 @@ static void adc_task(void *arg)
             }
             else
             {
-                ESP_LOGI(TAG, "ADC raw: %d (no calibration)", raw_output);
+                ESP_LOGD(TAG, "ADC raw: %d (no calibration)", raw_output);
                 vTaskDelay(pdMS_TO_TICKS(AVG_PERIOD * 1000 / AVG_SAMPLES));
                 continue;
             }
@@ -276,7 +287,7 @@ static void adc_task(void *arg)
 
         const int scaled_avg = SCALE_VOLTAGE(averaged_result);
         const int chosen = choose_battery_mv(averaged_result, scaled_avg);
-        ESP_LOGI(TAG, "ADC voltage: %d mV (%d mV scaled; chosen=%d mV)", averaged_result, scaled_avg, chosen);
+        ESP_LOGD(TAG, "ADC voltage: %d mV (%d mV scaled; chosen=%d mV)", averaged_result, scaled_avg, chosen);
         battery_voltage = chosen;
 
 		vTaskDelayUntil(&last_wake_time, pdMS_TO_TICKS(UPDATE_PERIOD_MS));

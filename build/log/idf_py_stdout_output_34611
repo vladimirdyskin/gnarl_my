@@ -1,0 +1,340 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 28 2025 14:32:02[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=20f0ch (134924) map[0m
+[0;32mI (135) esp_image: segment 1: paddr=00030f34 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (135) esp_image: segment 2: paddr=00030f58 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (146) esp_image: segment 3: paddr=000360ac vaddr=40080000 size=09f6ch ( 40812) load[0m
+[0;32mI (162) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=60688h (394888) map[0m
+[0;32mI (298) esp_image: segment 5: paddr=000a06b0 vaddr=40089f6c size=12ed8h ( 77528) load[0m
+[0;32mI (342) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (342) boot: Disabling RNG early entropy source...[0m
+[0;32mI (352) cpu_start: Multicore app[0m
+[0;32mI (361) cpu_start: Pro cpu start user code[0m
+[0;32mI (361) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (361) app_init: Application information:[0m
+[0;32mI (364) app_init: Project name:     gnarl[0m
+[0;32mI (368) app_init: App version:      ca38555-dirty[0m
+[0;32mI (374) app_init: Compile time:     Dec 28 2025 14:31:55[0m
+[0;32mI (380) app_init: ELF file SHA256:  0937c2a9c07f8266...[0m
+[0;32mI (386) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (390) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (395) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (400) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (405) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (412) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (418) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (424) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (430) heap_init: At 3FFC6720 len 000198E0 (102 KiB): DRAM[0m
+[0;32mI (437) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (443) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (450) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (458) spi_flash: detected chip: generic[0m
+[0;32mI (460) spi_flash: flash io: dio[0m
+[0;33mW (465) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (487) coexist: coex firmware version: e727207[0m
+[0;32mI (488) main_task: Started on CPU0[0m
+[0;32mI (488) main_task: Calling app_main()[0m
+[0;32mI (488) GNARL: ==== GNARL boot ====[0m
+[0;32mI (488) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (498) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (498) GNARL: heap free: 234020[0m
+[0;32mI (508) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (508) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: ENABLED[0m
+[0;32mI (518) GNARL: PM configured: min=20 max=80 light_sleep=1[0m
+[0;32mI (528) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (588) rfm95: RADIO: RFM95 Version: 0x12[0m
+[0;32mI (588) GNARL: radio ready; pump freq=868350000[0m
+[0;32mI (588) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (588) GNARL: display_init: starting[0m
+[0;32mI (598) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (608) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (608) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (618) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (628) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (648) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (648) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:ae[0m
+[0;32mI (658) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (1288) GNARL: BLE server_init[0m
+[0;32mI (1288) GNARL: BLE services registered[0m
+[0;32mI (1298) GNARL: BLE device name set to 'GNARL-32AE'[0m
+[0;32mI (1298) GNARL: NimBLE host task started[0m
+[0;32mI (1298) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1308) main_task: Returned from app_main()[0m
+[0;32mI (1348) GNARL: BLE sync_callback[0m
+[0;32mI (1348) GNARL: BLE addr: 88:13:bf:fd:32:ae[0m
+[0;32mI (1348) GNARL: BLE starting advertising[0m
+[0;32mI (1358) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (1368) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (1368) NimBLE: GAP procedure initiated: advertise; [0m
+[0;32mI (1368) NimBLE: disc_mode=2[0m
+[0;32mI (1378) NimBLE:  adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0[0m
+[0;32mI (1388) NimBLE: 
+[0m
+[0;32mI (1398) GNARL: BLE advertising started successfully[0m
+[0;32mI (1608) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (1608) GNARL: BLE connected successfully: handle=0x0000, RSSI=-60 dBm[0m
+[0;32mI (2258) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (2618) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=1[0m
+[0;32mI (2618) GNARL: BLE: Client enabled response count notifications[0m
+[0;32mI (2738) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (2738) NimBLE: att_handle=18
+[0m
+[0;32mI (2948) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=1[0m
+[0;32mI (2948) GNARL: BLE: Client enabled timer tick notifications[0m
+[0;32mI (3198) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (3198) NimBLE: att_handle=18
+[0m
+[0;32mI (3348) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (3348) NimBLE: att_handle=18
+[0m
+[0;32mI (3468) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (3468) NimBLE: att_handle=18
+[0m
+[0;32mI (3588) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (3588) NimBLE: att_handle=18
+[0m
+[0;32mI (3768) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (3768) NimBLE: att_handle=18
+[0m
+[0;32mI (3888) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (3888) NimBLE: att_handle=18
+[0m
+[0;32mI (4008) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (4008) NimBLE: att_handle=18
+[0m
+[0;32mI (4158) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (4158) NimBLE: att_handle=18
+[0m
+[0;32mI (4428) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (4428) NimBLE: att_handle=18
+[0m
+[0;32mI (4908) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (4908) NimBLE: att_handle=18
+[0m
+[0;32mI (5388) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (5388) NimBLE: att_handle=18
+[0m
+[0;32mI (7268) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (7268) NimBLE: att_handle=18
+[0m
+[0;32mI (7738) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (7748) NimBLE: att_handle=18
+[0m
+[0;32mI (8168) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (8168) NimBLE: att_handle=18
+[0m
+[0;32mI (8718) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (8718) NimBLE: att_handle=18
+[0m
+[0;32mI (9198) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (9198) NimBLE: att_handle=18
+[0m
+[0;32mI (9708) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (9708) NimBLE: att_handle=18
+[0m
+[0;32mI (10158) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (10158) NimBLE: att_handle=18
+[0m
+[0;32mI (10608) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (10608) NimBLE: att_handle=18
+[0m
+[0;32mI (11058) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11058) NimBLE: att_handle=18
+[0m
+[0;32mI (11868) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (11878) NimBLE: att_handle=18
+[0m
+[0;32mI (13768) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (13768) NimBLE: att_handle=18
+[0m
+[0;32mI (14228) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (14228) NimBLE: att_handle=18
+[0m
+[0;32mI (14688) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (14688) NimBLE: att_handle=18
+[0m
+[0;32mI (15138) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (15138) NimBLE: att_handle=18
+[0m
+[0;32mI (15588) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (15588) NimBLE: att_handle=18
+[0m
+[0;32mI (16038) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16038) NimBLE: att_handle=18
+[0m
+[0;32mI (16498) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16498) NimBLE: att_handle=18
+[0m
+[0;32mI (16948) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (16948) NimBLE: att_handle=18
+[0m
+[0;32mI (17398) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17398) NimBLE: att_handle=18
+[0m
+[0;32mI (17738) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17738) NimBLE: att_handle=18
+[0m
+[0;32mI (17948) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (17948) NimBLE: att_handle=18
+[0m
+[0;32mI (18498) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (18498) NimBLE: att_handle=18
+[0m
+[0;32mI (20698) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (20698) NimBLE: att_handle=18
+[0m
+[0;32mI (21118) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21118) NimBLE: att_handle=18
+[0m
+[0;32mI (21668) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (21678) NimBLE: att_handle=18
+[0m
+[0;32mI (22058) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22058) NimBLE: att_handle=18
+[0m
+[0;32mI (22518) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22518) NimBLE: att_handle=18
+[0m
+[0;32mI (22818) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (22818) NimBLE: att_handle=18
+[0m
+[0;32mI (23298) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (23298) NimBLE: att_handle=18
+[0m
+[0;32mI (23748) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (23748) NimBLE: att_handle=18
+[0m
+[0;32mI (24198) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (24198) NimBLE: att_handle=18
+[0m
+[0;32mI (27918) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (27918) NimBLE: att_handle=18
+[0m
+[0;32mI (28428) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (28428) NimBLE: att_handle=18
+[0m
+[0;32mI (35268) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (35268) NimBLE: att_handle=18
+[0m
+[0;33mW (36298) GNARL: RX: timeout (failure #1, noise floor RSSI=-116)[0m
+[0;32mI (36298) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (36298) NimBLE: att_handle=18
+[0m
+[0;32mI (36598) GNARL: RADIO: Successful RX after 1 failures[0m
+[0;32mI (36598) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (36598) NimBLE: att_handle=18
+[0m
+[0;32mI (59548) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (59548) NimBLE: att_handle=18
+[0m
+[0;32mI (60568) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (60578) NimBLE: att_handle=18
+[0m
+[0;32mI (60978) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (60978) NimBLE: att_handle=21
+[0m
+[0;32mI (60988) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (60988) NimBLE: att_handle=18
+[0m
+[0;32mI (61448) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (61448) NimBLE: att_handle=18
+[0m
+[0;32mI (61948) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (61948) NimBLE: att_handle=18
+[0m
+[0;32mI (92918) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (92918) NimBLE: att_handle=18
+[0m
+[0;32mI (93368) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (93368) NimBLE: att_handle=18
+[0m
+[0;32mI (93948) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (93948) NimBLE: att_handle=18
+[0m
+[0;32mI (95658) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (95658) NimBLE: att_handle=18
+[0m
+[0;32mI (96188) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (96188) NimBLE: att_handle=18
+[0m
+[0;32mI (118418) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (118418) NimBLE: att_handle=18
+[0m
+[0;32mI (118808) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (118808) NimBLE: att_handle=18
+[0m
+[0;32mI (119298) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (119298) NimBLE: att_handle=18
+[0m
+[0;32mI (120698) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (120698) NimBLE: att_handle=21
+[0m
+[0;32mI (180428) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (180428) NimBLE: att_handle=21
+[0m
+[0;32mI (240158) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (240158) NimBLE: att_handle=21
+[0m
+[0;33mW (294688) GNARL: RX: timeout (failure #1, noise floor RSSI=-48)[0m
+[0;32mI (294688) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (294688) NimBLE: att_handle=18
+[0m
+[0;33mW (294838) GNARL: RX: timeout (failure #2, noise floor RSSI=-48)[0m
+[0;32mI (294838) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (294838) NimBLE: att_handle=18
+[0m
+[0;32mI (299888) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (299898) NimBLE: att_handle=21
+[0m
+[0;33mW (306988) GNARL: RX: timeout (failure #3, noise floor RSSI=-48)[0m
+[0;32mI (306988) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (306988) NimBLE: att_handle=18
+[0m
+[0;33mW (306988) GNARL: CmdSendAndListen took 12078 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=0)[0m
+[0;33mW (307558) GNARL: RX: timeout (failure #4, noise floor RSSI=-48)[0m
+[0;32mI (307558) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (307558) NimBLE: att_handle=18
+[0m
+[0;33mW (308738) GNARL: RX: timeout (failure #5, noise floor RSSI=-48)[0m
+[0;33mW (308738) GNARL: RADIO: 5 consecutive RX failures - approaching reset threshold[0m
+[0;32mI (308738) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (308748) NimBLE: att_handle=18
+[0m
+[0;33mW (309308) GNARL: RX: timeout (failure #6, noise floor RSSI=-48)[0m
+[0;32mI (309308) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (309308) NimBLE: att_handle=18
+[0m
+[0;33mW (310478) GNARL: RX: timeout (failure #7, noise floor RSSI=-48)[0m
+[0;32mI (310478) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (310478) NimBLE: att_handle=18
+[0m
+[0;32mI (359588) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (359588) NimBLE: att_handle=21
+[0m
+[0;32mI (419308) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (419308) NimBLE: att_handle=21
+[0m

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <esp_mac.h>
 #include <esp_nimble_hci.h>
 #include <esp_pm.h>
 #include <esp_timer.h>
@@ -15,6 +16,8 @@
 #include <nvs_flash.h>
 #include <services/gap/ble_svc_gap.h>
 #include <services/gatt/ble_svc_gatt.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 #include "adc.h"
 #include "commands.h"
@@ -70,6 +73,11 @@ static bool connected;
 static uint16_t connection_handle;
 
 static esp_pm_lock_handle_t ble_no_light_sleep_lock;
+
+bool ble_is_connected(void)
+{
+	return connected;
+}
 
 static void ble_set_no_light_sleep(bool enabled)
 {
@@ -265,14 +273,24 @@ static void advertise(void)
 	if (err)
 	{
 		// Common after quick reconnects: stack is still unwinding previous state.
-		ESP_LOGW(TAG, "ble_gap_adv_start failed err=%d; stopping adv and will retry on ADV_COMPLETE", err);
-		ble_gap_adv_stop();
+		const char* err_str = "UNKNOWN";
+		switch(err) {
+			case 0x0d: err_str = "BLE_HS_EALREADY (already advertising)"; break;
+			case 0x02: err_str = "BLE_HS_EINVAL (invalid params)"; break;
+			case 0x0e: err_str = "BLE_HS_EBUSY (busy)"; break;
+		}
+		ESP_LOGW(TAG, "ble_gap_adv_start failed: %s (err=%d)", err_str, err);
+		ESP_LOGI(TAG, "Stopping previous advertising and will retry on ADV_COMPLETE");
+		int stop_err = ble_gap_adv_stop();
+		if (stop_err != 0) {
+			ESP_LOGW(TAG, "ble_gap_adv_stop also failed: err=%d", stop_err);
+		}
 		// Don't hold the lock if adv did not start.
 		ble_set_no_light_sleep(false);
 		return;
 	}
 
-	ESP_LOGD(TAG, "advertising started");
+	ESP_LOGI(TAG, "BLE advertising started successfully");
 }
 
 static int handle_gap_event(struct ble_gap_event *e, void *arg)
@@ -280,6 +298,8 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 	switch (e->type)
 	{
 	case BLE_GAP_EVENT_CONNECT:
+		ESP_LOGI(TAG, "BLE GAP_EVENT_CONNECT: status=%d, conn_handle=0x%04X", 
+		         e->connect.status, e->connect.conn_handle);
 		if (e->connect.status != 0)
 		{
 			ESP_LOGE(TAG, "BLE connect failed, status=%d", e->connect.status);
@@ -287,6 +307,8 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 			return 0;
 		}
 		connected = true;
+		connection_handle = e->connect.conn_handle;
+		
 		// Once connected, allow light sleep again.
 		ble_set_no_light_sleep(false);
 		// Force client to re-subscribe each connection.
@@ -294,16 +316,16 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 		timer_tick_notify_state = 0;
 		battery_level_notify_state = 0;
 		int8_t rssi;
-		ble_gap_conn_rssi(e->connect.conn_handle, &rssi);
+		ble_gap_conn_rssi(connection_handle, &rssi);
 		set_ble_rssi(rssi);
 
-		connection_handle = e->connect.conn_handle;
-		ESP_LOGI(TAG, "BLE connected, handle=0x%04X", connection_handle);
-		ESP_LOGD(TAG, "connection handle 0x%04X", connection_handle);
+		ESP_LOGI(TAG, "BLE connected successfully: handle=0x%04X, RSSI=%d dBm", connection_handle, (int)rssi);
 		ESP_LOGD(TAG, "response count notify handle 0x%04X", response_count_notify_handle);
 		ESP_LOGD(TAG, "timer tick notify handle 0x%04X", timer_tick_notify_handle);
 		break;
 	case BLE_GAP_EVENT_DISCONNECT:
+		ESP_LOGI(TAG, "BLE GAP_EVENT_DISCONNECT: reason=0x%03x (was handle=0x%04X)", 
+		         e->disconnect.reason, connection_handle);
 		connected = false;
 		connection_handle = 0;
 		response_count_notify_state = 0;
@@ -311,30 +333,58 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 		battery_level_notify_state = 0;
 		gnarl_cancel_current_command();
 		set_ble_disconnected();
-		ESP_LOGI(TAG, "BLE disconnected, reason=0x%x", e->disconnect.reason);
+		
+		// Decode disconnect reason for better debugging
+		const char* reason_str = "UNKNOWN";
+		switch(e->disconnect.reason) {
+			case 0x08: reason_str = "SUPERVISION_TIMEOUT"; break;
+			case 0x13: reason_str = "REMOTE_USER_TERMINATED"; break;
+			case 0x16: reason_str = "LOCAL_HOST_TERMINATED"; break;
+			case 0x208: reason_str = "BLE_HS_ETIMEOUT"; break;
+			case 0x20d: reason_str = "BLE_HS_EDONE"; break;
+		}
+		ESP_LOGI(TAG, "BLE disconnect reason: %s (0x%03x)", reason_str, e->disconnect.reason);
+		ESP_LOGI(TAG, "BLE restarting advertisement after short delay...");
+		
+		// Small delay to allow BLE stack to clean up before restarting advertising
+		// This helps prevent "already advertising" or "busy" errors on quick reconnects
+		vTaskDelay(pdMS_TO_TICKS(100));
+		
 		advertise();
 		break;
 	case BLE_GAP_EVENT_ADV_COMPLETE:
-		ESP_LOGD(TAG, "advertising complete (0x%x)", e->adv_complete.reason);
+		ESP_LOGI(TAG, "BLE advertising complete, reason=0x%x", e->adv_complete.reason);
+		const char* adv_reason_str = "UNKNOWN";
+		switch(e->adv_complete.reason) {
+			case 0: adv_reason_str = "SUCCESS/CONNECTED"; break;
+			case 0x0d: adv_reason_str = "TIMEOUT"; break;
+			case 0x208: adv_reason_str = "STOPPED"; break;
+		}
+		ESP_LOGI(TAG, "BLE adv complete reason: %s - restarting", adv_reason_str);
 		advertise();
 		break;
 	case BLE_GAP_EVENT_SUBSCRIBE:
-		ESP_LOGI(TAG, "BLE subscribe: attr=0x%04X notify=%d", e->subscribe.attr_handle, e->subscribe.cur_notify);
+		ESP_LOGI(TAG, "BLE subscribe: conn_handle=0x%04X, attr=0x%04X, notify=%d", 
+		         e->subscribe.conn_handle, e->subscribe.attr_handle, e->subscribe.cur_notify);
+		
 		if (e->subscribe.attr_handle == response_count_notify_handle)
 		{
-			ESP_LOGD(TAG, "notify %d for response count", e->subscribe.cur_notify);
+			ESP_LOGI(TAG, "BLE: Client %s response count notifications", 
+			         e->subscribe.cur_notify ? "enabled" : "disabled");
 			response_count_notify_state = e->subscribe.cur_notify;
 			break;
 		}
 		if (e->subscribe.attr_handle == timer_tick_notify_handle)
 		{
-			ESP_LOGD(TAG, "notify %d for timer tick", e->subscribe.cur_notify);
+			ESP_LOGI(TAG, "BLE: Client %s timer tick notifications", 
+			         e->subscribe.cur_notify ? "enabled" : "disabled");
 			timer_tick_notify_state = e->subscribe.cur_notify;
 			break;
 		}
 		if (e->subscribe.attr_handle == battery_level_notify_handle)
 		{
-			ESP_LOGD(TAG, "notify %d for battery level", e->subscribe.cur_notify);
+			ESP_LOGI(TAG, "BLE: Client %s battery level notifications", 
+			         e->subscribe.cur_notify ? "enabled" : "disabled");
 			battery_level_notify_state = e->subscribe.cur_notify;
 			break;
 		}
@@ -379,11 +429,12 @@ static uint16_t data_out_len;
 static void response_notify(void)
 {
 	response_count++;
-	ESP_LOGD(TAG, "BLE response_notify(): response_count=%d, connected=%d, notify_state=%d", 
-	         response_count, connected, response_count_notify_state);
+	ESP_LOGD(TAG, "BLE response_notify(): response_count=%d, connected=%d, notify_state=%d, handle=0x%04X", 
+	         response_count, connected, response_count_notify_state, connection_handle);
 	if (!connected || !response_count_notify_state)
 	{
-		ESP_LOGD(TAG, "not notifying for response count %d", response_count);
+		ESP_LOGD(TAG, "not notifying for response count %d (connected=%d, state=%d)", 
+		         response_count, connected, response_count_notify_state);
 		return;
 	}
 	struct os_mbuf *om = ble_hs_mbuf_from_flat(&response_count, sizeof(response_count));
@@ -395,33 +446,33 @@ static void response_notify(void)
 		ESP_LOGW(TAG, "response notify failed err=%d (connected=%d)", err, connected);
 		return;
 	}
-	ESP_LOGI(TAG, "BLE notification sent successfully: response_count=%d", response_count);
+	ESP_LOGD(TAG, "BLE notification sent successfully: response_count=%d", response_count);
 }
 
 void send_code(const uint8_t code)
 {
-	ESP_LOGI(TAG, "BLE send_code(): sending code 0x%02X to client", code);
+	ESP_LOGD(TAG, "BLE send_code(): sending code 0x%02X to client", code);
 	data_out[0] = code;
 	data_out_len = 1;
-	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_INFO);
+	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_DEBUG);
 	response_notify();
 }
 
 void send_bytes(const uint8_t *buf, int count)
 {
-	ESP_LOGI(TAG, "BLE send_bytes(): sending %d bytes to client", count);
+	ESP_LOGD(TAG, "BLE send_bytes(): sending %d bytes to client", count);
 	data_out[0] = RESPONSE_CODE_SUCCESS;
 	memcpy(data_out + 1, buf, count);
 	data_out_len = count + 1;
-	ESP_LOGI(TAG, "BLE total data length with response code: %d bytes", data_out_len);
-	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_INFO);
+	ESP_LOGD(TAG, "BLE total data length with response code: %d bytes", data_out_len);
+	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_DEBUG);
 	response_notify();
 }
 
 static void timer_tick_callback(void *arg)
 {
 	timer_tick++;
-	ESP_LOGD(TAG, "timer tick %d", timer_tick);
+	ESP_LOGD(TAG, "timer tick %d (connected=%d, handle=0x%04X)", timer_tick, connected, connection_handle);
 
 	// Periodic battery level notification (standard Battery Service 0x180F).
 	if (connected && battery_level_notify_state)
@@ -432,7 +483,8 @@ static void timer_tick_callback(void *arg)
 		if (err_batt)
 		{
 			os_mbuf_free_chain(om_batt);
-			ESP_LOGW(TAG, "battery level notify failed err=%d (connected=%d)", err_batt, connected);
+			ESP_LOGW(TAG, "battery level notify failed err=%d (connected=%d, handle=0x%04X)", 
+			         err_batt, connected, connection_handle);
 		}
 	}
 
@@ -463,25 +515,25 @@ static int data_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_ga
 	switch (ctxt->op)
 	{
 	case BLE_GATT_ACCESS_OP_READ_CHR:
-		ESP_LOGI(TAG, "BLE data_access READ: sending %d bytes from pump to phone", data_out_len);
+		ESP_LOGD(TAG, "BLE data_access READ: sending %d bytes from pump to phone", data_out_len);
 		if (data_out_len > 0) {
-			ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_INFO);
+			ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_DEBUG);
 		}
 		if (os_mbuf_append(ctxt->om, data_out, data_out_len) != 0)
 		{
 			ESP_LOGE(TAG, "BLE data_access: insufficient resources for %d bytes", data_out_len);
 			return BLE_ATT_ERR_INSUFFICIENT_RES;
 		}
-		ESP_LOGI(TAG, "BLE data sent successfully");
+		ESP_LOGD(TAG, "BLE data sent successfully");
 		return 0;
 	case BLE_GATT_ACCESS_OP_WRITE_CHR:
 		err = ble_hs_mbuf_to_flat(ctxt->om, data_in, sizeof(data_in), &data_in_len);
 		assert(!err);
-		ESP_LOGI(TAG, "BLE data_access WRITE: command received, %d bytes", data_in_len);
-		ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_in, data_in_len, ESP_LOG_INFO);
+		ESP_LOGD(TAG, "BLE data_access WRITE: command received, %d bytes", data_in_len);
+		ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_in, data_in_len, ESP_LOG_DEBUG);
 		ble_gap_conn_rssi(conn_handle, &rssi);
-		ESP_LOGI(TAG, "BLE RSSI: %d dBm", (int)rssi);
-		ESP_LOGI(TAG, "BLE calling rfspy_command with %d bytes", data_in_len);
+		ESP_LOGD(TAG, "BLE RSSI: %d dBm", (int)rssi);
+		ESP_LOGD(TAG, "BLE calling rfspy_command with %d bytes", data_in_len);
 		rfspy_command(data_in, data_in_len, (int)rssi);
 		return 0;
 	default:
@@ -504,14 +556,20 @@ static void read_custom_name(void)
 	err = nvs_get_blob(my_handle, "custom_name", custom_name, &required_size);
 	if (err == ESP_ERR_NVS_NOT_FOUND)
 	{
-		strcpy((char *)custom_name, DEFAULT_NAME);
-		ESP_LOGD(TAG, "set default custom name: %s", custom_name);
+		// Generate unique name using last 4 hex digits of MAC address
+		uint8_t mac[6];
+		esp_read_mac(mac, ESP_MAC_BT);
+		snprintf((char *)custom_name, CUSTOM_NAME_SIZE, "%s-%02X%02X", DEFAULT_NAME, mac[4], mac[5]);
+		ESP_LOGD(TAG, "set default custom name with MAC: %s", custom_name);
 	}
 	else if (err != ESP_OK)
 	{
 		ESP_LOGE(TAG, "read_custom_name: nvs_get_blob: %s", esp_err_to_name(err));
-		strcpy((char *)custom_name, DEFAULT_NAME);
-		ESP_LOGD(TAG, "fallback to default custom name: %s", custom_name);
+		// Generate unique name using last 4 hex digits of MAC address
+		uint8_t mac[6];
+		esp_read_mac(mac, ESP_MAC_BT);
+		snprintf((char *)custom_name, CUSTOM_NAME_SIZE, "%s-%02X%02X", DEFAULT_NAME, mac[4], mac[5]);
+		ESP_LOGD(TAG, "fallback to default custom name with MAC: %s", custom_name);
 	}
 	else
 	{

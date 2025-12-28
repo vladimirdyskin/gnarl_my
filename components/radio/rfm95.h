@@ -170,4 +170,12 @@ int read_rssi(void);
 
 int rx_packet_count(void);
 
+// Radio failure tracking - for auto-recovery
+int rfm95_get_failure_count(void);
+void rfm95_reset_failure_count(void);
+bool rfm95_needs_reset(void);
+
+// Soft reinit - reconfigure without hardware reset (safer for recovery)
+void rfm95_soft_reinit(void);
+
 #endif // _RFM95_H

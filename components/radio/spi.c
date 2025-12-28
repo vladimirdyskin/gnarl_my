@@ -6,32 +6,38 @@
 
 #define MILLISECONDS	1000
 
-static spi_device_handle_t spi_dev;
+static spi_device_handle_t spi_dev = NULL;
+static bool spi_bus_initialized = false;
 
 void spi_init(void) {
-	// Initialize the SPI bus.
-	spi_bus_config_t buscfg = {
-		.mosi_io_num   = LORA_SDO,
-		.miso_io_num   = LORA_SDI,
-		.sclk_io_num   = LORA_SCK,
-		.quadwp_io_num = -1,
-		.quadhd_io_num = -1,
-	};
-	ESP_ERROR_CHECK(spi_bus_initialize(VSPI_HOST, &buscfg, 0));
+	// Initialize the SPI bus (only once).
+	if (!spi_bus_initialized) {
+		spi_bus_config_t buscfg = {
+			.mosi_io_num   = LORA_SDO,
+			.miso_io_num   = LORA_SDI,
+			.sclk_io_num   = LORA_SCK,
+			.quadwp_io_num = -1,
+			.quadhd_io_num = -1,
+		};
+		ESP_ERROR_CHECK(spi_bus_initialize(VSPI_HOST, &buscfg, 0));
+		spi_bus_initialized = true;
+	}
 
 	gpio_set_direction(LORA_CS, GPIO_MODE_OUTPUT);
 	gpio_set_level(LORA_CS, 1);
 
-	// Attach the radio to the SPI bus.
-	spi_device_interface_config_t devcfg = {
-		.command_bits	= 8,
-		.address_bits	= 0,
-		.mode		= 0,
-		.clock_speed_hz = 5*MEGAHERTZ,
-		.spics_io_num	= LORA_CS,
-		.queue_size	= 1,
-	};
-	ESP_ERROR_CHECK(spi_bus_add_device(VSPI_HOST, &devcfg, &spi_dev));
+	// Attach the radio to the SPI bus (only once).
+	if (spi_dev == NULL) {
+		spi_device_interface_config_t devcfg = {
+			.command_bits	= 8,
+			.address_bits	= 0,
+			.mode		= 0,
+			.clock_speed_hz = 5*MEGAHERTZ,
+			.spics_io_num	= LORA_CS,
+			.queue_size	= 1,
+		};
+		ESP_ERROR_CHECK(spi_bus_add_device(VSPI_HOST, &devcfg, &spi_dev));
+	}
 }
 
 // Read register by sending the address followed by a dummy byte.

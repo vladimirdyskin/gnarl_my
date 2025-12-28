@@ -4,6 +4,7 @@
 
 #include <esp_log.h>
 #include <esp_err.h>
+#include <esp_pm.h>
 #include <driver/gpio.h>
 #include <driver/uart.h>
 #include <esp_sleep.h>
@@ -21,7 +22,26 @@
 
 #define DEFAULT_PREAMBLE_BYTES	0x18
 
+// Radio failure tracking for auto-reset
+static volatile int radio_failures = 0;
+#define RADIO_FAILURE_THRESHOLD 5
+
 static uint16_t current_preamble_bytes = DEFAULT_PREAMBLE_BYTES;
+
+// PM lock to prevent light sleep during radio operations
+static esp_pm_lock_handle_t radio_pm_lock = NULL;
+
+static void radio_pm_lock_acquire(void) {
+	if (radio_pm_lock != NULL) {
+		esp_pm_lock_acquire(radio_pm_lock);
+	}
+}
+
+static void radio_pm_lock_release(void) {
+	if (radio_pm_lock != NULL) {
+		esp_pm_lock_release(radio_pm_lock);
+	}
+}
 
 void rfm95_set_tx_power_dbm(int8_t dbm) {
 	// PA_BOOST output: 2..17 dBm range (SX1276 typical).
@@ -80,7 +100,7 @@ static void set_mode(uint8_t mode) {
 		ESP_LOGD(TAG, "RADIO: Already in mode %d, skipping", mode);
 		return;
 	}
-	ESP_LOGI(TAG, "RADIO: Changing mode %d -> %d", cur_mode, mode);
+	ESP_LOGD(TAG, "RADIO: Changing mode %d -> %d", cur_mode, mode);
 	write_register(REG_OP_MODE, FSK_OOK_MODE | MODULATION_OOK | mode);
 	if (cur_mode == MODE_SLEEP) {
 		usleep(100);
@@ -88,12 +108,16 @@ static void set_mode(uint8_t mode) {
 	for (int w = 0; w < MAX_WAIT; w++) {
 		cur_mode = read_mode();
 		if (cur_mode == mode) {
+			// Success - reset failure count on any successful mode change
+			radio_failures = 0;
 			return;
 		}
 		// Avoid tight spinning; keeps higher-level stacks (e.g. BLE) responsive.
 		taskYIELD();
 	}
-	ESP_LOGI(TAG, "set_mode(%d) timeout in mode %d", mode, cur_mode);
+	// Mode change timeout - increment failure counter
+	radio_failures++;
+	ESP_LOGE(TAG, "set_mode(%d) timeout in mode %d (failure #%d)", mode, cur_mode, radio_failures);
 }
 
 static inline void set_mode_sleep(void) {
@@ -117,17 +141,29 @@ static inline void sequencer_stop(void) {
 }
 
 // Reset the radio device.  See section 7.2.2 of data sheet.
-// NOTE: the RFM95 requires the reset pin to be in input mode
-// except while resetting the chip, unlike the RFM69 for example.
+// NOTE: For Heltec/TTGO boards we keep RST as OUTPUT and drive HIGH explicitly,
+// because the internal pull-up may be too weak or absent on these modules.
 
 void rfm95_reset(void) {
-	ESP_LOGI(TAG, "RADIO: Resetting RFM95 module");
+	ESP_LOGD(TAG, "RADIO: Resetting RFM95 module");
+	
+	// Configure RST as output
 	gpio_set_direction(LORA_RST, GPIO_MODE_OUTPUT);
+	
+	// Drive RST HIGH first to ensure known state
+	gpio_set_level(LORA_RST, 1);
+	usleep(10 * MILLISECOND);
+	
+	// Pull RESET LOW to reset the module (datasheet minimum 100us)
 	gpio_set_level(LORA_RST, 0);
-	usleep(100);
-	gpio_set_direction(LORA_RST, GPIO_MODE_INPUT);
-	usleep(5*MILLISECOND);
-	ESP_LOGI(TAG, "RADIO: Reset complete, waiting for module to stabilize");
+	usleep(1 * MILLISECOND);  // Hold LOW for 1ms
+	
+	// Drive RST HIGH to release reset (keep as OUTPUT, don't rely on pull-up!)
+	gpio_set_level(LORA_RST, 1);
+	
+	// Wait for module to stabilize (datasheet says 5ms, use 50ms for safety)
+	usleep(50 * MILLISECOND);
+	ESP_LOGD(TAG, "RADIO: Reset complete, waiting for module to stabilize");
 }
 
 static volatile int rx_packets;
@@ -142,12 +178,91 @@ int tx_packet_count(void) {
 	return tx_packets;
 }
 
+// Radio failure tracking functions (variable defined at top of file)
+int rfm95_get_failure_count(void) {
+	return radio_failures;
+}
+
+void rfm95_reset_failure_count(void) {
+	radio_failures = 0;
+}
+
+bool rfm95_needs_reset(void) {
+	return radio_failures >= RADIO_FAILURE_THRESHOLD;
+}
+
+// Soft reinit - reconfigure registers WITHOUT hardware reset
+// Use this for recovery, as hardware reset can kill the chip on some boards
+void rfm95_soft_reinit(void) {
+	ESP_LOGD(TAG, "RADIO: Soft reinit (no hardware reset)");
+	
+	// Reset failure counter first
+	radio_failures = 0;
+	
+	// Force standby mode to stop any ongoing operation
+	write_register(REG_OP_MODE, FSK_OOK_MODE | MODULATION_OOK | MODE_STDBY);
+	usleep(1 * MILLISECOND);
+	
+	// Clear FIFO
+	write_register(REG_IRQ_FLAGS_2, FIFO_OVERRUN);
+	
+	// Re-apply all configuration
+	write_register(REG_PA_CONFIG, 0x8F);
+	write_register(REG_LNA, 0x23);
+	write_register(REG_DIO_MAPPING_1, 3 << DIO2_MAPPING_SHIFT);
+	
+	// Force sleep mode twice (required for FSK/OOK mode change)
+	write_register(REG_OP_MODE, FSK_OOK_MODE | MODULATION_OOK | MODE_SLEEP);
+	usleep(100);
+	write_register(REG_OP_MODE, FSK_OOK_MODE | MODULATION_OOK | MODE_SLEEP);
+	usleep(100);
+	
+	// Bitrate
+	write_register(REG_BITRATE_MSB, 0x07);
+	write_register(REG_BITRATE_LSB, 0xA1);
+	
+	// RSSI config
+	write_register(REG_RSSI_CONFIG, 5);
+	
+	// RX bandwidth
+	write_register(REG_RX_BW, (1 << RX_BW_MANT_SHIFT) | 1);
+	
+	// Preamble
+	rfm95_set_preamble_bytes(DEFAULT_PREAMBLE_BYTES);
+	
+	// Sync word config
+	write_register(REG_SYNC_CONFIG, SYNC_ON | 3);
+	write_register(REG_SYNC_VALUE_1, 0xFF);
+	write_register(REG_SYNC_VALUE_2, 0x00);
+	write_register(REG_SYNC_VALUE_3, 0xFF);
+	write_register(REG_SYNC_VALUE_4, 0x00);
+	
+	// Packet format
+	write_register(REG_PACKET_CONFIG_1, PACKET_FORMAT_FIXED);
+	write_register(REG_PAYLOAD_LENGTH, 0);
+	write_register(REG_PACKET_CONFIG_2, PACKET_MODE | 0);
+	
+	// Go to standby
+	write_register(REG_OP_MODE, FSK_OOK_MODE | MODULATION_OOK | MODE_STDBY);
+	usleep(1 * MILLISECOND);
+	
+	int version = read_version();
+	ESP_LOGI(TAG, "RADIO: Soft reinit complete, Version: 0x%02X", version);
+}
+
 void rfm95_init(void) {
 	ESP_LOGI(TAG, "RADIO: Initializing RFM95 radio module");
 	spi_init();
 	ESP_LOGD(TAG, "RADIO: SPI initialized");
 	rfm95_reset();
 	ESP_LOGD(TAG, "RADIO: Reset complete");
+
+	// Enable PA_BOOST for TTGO/Heltec LoRa32 boards (required for TX)
+	// Using exact same value as original GNARL: 0x8F
+	write_register(REG_PA_CONFIG, 0x8F);
+
+	// Enable LNA with max gain and boost (critical for RX sensitivity!)
+	write_register(REG_LNA, 0x23);
 
 	gpio_set_direction(LORA_DIO2, GPIO_MODE_INPUT);
 	gpio_set_intr_type(LORA_DIO2, GPIO_INTR_POSEDGE);
@@ -191,11 +306,17 @@ void rfm95_init(void) {
 	write_register(REG_PAYLOAD_LENGTH, 0);
 	write_register(REG_PACKET_CONFIG_2, PACKET_MODE | 0);
 
-	// use PA_BOOST output pin
-	rfm95_set_tx_power_dbm(17);
 	int version = read_version();
 	ESP_LOGI(TAG, "RADIO: RFM95 Version: 0x%02X", version);
-	ESP_LOGI(TAG, "RADIO: RFM95 initialization complete, TX power=17 dBm, Bitrate=16384 bps, BW=200 kHz");
+	
+	// Create PM lock to prevent light sleep during radio operations
+	if (radio_pm_lock == NULL) {
+		esp_err_t err = esp_pm_lock_create(ESP_PM_NO_LIGHT_SLEEP, 0, "radio", &radio_pm_lock);
+		if (err != ESP_OK) {
+			ESP_LOGW(TAG, "Failed to create radio PM lock: %s", esp_err_to_name(err));
+			radio_pm_lock = NULL;
+		}
+	}
 }
 
 static inline bool fifo_empty(void) {
@@ -248,7 +369,7 @@ static void wait_for_transmit_done(void) {
 	for (int w = 0; w < MAX_WAIT; w++) {
 		mode = read_mode();
 		if (mode == MODE_STDBY) {
-			ESP_LOGI(TAG, "RADIO TX: Transmission completed after %d iterations", w);
+			ESP_LOGD(TAG, "RADIO TX: Transmission completed after %d iterations", w);
 			return;
 		}
 		usleep(1*MILLISECOND);
@@ -259,9 +380,9 @@ static void wait_for_transmit_done(void) {
 }
 
 void transmit(uint8_t *buf, int count) {
-	ESP_LOGI(TAG, "RADIO TX: Starting transmission of %d-byte packet", count);
+	ESP_LOGI(TAG, "TX: %d bytes", count);
 	if (count > 0) {
-		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, count, ESP_LOG_INFO);
+		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, count, ESP_LOG_DEBUG);
 	}
 	clear_fifo();
 	ESP_LOGD(TAG, "RADIO TX: FIFO cleared");
@@ -270,13 +391,13 @@ void transmit(uint8_t *buf, int count) {
 	// Automatically enter Transmit state on FifoLevel interrupt.
 	write_register(REG_FIFO_THRESH, TX_START_CONDITION | FIFO_THRESHOLD);
 	write_register(REG_SEQ_CONFIG_1, SEQUENCER_START | IDLE_MODE_STANDBY | FROM_START_TO_TX);
-	ESP_LOGI(TAG, "RADIO TX: Sequencer configured, FIFO threshold=%d", FIFO_THRESHOLD);
+	ESP_LOGD(TAG, "RADIO TX: Sequencer configured, FIFO threshold=%d", FIFO_THRESHOLD);
 	int avail = FIFO_SIZE;
 	for (;;) {
 		if (avail > count) {
 			avail = count;
 		}
-		ESP_LOGI(TAG, "RADIO TX: Writing %d bytes to TX FIFO (remaining: %d)", avail, count);
+		ESP_LOGD(TAG, "RADIO TX: Writing %d bytes to TX FIFO (remaining: %d)", avail, count);
 		xmit(buf, avail);
 		ESP_LOGD(TAG, "RADIO TX: After xmit: mode = %d", read_mode());
 		buf += avail;
@@ -305,13 +426,13 @@ void transmit(uint8_t *buf, int count) {
 	wait_for_transmit_done();
 	set_mode_standby();
 	tx_packets++;
-	ESP_LOGI(TAG, "RADIO TX: Transmission complete. Total TX packets: %d", tx_packets);
+	ESP_LOGI(TAG, "TX: done (total: %d)", tx_packets);
 }
 
 static bool packet_seen(void) {
 	bool seen = (read_register(REG_IRQ_FLAGS_1) & SYNC_ADDRESS_MATCH) != 0;
 	if (seen) {
-		ESP_LOGI(TAG, "RADIO RX: Incoming packet detected (SyncAddress match)");
+		ESP_LOGD(TAG, "RADIO RX: Incoming packet detected (SyncAddress match)");
 	}
 	return seen;
 }
@@ -334,24 +455,34 @@ int read_rssi(void) {
 typedef void wait_fn_t(int);
 
 static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
-	ESP_LOGI(TAG, "RADIO RX: Starting receive (buffer size: %d, timeout: %d ms)", count, timeout);
+	ESP_LOGI(TAG, "RX: listening (timeout: %d ms)", timeout);
+	radio_pm_lock_acquire();  // Prevent light sleep during RX
 	gpio_intr_enable(LORA_DIO2);
-	ESP_LOGD(TAG, "RADIO RX: GPIO interrupt enabled on DIO2");
 	set_mode_receive();
-	ESP_LOGD(TAG, "RADIO RX: Mode set to receive");
+	uint8_t mode_after = read_mode();
+	if (mode_after != MODE_RX) {
+		ESP_LOGE(TAG, "RX: Failed to enter RX mode! Current mode=%d", mode_after);
+	}
 	if (!packet_seen()) {
 		// Stay in RX mode.
-		ESP_LOGD(TAG, "RADIO RX: No packet detected yet, waiting...");
 		wait_fn(timeout);
 		if (!packet_seen()) {
+			// Read RSSI even on timeout to get noise floor
+			last_rssi = read_register(REG_RSSI);
+			uint8_t mode = read_mode();
+			uint8_t irq1 = read_register(REG_IRQ_FLAGS_1);
+			uint8_t irq2 = read_register(REG_IRQ_FLAGS_2);
 			set_mode_sleep();
-			ESP_LOGI(TAG, "RADIO RX: Receive timeout after %d ms", timeout);
+			gpio_intr_disable(LORA_DIO2);
+			radio_pm_lock_release();  // Allow light sleep again
+			ESP_LOGW(TAG, "RX: timeout, mode=%d, rssi=0x%02X(%d dBm), irq1=0x%02X, irq2=0x%02X", 
+					 mode, last_rssi, read_rssi(), irq1, irq2);
 			return 0;
 		}
 	}
-	ESP_LOGI(TAG, "RADIO RX: Packet detected, reading data");
+	ESP_LOGD(TAG, "RADIO RX: Packet detected, reading data");
 	last_rssi = read_register(REG_RSSI);
-	ESP_LOGI(TAG, "RADIO RX: RSSI = %d dBm", read_rssi());
+	ESP_LOGD(TAG, "RADIO RX: RSSI = %d dBm", read_rssi());
 	int n = 0;
 	int w = 0;
 	ESP_LOGD(TAG, "RADIO RX: Reading bytes from FIFO");
@@ -387,11 +518,10 @@ static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
 	}
 	if (n > 0) {
 		rx_packets++;
-		ESP_LOGI(TAG, "RADIO RX: Received %d bytes, RSSI: %d dBm, Total RX packets: %d", n, read_rssi(), rx_packets);
-		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, n, ESP_LOG_INFO);
-	} else {
-		ESP_LOGI(TAG, "RADIO RX: No data received");
+		ESP_LOGI(TAG, "RX: %d bytes, RSSI: %d dBm (total: %d)", n, read_rssi(), rx_packets);
+		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, n, ESP_LOG_DEBUG);
 	}
+	radio_pm_lock_release();  // Allow light sleep again
 	return n;
 }
 
@@ -469,14 +599,20 @@ uint32_t read_frequency(void) {
 }
 
 void set_frequency(uint32_t freq_hz) {
-	ESP_LOGI(TAG, "RADIO: Setting frequency to %lu Hz", (unsigned long)freq_hz);
+	// Override frequency in 868-869 MHz range to 868.35 MHz (pump frequency for EU region)
+	// This matches original GNARL behavior - Loop may request different frequencies but pump uses fixed one
+	if (freq_hz > 868000000 && freq_hz < 869000000) {
+		ESP_LOGD(TAG, "set_frequency: Overriding %lu Hz to 868350000 Hz", (unsigned long)freq_hz);
+		freq_hz = 868350000;
+	} else {
+		ESP_LOGD(TAG, "set_frequency: %lu Hz", (unsigned long)freq_hz);
+	}
 	uint32_t f = (((uint64_t)freq_hz << 19) + FXOSC/2) / FXOSC;
 	uint8_t frf[3];
 	frf[0] = f >> 16;
 	frf[1] = f >> 8;
 	frf[2] = f;
 	write_burst(REG_FRF_MSB, frf, sizeof(frf));
-	ESP_LOGD(TAG, "RADIO: Frequency set complete");
 }
 
 int read_version(void) {

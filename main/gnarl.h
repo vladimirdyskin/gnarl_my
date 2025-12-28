@@ -1,6 +1,7 @@
 #ifndef _GNARL_H
 #define _GNARL_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "pump_config.h"
@@ -47,6 +48,12 @@ void gnarl_cancel_current_command(void);
 // ISR-safe: request an immediate active pump probe (updates pump RSSI).
 // Returns 1 if a higher-priority task was woken.
 int gnarl_request_pump_probe_isr(void);
+
+// Check if BLE is currently connected
+bool ble_is_connected(void);
+
+// Check if radio is currently busy (for low-priority tasks to avoid interference)
+bool radio_is_busy(void);
 
 #define set_pump_rssi(value) set_rssi(value, CONNECTION_STAT_PUMP);
 #define set_pump_disconnected() set_rssi(0, CONNECTION_STAT_PUMP);

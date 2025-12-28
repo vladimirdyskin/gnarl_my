@@ -59,6 +59,11 @@ void gnarl_cancel_current_command(void)
 
 static SemaphoreHandle_t radio_mutex;
 
+// Tracking for RX timeouts (send_and_listen failures)
+// Note: mode change failures are tracked separately in rfm95.c via rfm95_needs_reset()
+static volatile int consecutive_rx_failures = 0;
+#define RX_FAILURE_THRESHOLD 10  // Reset after 10 consecutive RX timeouts
+
 #define PUMP_BG_LISTEN_INTERVAL_MS 5000
 // 250ms was often too short to catch sporadic on-air traffic.
 // Keep it modest to avoid delaying foreground commands.
@@ -83,6 +88,44 @@ static inline void radio_unlock(void)
 	if (radio_mutex != NULL)
 	{
 		xSemaphoreGive(radio_mutex);
+	}
+}
+
+// Check if radio is currently busy (for ADC to avoid interference)
+bool radio_is_busy(void) {
+	if (radio_mutex == NULL) {
+		return false;
+	}
+	// Try to take with zero timeout - if we can't, it's busy
+	if (xSemaphoreTake(radio_mutex, 0) == pdTRUE) {
+		xSemaphoreGive(radio_mutex);
+		return false;
+	}
+	return true;
+}
+
+// Check both RX failures and mode change failures (from rfm95.c)
+static void reset_radio_if_needed(void) {
+	bool needs_reset = (consecutive_rx_failures >= RX_FAILURE_THRESHOLD) || rfm95_needs_reset();
+	
+	if (needs_reset) {
+		int rfm_failures = rfm95_get_failure_count();
+		ESP_LOGW(TAG, "RADIO: Performing soft reinit (RX failures=%d, mode failures=%d)", 
+				 consecutive_rx_failures, rfm_failures);
+		
+		// NOTE: This function is called only from within radio-locked contexts,
+		// so we don't need to acquire the lock here.
+		uint32_t saved_freq = PUMP_FREQUENCY;
+		
+		// Use soft reinit - NO hardware reset! Just reconfigure registers.
+		// Hardware reset can kill the RFM95 chip on Heltec boards.
+		rfm95_soft_reinit();
+		set_frequency(saved_freq);
+		
+		// Reset both counters
+		consecutive_rx_failures = 0;
+		rfm95_reset_failure_count();
+		ESP_LOGI(TAG, "RADIO: Soft reinit complete, frequency restored to %lu Hz", saved_freq);
 	}
 }
 
@@ -209,10 +252,28 @@ static void rx_common(int n, int rssi)
 {
 	if (n == 0)
 	{
-		ESP_LOGD(TAG, "RX: timeout");
+		consecutive_rx_failures++;
+		// Log RSSI (noise floor) even on timeout for diagnostics
+		ESP_LOGW(TAG, "RX: timeout (failure #%d, noise floor RSSI=%d)", consecutive_rx_failures, rssi);
+		
+		// Log every 5 failures to track deterioration
+		if ((consecutive_rx_failures % 5) == 0) {
+			ESP_LOGW(TAG, "RADIO: %d consecutive RX failures - approaching reset threshold", consecutive_rx_failures);
+		}
+		
+		reset_radio_if_needed();
 		send_code(RESPONSE_CODE_RX_TIMEOUT);
 		return;
 	}
+	
+	// Successful reception - reset failure counter
+	if (consecutive_rx_failures > 0) {
+		ESP_LOGI(TAG, "RADIO: Successful RX after %d failures", consecutive_rx_failures);
+		consecutive_rx_failures = 0;
+	}
+	// Also reset rfm95 mode failure counter on successful RX
+	rfm95_reset_failure_count();
+	
 	set_pump_rssi(rssi);
 	rx_buf.rssi = raw_rssi(rssi);
 	if (rx_buf.rssi == 0)
@@ -249,7 +310,10 @@ static volatile int in_get_packet = 0;
 static void get_packet(const uint8_t *buf, int len)
 {
 	get_packet_cmd_t *p = (get_packet_cmd_t *)buf;
-	reverse_four_bytes(&p->timeout_ms);
+	uint32_t timeout_ms;
+	memcpy(&timeout_ms, &p->timeout_ms, sizeof(timeout_ms));
+	reverse_four_bytes(&timeout_ms);
+	memcpy(&p->timeout_ms, &timeout_ms, sizeof(timeout_ms));
 	ESP_LOGD(TAG, "get_packet: listen_channel %d timeout_ms %lu",
 			 p->listen_channel, p->timeout_ms);
 	if (!radio_lock(portMAX_DELAY))
@@ -272,7 +336,10 @@ static void get_packet(const uint8_t *buf, int len)
 static void send_packet(const uint8_t *buf, int len)
 {
 	send_packet_cmd_t *p = (send_packet_cmd_t *)buf;
-	reverse_two_bytes(&p->delay_ms);
+	uint16_t delay_ms_val;
+	memcpy(&delay_ms_val, &p->delay_ms, sizeof(delay_ms_val));
+	reverse_two_bytes(&delay_ms_val);
+	memcpy(&p->delay_ms, &delay_ms_val, sizeof(delay_ms_val));
 	ESP_LOGD(TAG, "send_packet: len %d send_channel %d repeat_count %d delay_ms %d",
 			 len, p->send_channel, p->repeat_count, p->delay_ms);
 	len -= (p->packet - (uint8_t *)p);
@@ -295,9 +362,17 @@ static void send_packet(const uint8_t *buf, int len)
 static void send_and_listen(const uint8_t *buf, int len)
 {
 	send_and_listen_cmd_t *p = (send_and_listen_cmd_t *)buf;
-	reverse_two_bytes(&p->delay_ms);
-	reverse_four_bytes(&p->timeout_ms);
-	reverse_two_bytes(&p->preamble_ms);
+	uint16_t delay_ms_val, preamble_ms_val;
+	uint32_t timeout_ms_val;
+	memcpy(&delay_ms_val, &p->delay_ms, sizeof(delay_ms_val));
+	memcpy(&timeout_ms_val, &p->timeout_ms, sizeof(timeout_ms_val));
+	memcpy(&preamble_ms_val, &p->preamble_ms, sizeof(preamble_ms_val));
+	reverse_two_bytes(&delay_ms_val);
+	reverse_four_bytes(&timeout_ms_val);
+	reverse_two_bytes(&preamble_ms_val);
+	memcpy(&p->delay_ms, &delay_ms_val, sizeof(delay_ms_val));
+	memcpy(&p->timeout_ms, &timeout_ms_val, sizeof(timeout_ms_val));
+	memcpy(&p->preamble_ms, &preamble_ms_val, sizeof(preamble_ms_val));
 	ESP_LOGD(TAG, "send_and_listen: len %d send_channel %d repeat_count %d delay_ms %d",
 			 len, p->send_channel, p->repeat_count, p->delay_ms);
 	ESP_LOGD(TAG, "send_and_listen: listen_channel %d timeout_ms %lu retry_count %d preamble_ms %u",
@@ -331,6 +406,8 @@ static void send_and_listen(const uint8_t *buf, int len)
 	for (int retries = p->retry_count + 1; retries > 0; retries--)
 	{
 		tries_used++;
+		ESP_LOGI(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)", 
+				 tries_used, p->retry_count + 1, (unsigned)p->preamble_ms, p->timeout_ms);
 		if (cancel_current_command)
 		{
 			break;
@@ -355,6 +432,12 @@ static void send_and_listen(const uint8_t *buf, int len)
 	// Restore default preamble to keep behavior consistent for other commands.
 	rfm95_set_preamble_ms(0);
 
+	// Call rx_common BEFORE unlocking radio, so reset_radio_if_needed() has the lock
+	if (!cancel_current_command)
+	{
+		rx_common(n, rssi);
+	}
+
 	radio_unlock();
 
 	int64_t dt = esp_timer_get_time() - t0;
@@ -370,10 +453,6 @@ static void send_and_listen(const uint8_t *buf, int len)
 				 (unsigned)p->preamble_ms,
 				 (unsigned long)p->timeout_ms,
 				 n);
-	}
-	if (!cancel_current_command)
-	{
-		rx_common(n, rssi);
 	}
 }
 
@@ -413,12 +492,12 @@ static void pump_bg_listen_task(void *unused)
 
 		if (n > 0)
 		{
-			ESP_LOGI(TAG, "pump_bg_listen: got packet len=%d rssi=%d", n, rssi);
+			ESP_LOGD(TAG, "pump_bg_listen: got packet len=%d rssi=%d", n, rssi);
 			set_pump_rssi(rssi);
 		}
 		else if ((loops % 6) == 0)
 		{
-			ESP_LOGI(TAG, "pump_bg_listen: no packets yet (listening on %lu Hz, window=%dms)",
+			ESP_LOGD(TAG, "pump_bg_listen: no packets yet (listening on %lu Hz, window=%dms)",
 					 (unsigned long)PUMP_FREQUENCY, PUMP_BG_LISTEN_TIMEOUT_MS);
 		}
 
@@ -426,6 +505,7 @@ static void pump_bg_listen_task(void *unused)
 	}
 }
 
+__attribute__((unused))
 static void pump_active_probe_task(void *unused)
 {
 	ESP_LOGI(TAG, "pump_active_probe: started (interval=%dms)", PUMP_ACTIVE_PROBE_INTERVAL_MS);
@@ -452,6 +532,12 @@ static void pump_active_probe_task(void *unused)
 		(void)xTaskNotifyWait(0, UINT32_MAX, &notif, wait_ticks);
 
 		loops++;
+
+		// Only probe when BLE is connected
+		if (!ble_is_connected())
+		{
+			continue;
+		}
 
 		// Don't interfere with active radio operations.
 		if (!radio_lock(0))
@@ -485,6 +571,9 @@ static void pump_active_probe_task(void *unused)
 		if (rc == 0)
 		{
 			ESP_LOGI(TAG, "pump_active_probe: ok (rssi=%d status=0x%02x)", rssi, (unsigned)st.code);
+			// Successful communication - reset failure counters
+			consecutive_rx_failures = 0;
+			rfm95_reset_failure_count();
 			// -127 is a common sentinel (last_rssi=0xFF) meaning "no valid RSSI".
 			// Don't overwrite a previous good reading with it.
 			if (rssi != -127)
@@ -537,7 +626,7 @@ static void check_frequency(void)
 	uint32_t freq = (uint32_t)(((uint64_t)f * 24 * MHz) >> 16);
 	if (valid_frequency(freq))
 	{
-		ESP_LOGI(TAG, "setting frequency to %lu Hz", freq);
+			ESP_LOGD(TAG, "setting frequency to %lu Hz", freq);
 		set_frequency(freq);
 	}
 	else
@@ -631,11 +720,24 @@ static void send_stats()
 	ESP_LOGD(TAG, "send_stats len %d uptime %lu rx %d tx %d",
 			 sizeof(statistics), statistics.uptime,
 			 statistics.packet_rx_count, statistics.packet_tx_count);
-	reverse_four_bytes(&statistics.uptime);
-	reverse_two_bytes(&statistics.packet_rx_count);
-	reverse_two_bytes(&statistics.packet_tx_count);
-	reverse_two_bytes(&statistics.placeholder0);
-	reverse_two_bytes(&statistics.placeholder1);
+	
+	// Use local copies to avoid taking address of packed struct members
+	uint32_t uptime = statistics.uptime;
+	uint16_t rx_count = statistics.packet_rx_count;
+	uint16_t tx_count = statistics.packet_tx_count;
+	uint16_t ph0 = statistics.placeholder0;
+	uint16_t ph1 = statistics.placeholder1;
+	reverse_four_bytes(&uptime);
+	reverse_two_bytes(&rx_count);
+	reverse_two_bytes(&tx_count);
+	reverse_two_bytes(&ph0);
+	reverse_two_bytes(&ph1);
+	statistics.uptime = uptime;
+	statistics.packet_rx_count = rx_count;
+	statistics.packet_tx_count = tx_count;
+	statistics.placeholder0 = ph0;
+	statistics.placeholder1 = ph1;
+	
 	send_bytes((const uint8_t *)&statistics, sizeof(statistics));
 }
 
@@ -703,47 +805,47 @@ static void gnarl_loop(void *unused)
 		switch (req.command)
 		{
 		case CmdGetState:
-			ESP_LOGI(TAG, "CmdGetState");
+			ESP_LOGD(TAG, "CmdGetState");
 			send_bytes((const uint8_t *)STATE_OK, strlen(STATE_OK));
 			break;
 		case CmdGetVersion:
-			ESP_LOGI(TAG, "CmdGetVersion");
+			ESP_LOGD(TAG, "CmdGetVersion");
 			send_bytes((const uint8_t *)SUBG_RFSPY_VERSION, strlen(SUBG_RFSPY_VERSION));
 			break;
 		case CmdGetPacket:
-			ESP_LOGI(TAG, "CmdGetPacket");
+			ESP_LOGD(TAG, "CmdGetPacket");
 			get_packet(req.data, req.length);
 			break;
 		case CmdSendPacket:
-			ESP_LOGI(TAG, "CmdSendPacket");
+			ESP_LOGD(TAG, "CmdSendPacket");
 			send_packet(req.data, req.length);
 			break;
 		case CmdSendAndListen:
-			ESP_LOGI(TAG, "CmdSendAndListen");
+			ESP_LOGD(TAG, "CmdSendAndListen");
 			send_and_listen(req.data, req.length);
 			break;
 		case CmdUpdateRegister:
-			ESP_LOGI(TAG, "CmdUpdateRegister");
+			ESP_LOGD(TAG, "CmdUpdateRegister");
 			update_register(req.data, req.length);
 			break;
 		case CmdLED:
-			ESP_LOGI(TAG, "CmdLED");
+			ESP_LOGD(TAG, "CmdLED");
 			led_mode(req.data, req.length);
 			break;
 		case CmdReadRegister:
-			ESP_LOGI(TAG, "CmdReadRegister");
+			ESP_LOGD(TAG, "CmdReadRegister");
 			read_register(req.data, req.length);
 			break;
 		case CmdSetSWEncoding:
-			ESP_LOGI(TAG, "CmdSetSWEncoding");
+			ESP_LOGD(TAG, "CmdSetSWEncoding");
 			set_sw_encoding(req.data, req.length);
 			break;
 		case CmdResetRadioConfig:
-			ESP_LOGI(TAG, "CmdResetRadioConfig");
+			ESP_LOGD(TAG, "CmdResetRadioConfig");
 			send_code(RESPONSE_CODE_SUCCESS);
 			break;
 		case CmdGetStatistics:
-			ESP_LOGI(TAG, "CmdGetStatistics");
+			ESP_LOGD(TAG, "CmdGetStatistics");
 			send_stats();
 			break;
 		default:
@@ -773,11 +875,15 @@ void start_gnarl_task(void)
 	// Background short listen to populate pump RSSI after reboot.
 	xTaskCreate(pump_bg_listen_task, "pump_bg", 3072, 0, tskIDLE_PRIORITY + 6, NULL);
 
-	// Active probe to populate pump RSSI even when the pump is otherwise silent.
-	BaseType_t ok = xTaskCreate(pump_active_probe_task, "pump_probe", 4096, 0, tskIDLE_PRIORITY + 6, &pump_probe_handle);
+	// Active probe disabled - causes too much radio traffic
+	// Loop/phone commands provide enough activity to keep pump RSSI updated
+	// BaseType_t ok = xTaskCreate(pump_active_probe_task, "pump_probe", 4096, 0, tskIDLE_PRIORITY + 6, &pump_probe_handle);
+	pump_probe_handle = NULL;  // Task not created
+	/*
 	if (ok != pdPASS)
 	{
 		ESP_LOGW(TAG, "pump_active_probe: task create failed");
 		pump_probe_handle = NULL;
 	}
+	*/
 }
