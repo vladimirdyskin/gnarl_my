@@ -380,7 +380,7 @@ static void wait_for_transmit_done(void) {
 }
 
 void transmit(uint8_t *buf, int count) {
-	ESP_LOGI(TAG, "TX: %d bytes", count);
+	ESP_LOGD(TAG, "TX: %d bytes", count);
 	if (count > 0) {
 		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, count, ESP_LOG_DEBUG);
 	}
@@ -426,7 +426,7 @@ void transmit(uint8_t *buf, int count) {
 	wait_for_transmit_done();
 	set_mode_standby();
 	tx_packets++;
-	ESP_LOGI(TAG, "TX: done (total: %d)", tx_packets);
+	ESP_LOGD(TAG, "TX: done (total: %d)", tx_packets);
 }
 
 static bool packet_seen(void) {
@@ -455,7 +455,7 @@ int read_rssi(void) {
 typedef void wait_fn_t(int);
 
 static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
-	ESP_LOGI(TAG, "RX: listening (timeout: %d ms)", timeout);
+	ESP_LOGD(TAG, "RX: listening (timeout: %d ms)", timeout);
 	radio_pm_lock_acquire();  // Prevent light sleep during RX
 	gpio_intr_enable(LORA_DIO2);
 	set_mode_receive();
@@ -475,7 +475,7 @@ static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
 			set_mode_sleep();
 			gpio_intr_disable(LORA_DIO2);
 			radio_pm_lock_release();  // Allow light sleep again
-			ESP_LOGW(TAG, "RX: timeout, mode=%d, rssi=0x%02X(%d dBm), irq1=0x%02X, irq2=0x%02X", 
+			ESP_LOGD(TAG, "RX: timeout, mode=%d, rssi=0x%02X(%d dBm), irq1=0x%02X, irq2=0x%02X", 
 					 mode, last_rssi, read_rssi(), irq1, irq2);
 			return 0;
 		}
@@ -518,7 +518,7 @@ static int rx_common(wait_fn_t wait_fn, uint8_t *buf, int count, int timeout) {
 	}
 	if (n > 0) {
 		rx_packets++;
-		ESP_LOGI(TAG, "RX: %d bytes, RSSI: %d dBm (total: %d)", n, read_rssi(), rx_packets);
+		ESP_LOGD(TAG, "RX: %d bytes, RSSI: %d dBm (total: %d)", n, read_rssi(), rx_packets);
 		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, n, ESP_LOG_DEBUG);
 	}
 	radio_pm_lock_release();  // Allow light sleep again

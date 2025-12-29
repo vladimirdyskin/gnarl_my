@@ -406,7 +406,7 @@ static void send_and_listen(const uint8_t *buf, int len)
 	for (int retries = p->retry_count + 1; retries > 0; retries--)
 	{
 		tries_used++;
-		ESP_LOGI(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)", 
+		ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)", 
 				 tries_used, p->retry_count + 1, (unsigned)p->preamble_ms, p->timeout_ms);
 		if (cancel_current_command)
 		{

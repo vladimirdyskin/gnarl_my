@@ -431,4 +431,103 @@ entry 0x4008063c
 [0;32mI (127669) rfm95: TX: done (total: 34)[0m
 [0;32mI (127669) rfm95: RX: listening (timeout: 200 ms)[0m
 [0;32mI (127779) rfm95: RX: 107 bytes, RSSI: -70 dBm (total: 26)[0m
-[0;32mI (127789) NimBLE: GATT procedure in
+[0;32mI (127789) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (127789) NimBLE: att_handle=18
+[0m
+[0;32mI (128139) GNARL: SendAndListen: try 1/4 (preamble=0 ms, timeout=200 ms)[0m
+[0;32mI (128139) rfm95: TX: 11 bytes[0m
+[0;32mI (128159) rfm95: TX: done (total: 35)[0m
+[0;32mI (128169) rfm95: RX: listening (timeout: 200 ms)[0m
+[0;32mI (128219) rfm95: RX: 11 bytes, RSSI: -84 dBm (total: 27)[0m
+[0;32mI (128219) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (128219) NimBLE: att_handle=18
+[0m
+[0;32mI (128559) GNARL: SendAndListen: try 1/4 (preamble=0 ms, timeout=200 ms)[0m
+[0;32mI (128559) rfm95: TX: 107 bytes[0m
+[0;32mI (128629) rfm95: TX: done (total: 36)[0m
+[0;32mI (128629) rfm95: RX: listening (timeout: 200 ms)[0m
+[0;32mI (128799) rfm95: RX: 11 bytes, RSSI: -87 dBm (total: 28)[0m
+[0;32mI (128799) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (128799) NimBLE: att_handle=18
+[0m
+[0;32mI (130519) GNARL: SendAndListen: try 1/4 (preamble=0 ms, timeout=200 ms)[0m
+[0;32mI (130519) rfm95: TX: 11 bytes[0m
+[0;32mI (130549) rfm95: TX: done (total: 37)[0m
+[0;32mI (130549) rfm95: RX: listening (timeout: 200 ms)[0m
+[0;32mI (130609) rfm95: RX: 11 bytes, RSSI: -95 dBm (total: 29)[0m
+[0;32mI (130609) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (130609) NimBLE: att_handle=18
+[0m
+[0;32mI (130949) GNARL: SendAndListen: try 1/4 (preamble=0 ms, timeout=200 ms)[0m
+[0;32mI (130949) rfm95: TX: 107 bytes[0m
+[0;32mI (131019) rfm95: TX: done (total: 38)[0m
+[0;32mI (131019) rfm95: RX: listening (timeout: 200 ms)[0m
+[0;32mI (131139) rfm95: RX: 11 bytes, RSSI: -71 dBm (total: 30)[0m
+[0;32mI (131139) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (131139) NimBLE: att_handle=18
+[0m
+[0;32mI (132639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (134139) rfm95: RX: timeout, mode=5, rssi=0xBF(-95 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (139139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (140639) rfm95: RX: timeout, mode=5, rssi=0xBA(-93 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (145639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (147139) rfm95: RX: timeout, mode=5, rssi=0xCC(-102 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (152139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (153639) rfm95: RX: timeout, mode=5, rssi=0xCF(-103 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (158639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (160139) rfm95: RX: timeout, mode=5, rssi=0xD1(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (165139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (166639) rfm95: RX: timeout, mode=5, rssi=0xCD(-102 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (171639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (173139) rfm95: RX: timeout, mode=5, rssi=0xD0(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (178139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (179639) rfm95: RX: timeout, mode=5, rssi=0xD3(-105 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (180329) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (180329) NimBLE: att_handle=21
+[0m
+[0;32mI (184639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (186139) rfm95: RX: timeout, mode=5, rssi=0xD0(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (191139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (192639) rfm95: RX: timeout, mode=5, rssi=0xD1(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (197639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (199139) rfm95: RX: timeout, mode=5, rssi=0xCD(-102 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (204139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (205639) rfm95: RX: timeout, mode=5, rssi=0xD2(-105 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (210639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (212139) rfm95: RX: timeout, mode=5, rssi=0xD0(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (217139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (218639) rfm95: RX: timeout, mode=5, rssi=0xB5(-90 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (223639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (225139) rfm95: RX: timeout, mode=5, rssi=0xBD(-94 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (230139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (231639) rfm95: RX: timeout, mode=5, rssi=0xAF(-87 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (236639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (238139) rfm95: RX: timeout, mode=5, rssi=0xB1(-88 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (240039) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (240039) NimBLE: att_handle=21
+[0m
+[0;32mI (243139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (244639) rfm95: RX: timeout, mode=5, rssi=0xB7(-91 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (249639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (251139) rfm95: RX: timeout, mode=5, rssi=0xB5(-90 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (256139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (257639) rfm95: RX: timeout, mode=5, rssi=0xA7(-83 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (262639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (264139) rfm95: RX: timeout, mode=5, rssi=0xAF(-87 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (269139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (270639) rfm95: RX: timeout, mode=5, rssi=0xCA(-101 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (275639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (277139) rfm95: RX: timeout, mode=5, rssi=0xC1(-96 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (282139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (283639) rfm95: RX: timeout, mode=5, rssi=0xD2(-105 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (288639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (290139) rfm95: RX: timeout, mode=5, rssi=0xCD(-102 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (295139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (296639) rfm95: RX: timeout, mode=5, rssi=0xD0(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (299679) NimBLE: GATT procedure initiated: notify; [0m
+[0;32mI (299679) NimBLE: att_handle=21
+[0m
+[0;32mI (301639) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (303139) rfm95: RX: timeout, mode=5, rssi=0xD1(-104 dBm), irq1=0xD8, irq2=0x40[0m
+[0;32mI (308139) rfm95: RX: listening (timeout: 1500 ms)[0m
+[0;33mW (309639) rfm95: RX: timeout, mode=5, rssi=0xD1(-104 dBm), irq1=0xD8, irq2=0x40[0m
