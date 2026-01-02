@@ -645,11 +645,11 @@ static void send_and_listen(const uint8_t *buf, int len)
 			rssi = read_rssi();
 		}
 	} else {
-		// Auto-wakeup check - conservative to avoid interfering with normal operation
-		// Only trigger if pump has been silent for > 90 seconds
+		// Auto-wakeup check - wake pump before it goes to deep sleep
+		// Pump typically sleeps after ~60s inactivity, so wake at 50s to be safe
 		// Note: Don't auto-wakeup if client explicitly sends wakeup command - that's handled above
 		int64_t now = esp_timer_get_time();
-		int64_t silence_threshold = 90 * SECONDS;  // 90 seconds
+		int64_t silence_threshold = 50 * SECONDS;  // 50 seconds (pump sleeps at ~60s)
 		
 		// Calculate actual silence duration
 		// If last_pump_comm_time == 0, pump never responded - but we only auto-wakeup
