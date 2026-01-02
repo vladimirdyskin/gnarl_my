@@ -81,6 +81,20 @@ static TaskHandle_t gnarl_loop_handle = NULL;
 static TaskHandle_t pump_probe_handle = NULL;
 
 static volatile bool cancel_current_command;
+static volatile bool pump_awake = false;
+
+static inline bool pump_is_asleep(void) {
+	// Consider pump awake only if we have a recent successful RX.
+	if (pump_awake) {
+		int64_t now = esp_timer_get_time();
+		if (last_pump_comm_time > 0 && (now - last_pump_comm_time) <= (45 * SECONDS)) {
+			return false;
+		}
+	}
+	// If no recent comms (>45s) or never awake, treat as asleep and clear flag.
+	pump_awake = false;
+	return true;
+}
 
 void gnarl_cancel_current_command(void)
 {
@@ -336,6 +350,7 @@ static uint8_t raw_rssi(int rssi)
 static void rx_common(int n, int rssi)
 {
 	if (n > 0) {
+		pump_awake = true;
 		last_pump_comm_time = esp_timer_get_time();
 	}
 	if (n == 0)
@@ -408,8 +423,19 @@ static void get_packet(const uint8_t *buf, int len)
 	memcpy(&timeout_ms, &p->timeout_ms, sizeof(timeout_ms));
 	reverse_four_bytes(&timeout_ms);
 	memcpy(&p->timeout_ms, &timeout_ms, sizeof(timeout_ms));
-	ESP_LOGD(TAG, "get_packet: listen_channel %d timeout_ms %lu",
-			 p->listen_channel, p->timeout_ms);
+	uint32_t original_timeout_ms = p->timeout_ms;
+	bool pump_asleep = !pump_awake;
+	if (pump_asleep) {
+		const uint32_t bump_ms = 1000u;
+		if (p->timeout_ms > 0xFFFFFFFFu - bump_ms) {
+			p->timeout_ms = 0xFFFFFFFFu;
+		} else {
+			p->timeout_ms += bump_ms;
+		}
+	}
+	ESP_LOGD(TAG, "get_packet: listen_channel %d timeout_ms %lu (raw %lu%s)",
+			 p->listen_channel, p->timeout_ms, (unsigned long)original_timeout_ms,
+			 pump_asleep ? ", +1000ms (pump asleep)" : "");
 	if (!radio_lock(portMAX_DELAY))
 	{
 		ESP_LOGW(TAG, "get_packet: radio mutex unavailable");
@@ -453,39 +479,6 @@ static void send_packet(const uint8_t *buf, int len)
 	send_code(RESPONSE_CODE_SUCCESS);
 }
 
-// Wakeup burst strategies - adaptive frequency hopping
-#define WAKEUP_BURST_COUNT      180     // Total packets across all frequencies
-#define WAKEUP_RX_WINDOW_MS     40      // RX window after each packet
-#define WAKEUP_INTER_PKT_DELAY  150     // 150us between packets
-#define WAKEUP_PREAMBLE_MS      10      // Short preamble for burst packets
-
-// Frequencies to try during wakeup (Hz)
-// These will be reordered dynamically based on success
-static uint32_t wakeup_frequencies[] = {
-    868300000,  // Start with 868.3 MHz
-    868250000,  // Then 868.25 MHz  
-    868350000,  // Then 868.35 MHz
-};
-#define NUM_WAKEUP_FREQS (sizeof(wakeup_frequencies) / sizeof(wakeup_frequencies[0]))
-
-// Track last successful frequency for adaptive behavior
-static uint32_t last_successful_freq = 0;
-
-// Move successful frequency to front of list
-static void promote_frequency(uint32_t freq) {
-    for (int i = 1; i < NUM_WAKEUP_FREQS; i++) {
-        if (wakeup_frequencies[i] == freq) {
-            // Swap with first position
-            uint32_t tmp = wakeup_frequencies[0];
-            wakeup_frequencies[0] = freq;
-            wakeup_frequencies[i] = tmp;
-            ESP_LOGI(TAG, "Promoted freq %lu to primary", (unsigned long)freq);
-            break;
-        }
-    }
-    last_successful_freq = freq;
-}
-
 static int perform_wakeup_burst(const uint8_t *id_packet) {
     uint8_t wakeup_pkt[7];
     // Force Device Type to Carelink (0xA7)
@@ -494,97 +487,77 @@ static int perform_wakeup_burst(const uint8_t *id_packet) {
     wakeup_pkt[1] = 0x90;
     wakeup_pkt[2] = 0x75;
     wakeup_pkt[3] = 0x91;
-    ESP_LOGD(TAG, "Using Pump ID 907591 (packet had %02X%02X%02X)", id_packet[1], id_packet[2], id_packet[3]);
+    ESP_LOGW(TAG, "Forcing Pump ID to 907591 (overriding %02X%02X%02X)", id_packet[1], id_packet[2], id_packet[3]);
     wakeup_pkt[4] = 0x5D;
     wakeup_pkt[5] = 0x00;
     wakeup_pkt[6] = crc8(wakeup_pkt, 6);
     
-    // Save current frequency to restore after wakeup
-    uint32_t original_freq = read_frequency();
+    ESP_LOGI(TAG, "Starting Wakeup Burst (ID: %02X%02X%02X, Freq: %lu)", 
+             wakeup_pkt[1], wakeup_pkt[2], wakeup_pkt[3], read_frequency());
+
+    // Force frequency to PUMP_FREQUENCY (868.25 MHz) for wakeup
+    // The phone app might have set it to 868.35 MHz, but we know better.
+    uint32_t current_freq = read_frequency();
+    if (current_freq != PUMP_FREQUENCY) {
+        ESP_LOGW(TAG, "Forcing frequency to %lu Hz (was %lu Hz)", (unsigned long)PUMP_FREQUENCY, current_freq);
+        set_frequency(PUMP_FREQUENCY);
+    }
 
     uint8_t *tx_data = wakeup_pkt;
     int tx_len = 7;
     
-    // Always encode for Medtronic wakeup
-    tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
-    tx_data = pkt_buf;
+    // Always encode for Medtronic wakeup, regardless of global setting
+    // if (encoding_type == ENCODING_4B6B) {
+        tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
+        tx_data = pkt_buf;
+    // }
     
-    // Set short preamble for burst mode
-    rfm95_set_preamble_ms(WAKEUP_PREAMBLE_MS);
-    
-    int n = 0;
-    int total_attempts = 0;
-    uint32_t success_freq = 0;
-    
-    // Adaptive distribution: more packets on first (most likely) frequency
-    // 60% on first, 25% on second, 15% on third
-    int pkts_per_freq[] = {
-        (WAKEUP_BURST_COUNT * 60) / 100,  // First freq gets more attempts
-        (WAKEUP_BURST_COUNT * 25) / 100,
-        (WAKEUP_BURST_COUNT * 15) / 100,
-    };
-    
-    // Try each frequency in sequence
-    for (int freq_idx = 0; freq_idx < NUM_WAKEUP_FREQS && n == 0; freq_idx++) {
-        uint32_t try_freq = wakeup_frequencies[freq_idx];
-        set_frequency(try_freq);
-        
-        int pkts_this_freq = pkts_per_freq[freq_idx];
-        ESP_LOGI(TAG, "Wakeup burst on %lu Hz (%d pkts, attempt %d/%d)", 
-                 (unsigned long)try_freq, pkts_this_freq, freq_idx + 1, (int)NUM_WAKEUP_FREQS);
-        
-        for (int i = 0; i < pkts_this_freq; i++) {
-            total_attempts++;
-            
-            if (cancel_current_command) {
-                ESP_LOGW(TAG, "Wakeup burst cancelled at attempt %d", total_attempts);
-                goto wakeup_done;
-            }
-            
-            if (!transmit(tx_data, tx_len)) {
-                ESP_LOGE(TAG, "Wakeup TX failed at attempt %d", total_attempts);
-                break;
-            }
-            
-            // Small inter-packet delay helps receiver sync
-            if (WAKEUP_INTER_PKT_DELAY > 0) {
-                usleep(WAKEUP_INTER_PKT_DELAY);
-            }
-            
-            // Listen for ACK
-            n = receive(rx_buf.packet, sizeof(rx_buf.packet), WAKEUP_RX_WINDOW_MS);
-            
-            if (n > 0) {
-                int rssi = read_rssi();
-                ESP_LOGI(TAG, "Wakeup ACK at attempt %d, freq %lu Hz (RSSI: %d)", 
-                         total_attempts, (unsigned long)try_freq, rssi);
-                last_pump_comm_time = esp_timer_get_time();
-                success_freq = try_freq;
-                goto wakeup_done;
-            }
-            
-            // Yield occasionally to keep watchdog happy
-            if (i % 30 == 0) {
-                taskYIELD();
-            }
+	int n = 0;
+	int64_t t_start = esp_timer_get_time();
+	// Faster fail/return: cap to ~8s and fewer packets, widen RX window a bit.
+	const int max_packets = 80;
+	const int rx_window_ms = 30;
+	for (int i = 0; i < max_packets; i++) {
+        if (cancel_current_command) {
+            ESP_LOGW(TAG, "Wakeup burst cancelled at %d", i);
+            break;
         }
         
-        // Brief pause between frequency switches
-        vTaskDelay(pdMS_TO_TICKS(30));
+        if (!transmit(tx_data, tx_len)) {
+            ESP_LOGE(TAG, "Wakeup burst %d: TX failed", i);
+            break;
+        }
+        // No delay (0 us) to maximize packet density
+        // usleep(500); 
+        
+		// Increased RX window to 30ms to catch the pump's ACK
+		n = receive(rx_buf.packet, sizeof(rx_buf.packet), rx_window_ms);
+        
+        if (n > 0) {
+            ESP_LOGI(TAG, "Wakeup ACK received at burst %d (RSSI: %d)", i, read_rssi());
+            last_pump_comm_time = esp_timer_get_time();
+            break;
+        }
+
+		// Stop early if we've spent ~8s already
+		if ((esp_timer_get_time() - t_start) > 8 * SECONDS) {
+			ESP_LOGW(TAG, "Wakeup burst timeout after %d packets (~%lld ms)",
+					 i + 1, (long long)((esp_timer_get_time() - t_start) / 1000));
+			break;
+		}
+        
+        if (i % 20 == 0) {
+             // Keep watchdog happy and allow other tasks (like BLE) to run briefly
+             // But don't sleep too long
+             // taskYIELD();
+        }
     }
     
-wakeup_done:
-    // Restore preamble to default
-    rfm95_set_preamble_ms(0);
-    
-    // If successful, promote that frequency for next time
-    if (n > 0 && success_freq != 0) {
-        promote_frequency(success_freq);
-        // Stay on successful frequency
-    } else {
-        ESP_LOGW(TAG, "Wakeup burst finished with NO response after %d attempts", total_attempts);
-        set_frequency(original_freq);
-    }
+	if (n == 0) {
+		ESP_LOGW(TAG, "Wakeup burst finished with NO response");
+	} else {
+		pump_awake = true;
+	}
     
     return n;
 }
@@ -603,16 +576,24 @@ static void send_and_listen(const uint8_t *buf, int len)
 	memcpy(&p->delay_ms, &delay_ms_val, sizeof(delay_ms_val));
 	memcpy(&p->timeout_ms, &timeout_ms_val, sizeof(timeout_ms_val));
 	memcpy(&p->preamble_ms, &preamble_ms_val, sizeof(preamble_ms_val));
+	uint32_t original_timeout_ms = p->timeout_ms;
+	bool pump_asleep = pump_is_asleep();
+	if (pump_asleep) {
+		const uint32_t min_timeout_ms = 45000u; // hard minimum for first try
+		if (p->timeout_ms < min_timeout_ms) {
+			p->timeout_ms = min_timeout_ms;
+		}
+	}
 	ESP_LOGD(TAG, "send_and_listen: len %d send_channel %d repeat_count %d delay_ms %d",
 			 len, p->send_channel, p->repeat_count, p->delay_ms);
-	ESP_LOGD(TAG, "send_and_listen: listen_channel %d timeout_ms %lu retry_count %d preamble_ms %u",
-			 p->listen_channel, p->timeout_ms, p->retry_count, (unsigned)p->preamble_ms);
+	ESP_LOGD(TAG, "send_and_listen: listen_channel %d timeout_ms %lu (raw %lu%s) retry_count %d preamble_ms %u",
+			 p->listen_channel, p->timeout_ms, (unsigned long)original_timeout_ms,
+			 pump_asleep ? ", min 45000ms (pump asleep)" : "",
+			 p->retry_count, (unsigned)p->preamble_ms);
 	len -= (p->packet - (uint8_t *)p);
 
 	int repeat_count = p->repeat_count;
 	int delay_ms = p->delay_ms;
-	// Some clients use 0xFF as a sentinel for "default". Treat it as "no repeats".
-	// Also, delay_ms==0 makes repeated TX effectively back-to-back; avoid huge bursts.
 	if (repeat_count == 0xFF || delay_ms == 0) {
 		repeat_count = 0;
 	}
@@ -632,9 +613,9 @@ static void send_and_listen(const uint8_t *buf, int len)
 	// Check for WAKEUP command (0x5D)
 	// Packet structure: [DeviceType, PumpID0, PumpID1, PumpID2, Command, ...]
 	// Command is at index 4.
-    uint8_t pump_id[3];
-    uint8_t cmd_code;
-    bool is_minimed = extract_minimed_info(p->packet, len, pump_id, &cmd_code);
+	uint8_t pump_id[3];
+	uint8_t cmd_code;
+	bool is_minimed = extract_minimed_info(p->packet, len, pump_id, &cmd_code);
 	bool is_wakeup = (is_minimed && cmd_code == 0x5D);
 
 	if (is_wakeup) {
@@ -645,29 +626,10 @@ static void send_and_listen(const uint8_t *buf, int len)
 			rssi = read_rssi();
 		}
 	} else {
-		// Auto-wakeup check - wake pump before it goes to deep sleep
-		// Pump typically sleeps after ~60s inactivity, so wake at 50s to be safe
-		// Note: Don't auto-wakeup if client explicitly sends wakeup command - that's handled above
-		int64_t now = esp_timer_get_time();
-		int64_t silence_threshold = 50 * SECONDS;  // 50 seconds (pump sleeps at ~60s)
-		
-		// Calculate actual silence duration
-		// If last_pump_comm_time == 0, pump never responded - but we only auto-wakeup
-		// if it's been >90s since boot to give normal commands a chance first
-		int64_t silence_duration;
-		if (last_pump_comm_time == 0) {
-			silence_duration = now;  // Time since boot
-		} else {
-			silence_duration = now - last_pump_comm_time;
-		}
-		
-		if (silence_duration > silence_threshold) {
-			ESP_LOGI(TAG, "Auto-wakeup: silence=%llds (threshold=%ds)", 
-			         (long long)(silence_duration / SECONDS),
-			         (int)(silence_threshold / SECONDS));
+		// Auto-wakeup check
+		if (last_pump_comm_time == 0 || (esp_timer_get_time() - last_pump_comm_time > 60 * SECONDS)) {
+			ESP_LOGI(TAG, "Auto-wakeup triggered (last_comm=%lld, now=%lld)", (long long)last_pump_comm_time, (long long)esp_timer_get_time());
 			perform_wakeup_burst(p->packet);
-			// Brief pause after wakeup to let pump stabilize
-			vTaskDelay(pdMS_TO_TICKS(100));
 		}
 
 		// Standard logic for other commands
@@ -679,8 +641,7 @@ static void send_and_listen(const uint8_t *buf, int len)
 		for (int retries = p->retry_count + 1; retries > 0; retries--)
 		{
 			tries_used++;
-			
-			// Adaptive preamble logic
+
 			uint16_t retry_preamble = current_preamble;
 			if (tries_used > 1) {
 				retry_preamble = current_preamble + ((tries_used - 1) * 50);
@@ -688,16 +649,15 @@ static void send_and_listen(const uint8_t *buf, int len)
 					retry_preamble = 300;
 				}
 			}
-			
-			// Force minimum 100ms for first try if it's short
+
 			if (tries_used == 1 && retry_preamble < 100) {
 				retry_preamble = 100;
 			}
-			
+
 			rfm95_set_preamble_ms(retry_preamble);
-			
-			ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)", 
-					 tries_used, p->retry_count + 1, (unsigned)retry_preamble, p->timeout_ms);
+
+			ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)",
+				 tries_used, p->retry_count + 1, (unsigned)retry_preamble, p->timeout_ms);
 			if (cancel_current_command)
 			{
 				break;
@@ -718,11 +678,9 @@ static void send_and_listen(const uint8_t *buf, int len)
 				break;
 			}
 		}
-		// Restore default preamble
 		rfm95_set_preamble_ms(0);
 	}
 
-	// Call rx_common BEFORE unlocking radio, so reset_radio_if_needed() has the lock
 	if (!cancel_current_command)
 	{
 		rx_common(n, rssi);
@@ -734,15 +692,15 @@ static void send_and_listen(const uint8_t *buf, int len)
 	if (dt > 2 * SECONDS)
 	{
 		ESP_LOGW(TAG, "CmdSendAndListen took %lld ms (tries=%d, send_ch=%u, listen_ch=%u, repeat=%u, delay_ms=%u, preamble_ms=%u, timeout_ms=%lu, rx_len=%d)",
-				 (long long)(dt / 1000),
-				 tries_used,
-				 (unsigned)p->send_channel,
-				 (unsigned)p->listen_channel,
-				 (unsigned)repeat_count,
-				 (unsigned)delay_ms,
-				 (unsigned)p->preamble_ms,
-				 (unsigned long)p->timeout_ms,
-				 n);
+			 (long long)(dt / 1000),
+			 tries_used,
+			 (unsigned)p->send_channel,
+			 (unsigned)p->listen_channel,
+			 (unsigned)repeat_count,
+			 (unsigned)delay_ms,
+			 (unsigned)p->preamble_ms,
+			 (unsigned long)p->timeout_ms,
+			 n);
 	}
 }
 
@@ -765,7 +723,6 @@ static void pump_bg_listen_task(void *unused)
 		}
 
 		// Temporarily tune to the pump frequency for passive listening.
-		// Client commands (e.g. mmtune scans) may change the active frequency.
 		uint32_t prev_freq = read_frequency();
 		if (prev_freq != PUMP_FREQUENCY)
 		{
@@ -895,18 +852,6 @@ int gnarl_request_pump_probe_isr(void)
 }
 
 static uint8_t fr[3];
-
-// Convert frequency in Hz to CC111x register format (for iAPS compatibility)
-// Formula: f = (freq_hz * 2^16) / (24 MHz)
-static void freq_to_registers(uint32_t freq_hz)
-{
-	uint32_t f = (uint32_t)(((uint64_t)freq_hz << 16) / (24 * MHz));
-	fr[0] = (f >> 16) & 0xFF;
-	fr[1] = (f >> 8) & 0xFF;
-	fr[2] = f & 0xFF;
-	ESP_LOGD(TAG, "freq_to_registers: %lu Hz -> %02X %02X %02X", 
-	         (unsigned long)freq_hz, fr[0], fr[1], fr[2]);
-}
 
 static inline bool valid_frequency(uint32_t f)
 {
@@ -1176,10 +1121,6 @@ void start_gnarl_task(void)
 	}
 
 	request_queue = xQueueCreate(QUEUE_LENGTH, sizeof(rfspy_request_t));
-	
-	// Initialize frequency registers so iAPS can read them before any UpdateRegister command
-	freq_to_registers(PUMP_FREQUENCY);
-	
 	// Keep this task responsive, but avoid starving NimBLE/BT tasks.
 	// Too-high priority here can lead to periodic BLE disconnects under load.
 	xTaskCreate(gnarl_loop, "gnarl", 4096, 0, tskIDLE_PRIORITY + 10, &gnarl_loop_handle);
