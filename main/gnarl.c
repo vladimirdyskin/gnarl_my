@@ -47,8 +47,8 @@ static bool extract_minimed_info(const uint8_t *encoded, uint8_t len,
     pump_id[2] = decoded[3];
     *cmd = decoded[4];
     
-    ESP_LOGI(TAG, "Minimed: PumpID=%02X%02X%02X Cmd=0x%02X (%s)", 
-            pump_id[0], pump_id[1], pump_id[2], *cmd, cmd_name(*cmd));
+	    ESP_LOGD(TAG, "Minimed: PumpID=%02X%02X%02X Cmd=0x%02X (%s)", 
+		    pump_id[0], pump_id[1], pump_id[2], *cmd, cmd_name(*cmd));
     
     return true;
 }
@@ -349,36 +349,37 @@ static uint8_t raw_rssi(int rssi)
 
 static void rx_common(int n, int rssi)
 {
-	if (n > 0) {
+	if (n > 0)
+	{
 		pump_awake = true;
 		last_pump_comm_time = esp_timer_get_time();
+		display_pulse_radio_rx();
 	}
+
 	if (n == 0)
 	{
 		consecutive_rx_failures++;
-		// Log RSSI (noise floor) even on timeout for diagnostics
-		ESP_LOGW(TAG, "RX: timeout (failure #%d, noise floor RSSI=%d)", consecutive_rx_failures, rssi);
-		
-		// Log every 5 failures to track deterioration
-		if ((consecutive_rx_failures % 5) == 0) {
-			ESP_LOGW(TAG, "RADIO: %d consecutive RX failures - approaching reset threshold", consecutive_rx_failures);
+		if ((consecutive_rx_failures % 5) == 0)
+		{
+			ESP_LOGW(TAG, "RX: timeout (failure #%d, noise floor RSSI=%d)", consecutive_rx_failures, rssi);
 		}
-		
+		else
+		{
+			ESP_LOGD(TAG, "RX: timeout (failure #%d, noise floor RSSI=%d)", consecutive_rx_failures, rssi);
+		}
 		reset_radio_if_needed();
 		send_code(RESPONSE_CODE_RX_TIMEOUT);
 		return;
 	}
-	
-	// Successful reception - reset failure counter
-	if (consecutive_rx_failures > 0) {
+
+	if (consecutive_rx_failures > 0)
+	{
 		ESP_LOGI(TAG, "RADIO: Successful RX after %d failures", consecutive_rx_failures);
 		consecutive_rx_failures = 0;
 	}
-	// Also reset rfm95 mode failure counter on successful RX
+
 	rfm95_reset_failure_count();
-	
 	cmd_log_radio_rx(rx_buf.packet, n);
-	
 	set_pump_rssi(rssi);
 	rx_buf.rssi = raw_rssi(rssi);
 	if (rx_buf.rssi == 0)
@@ -407,10 +408,8 @@ static void rx_common(int n, int rssi)
 		ESP_LOGE(TAG, "RX: unknown encoding type %d", encoding_type);
 		break;
 	}
-	
-	// Выводим накопленные логи когда радио свободно
+
 	cmd_log_flush();
-	
 	send_bytes((uint8_t *)&rx_buf, 2 + n);
 }
 
@@ -487,7 +486,7 @@ static int perform_wakeup_burst(const uint8_t *id_packet) {
     wakeup_pkt[1] = 0x90;
     wakeup_pkt[2] = 0x75;
     wakeup_pkt[3] = 0x91;
-    ESP_LOGW(TAG, "Forcing Pump ID to 907591 (overriding %02X%02X%02X)", id_packet[1], id_packet[2], id_packet[3]);
+	ESP_LOGD(TAG, "Forcing Pump ID to 907591 (overriding %02X%02X%02X)", id_packet[1], id_packet[2], id_packet[3]);
     wakeup_pkt[4] = 0x5D;
     wakeup_pkt[5] = 0x00;
     wakeup_pkt[6] = crc8(wakeup_pkt, 6);
@@ -499,7 +498,7 @@ static int perform_wakeup_burst(const uint8_t *id_packet) {
     // The phone app might have set it to 868.35 MHz, but we know better.
     uint32_t current_freq = read_frequency();
     if (current_freq != PUMP_FREQUENCY) {
-        ESP_LOGW(TAG, "Forcing frequency to %lu Hz (was %lu Hz)", (unsigned long)PUMP_FREQUENCY, current_freq);
+		ESP_LOGD(TAG, "Forcing frequency to %lu Hz (was %lu Hz)", (unsigned long)PUMP_FREQUENCY, current_freq);
         set_frequency(PUMP_FREQUENCY);
     }
 
@@ -604,6 +603,8 @@ static void send_and_listen(const uint8_t *buf, int len)
 		return;
 	}
 
+	display_set_radio_active(true);
+
 	int64_t t0 = esp_timer_get_time();
 
 	int n = 0;
@@ -628,7 +629,7 @@ static void send_and_listen(const uint8_t *buf, int len)
 	} else {
 		// Auto-wakeup check
 		if (last_pump_comm_time == 0 || (esp_timer_get_time() - last_pump_comm_time > 60 * SECONDS)) {
-			ESP_LOGI(TAG, "Auto-wakeup triggered (last_comm=%lld, now=%lld)", (long long)last_pump_comm_time, (long long)esp_timer_get_time());
+			ESP_LOGD(TAG, "Auto-wakeup triggered (last_comm=%lld, now=%lld)", (long long)last_pump_comm_time, (long long)esp_timer_get_time());
 			perform_wakeup_burst(p->packet);
 		}
 
@@ -686,6 +687,8 @@ static void send_and_listen(const uint8_t *buf, int len)
 		rx_common(n, rssi);
 	}
 
+	display_set_radio_active(false);
+
 	radio_unlock();
 
 	int64_t dt = esp_timer_get_time() - t0;
@@ -708,6 +711,8 @@ static void pump_bg_listen_task(void *unused)
 {
 	ESP_LOGI(TAG, "pump_bg_listen: started (interval=%dms timeout=%dms)",
 			 PUMP_BG_LISTEN_INTERVAL_MS, PUMP_BG_LISTEN_TIMEOUT_MS);
+
+			display_set_radio_active(false);
 
 	uint32_t loops = 0;
 
@@ -831,7 +836,7 @@ static void pump_active_probe_task(void *unused)
 		}
 		else if ((loops % 1) == 0)
 		{
-			ESP_LOGI(TAG, "pump_active_probe: no response yet (woke=%d)", woke ? 1 : 0);
+			ESP_LOGD(TAG, "pump_active_probe: no response yet (woke=%d)", woke ? 1 : 0);
 		}
 
 		if (!had_success && fast_tries_left > 0)
@@ -1003,11 +1008,8 @@ void rfspy_command(const uint8_t *buf, int count, int rssi)
 	}
 	rfspy_cmd_t cmd = buf[1];
 
-    // Log the incoming command
-    ESP_LOGI(TAG, "BLE CMD: 0x%02X Len: %d", cmd, count);
-    if (count > 0) {
-        ESP_LOG_BUFFER_HEX(TAG, buf, count);
-    }
+	// Log the incoming command (debug only, to reduce noise).
+	ESP_LOGD(TAG, "BLE CMD: 0x%02X Len: %d", cmd, count);
 
 	// GetPacket is used by Loop to wait for MySentry packets.
 	// It is fine to ignore subsequent calls if in_get_packet is true
@@ -1015,7 +1017,7 @@ void rfspy_command(const uint8_t *buf, int count, int rssi)
 	// The commands and responses do not seem to have a sequence number.
 	if ((cmd == CmdGetPacket) && in_get_packet)
 	{
-		ESP_LOGI(TAG, "ignoring CmdGetPacket while GetPacket is active");
+		ESP_LOGD(TAG, "ignoring CmdGetPacket while GetPacket is active");
 		return;
 	}
 

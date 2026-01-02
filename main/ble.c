@@ -75,6 +75,8 @@ static uint16_t connection_handle;
 
 static esp_pm_lock_handle_t ble_no_light_sleep_lock;
 
+static void advertise(void);
+
 bool ble_is_connected(void)
 {
 	return connected;
@@ -116,6 +118,38 @@ static void timer_tick_callback(void *);
 
 static uint16_t battery_level_notify_handle;
 static int battery_level_notify_state;
+
+static esp_timer_handle_t adv_retry_timer;
+
+static void advertise_retry_cb(void *arg)
+{
+	ESP_LOGI(TAG, "BLE advertise retry timer fired");
+	advertise();
+}
+
+static void schedule_adv_retry(uint32_t delay_ms, const char *reason)
+{
+	if (adv_retry_timer == NULL)
+	{
+		ESP_LOGW(TAG, "BLE advertise(): retry timer not initialized (%s)", reason);
+		return;
+	}
+
+	esp_err_t stop_err = esp_timer_stop(adv_retry_timer);
+	if (stop_err != ESP_OK && stop_err != ESP_ERR_INVALID_STATE)
+	{
+		ESP_LOGW(TAG, "BLE advertise(): could not stop retry timer (%s): %s", reason, esp_err_to_name(stop_err));
+	}
+
+	esp_err_t start_err = esp_timer_start_once(adv_retry_timer, delay_ms * MILLISECONDS);
+	if (start_err != ESP_OK)
+	{
+		ESP_LOGW(TAG, "BLE advertise(): failed to schedule retry (%s): %s", reason, esp_err_to_name(start_err));
+		return;
+	}
+
+	ESP_LOGI(TAG, "BLE advertising retry scheduled in %lu ms (%s)", (unsigned long)delay_ms, reason);
+}
 
 static const struct ble_gatt_svc_def service_list[] = {
 	{
@@ -204,9 +238,20 @@ static void server_init(void)
 static void advertise(void)
 {
 	ESP_LOGI(TAG, "BLE advertise(): starting advertisement setup");
+	if (connected)
+	{
+		ESP_LOGI(TAG, "BLE advertise(): already connected, skipping advert start");
+		return;
+	}
 	// While advertising, keep light sleep disabled so iAPS can reliably discover us.
 	ble_set_no_light_sleep(true);
 	ESP_LOGD(TAG, "BLE light sleep disabled for advertising");
+
+	// Cancel any pending retry now that we're actively (re)starting.
+	if (adv_retry_timer)
+	{
+		esp_timer_stop(adv_retry_timer);
+	}
 
 	// Make advertising restart resilient: don't rely on asserts.
 	struct ble_hs_adv_fields fields, fields_ext;
@@ -246,6 +291,7 @@ static void advertise(void)
 		ESP_LOGE(TAG, "BLE advertisement setup failed, releasing light sleep lock");
 		// Don't hold the lock if we aren't actually advertising.
 		ble_set_no_light_sleep(false);
+		schedule_adv_retry(200, "adv_set_fields");
 		return;
 	}
 
@@ -260,6 +306,7 @@ static void advertise(void)
 		if (err)
 		{
 			ESP_LOGE(TAG, "ble_gap_adv_rsp_set_fields: name might be too long, err %d", err);
+			schedule_adv_retry(200, "adv_rsp_set_fields");
 		}
 	}
 	ESP_LOGI(TAG, "BLE advertising: name='%s' short='%s'", name, short_name);
@@ -288,6 +335,8 @@ static void advertise(void)
 		}
 		// Don't hold the lock if adv did not start.
 		ble_set_no_light_sleep(false);
+		// Schedule a retry in case ADV_COMPLETE never fires (stack wedged/busy).
+		schedule_adv_retry(250, "adv_start_failure");
 		return;
 	}
 
@@ -714,6 +763,12 @@ void gnarl_init(void)
 		ble_no_light_sleep_lock = NULL;
 		ESP_LOGW(TAG, "esp_pm_lock_create(NO_LIGHT_SLEEP) failed: %s", esp_err_to_name(pm_err));
 	}
+
+	esp_timer_create_args_t adv_retry_args = {
+		.callback = advertise_retry_cb,
+		.name = "ble_adv_retry",
+	};
+	ESP_ERROR_CHECK(esp_timer_create(&adv_retry_args, &adv_retry_timer));
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 	

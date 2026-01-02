@@ -45,6 +45,11 @@ static inline int left_limit_x(void)
 	return LEFT_COL_WIDTH + GAP_PX;
 }
 
+static inline int center_limit_x(int object_width)
+{
+	return CENTER_OFFSET(OLED_WIDTH, object_width);
+}
+
 static int draw_right_field(int x_right, int y, const char *s)
 {
 	oled_align_right();
@@ -123,6 +128,9 @@ typedef struct
 	uint32_t uptime;
 } display_data_t;
 
+static bool radio_active;
+static int64_t rx_flash_until;
+
 static inline uint32_t timestamp_to_period(uint32_t timestamp)
 {
 	return (esp_timer_get_time() / SECONDS) - timestamp;
@@ -144,9 +152,9 @@ static void draw_initial()
 	// draw battery glyph_t
 	// 32-47
 	oled_draw_xbm(left_col_x_center(BATTERY.width), row_baseline_y(2) - BATTERY.height + 1, BATTERY.width, BATTERY.height, BATTERY.bits);
-	// draw clock glyph_t
-	// 48-63
-	oled_draw_xbm(left_col_x_center(CLOCK.width), row_baseline_y(3) - CLOCK.height + 1, CLOCK.width, CLOCK.height, CLOCK.bits);
+
+	// draw clock glyph_t centered horizontally on bottom row
+	oled_draw_xbm(center_limit_x(CLOCK.width), row_baseline_y(3) - CLOCK.height + 1, CLOCK.width, CLOCK.height, CLOCK.bits);
 
 	oled_update();
 }
@@ -158,7 +166,7 @@ static void draw_static_glyphs(void)
 	oled_draw_xbm(left_col_x_center(PHONE.width), row_baseline_y(0) - PHONE.height + 1, PHONE.width, PHONE.height, PHONE.bits);
 	oled_draw_xbm(left_col_x_center(PUMP.width), row_baseline_y(1) - PUMP.height + 1, PUMP.width, PUMP.height, PUMP.bits);
 	oled_draw_xbm(left_col_x_center(BATTERY.width), row_baseline_y(2) - BATTERY.height + 1, BATTERY.width, BATTERY.height, BATTERY.bits);
-	oled_draw_xbm(left_col_x_center(CLOCK.width), row_baseline_y(3) - CLOCK.height + 1, CLOCK.width, CLOCK.height, CLOCK.bits);
+	oled_draw_xbm(center_limit_x(CLOCK.width), row_baseline_y(3) - CLOCK.height + 1, CLOCK.width, CLOCK.height, CLOCK.bits);
 }
 
 static void draw_row_rssi_and_age(int row, const char *rssi_str, const char *age_str)
@@ -292,10 +300,30 @@ static void draw_data()
 		// -127 is commonly used as a sentinel for "invalid/unknown RSSI".
 		snprintf(rssi_str, sizeof(rssi_str), (rssi == 0 || rssi == -127) ? " ---" : "%4d", (int)rssi);
 		format_time_period(age_str, age);
+
 		draw_row_rssi_and_age(i, rssi_str, age_str);
 		last_connection_data->rssi = rssi;
 		last_connection_data->uptime = age;
 	}
+
+	// Bottom row: TX/RX markers on the left
+	bool rx_on = (rx_flash_until != 0) && (esp_timer_get_time() < rx_flash_until);
+	char status[8] = "";
+	if (radio_active && rx_on)
+	{
+		strncpy(status, "TX RX", sizeof(status));
+	}
+	else if (radio_active)
+	{
+		strncpy(status, "TX", sizeof(status));
+	}
+	else if (rx_on)
+	{
+		strncpy(status, "RX", sizeof(status));
+	}
+
+	oled_align_left();
+	oled_draw_string(left_limit_x(), row_baseline_y(3), status);
 
 	// Battery row
 	const uint16_t battery_mv = get_battery_voltage();
@@ -310,6 +338,24 @@ static void draw_data()
 	last_display_data.uptime = new_uptime;
 
 	oled_update();
+}
+
+void display_set_radio_active(bool active)
+{
+	radio_active = active;
+	if (task_handle != NULL)
+	{
+		xTaskNotify(task_handle, pdTRUE, eSetValueWithOverwrite);
+	}
+}
+
+void display_pulse_radio_rx(void)
+{
+	rx_flash_until = esp_timer_get_time() + 3 * SECONDS;
+	if (task_handle != NULL)
+	{
+		xTaskNotify(task_handle, pdTRUE, eSetValueWithOverwrite);
+	}
 }
 
 static void display_loop(void *unused)
