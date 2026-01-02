@@ -12,13 +12,46 @@
 
 #include "4b6b.h"
 #include "adc.h"
+#include "cmd_log.h"
 #include "commands.h"
 #include "display.h"
 #include "medtronic.h"
 #include "rfm95.h"
+#include "crc.h"
+#include "pump_config.h"
 
 #define MAX_PARAM_LEN (16)
 #define MAX_PACKET_LEN (107)
+
+#define CARELINK_DEVICE 0xA7
+
+static const char* cmd_name(uint8_t cmd) {
+    switch(cmd) {
+        case 0x00: return "ACK";
+        case 0x5D: return "WAKEUP";
+        case 0x8D: return "MODEL";
+        default: return "UNKNOWN";
+    }
+}
+
+static bool extract_minimed_info(const uint8_t *encoded, uint8_t len,
+                                  uint8_t pump_id[3], uint8_t *cmd) {
+    uint8_t decoded[96];
+    int dec_len = decode_4b6b(encoded, decoded, len);
+    
+    if (dec_len < 5) return false;
+    if (decoded[0] != CARELINK_DEVICE) return false;
+    
+    pump_id[0] = decoded[1];
+    pump_id[1] = decoded[2];
+    pump_id[2] = decoded[3];
+    *cmd = decoded[4];
+    
+    ESP_LOGI(TAG, "Minimed: PumpID=%02X%02X%02X Cmd=0x%02X (%s)", 
+            pump_id[0], pump_id[1], pump_id[2], *cmd, cmd_name(*cmd));
+    
+    return true;
+}
 
 typedef enum
 {
@@ -27,6 +60,7 @@ typedef enum
 } encoding_type_t;
 
 static encoding_type_t encoding_type = ENCODING_NONE;
+static int64_t last_pump_comm_time = 0;
 
 typedef enum CommandCode rfspy_cmd_t;
 
@@ -219,6 +253,55 @@ static void send(uint8_t *data, int len, int repeat_count, int delay_ms)
 	{
 		len--;
 	}
+
+    // --- ID SUBSTITUTION HACK ---
+    // Check if this is a Minimed packet and substitute the ID if needed.
+    // This handles ALL transmissions (Wakeup, Model, Status, etc.)
+    uint8_t pump_id[3];
+    uint8_t cmd_code;
+    // Only try to decode if it looks like 4b6b (length check roughly)
+    if (encoding_type == ENCODING_4B6B && len > 10) {
+        if (extract_minimed_info(data, len, pump_id, &cmd_code)) {
+            // Check if ID matches the "wrong" one (66555A)
+            if (pump_id[0] == 0x66 && pump_id[1] == 0x55 && pump_id[2] == 0x5A) {
+                ESP_LOGW(TAG, "HACK: Substituting ID 66555A -> 907591 in TX packet");
+                
+                // We need to decode, modify, and re-encode because of 4b6b
+                uint8_t decoded[96];
+                int dec_len = decode_4b6b(data, decoded, len);
+                
+                if (dec_len > 0) {
+                    // Modify ID in decoded buffer
+                    decoded[1] = 0x90;
+                    decoded[2] = 0x75;
+                    decoded[3] = 0x91;
+                    
+                    // Re-calculate CRC (last byte)
+                    decoded[dec_len - 1] = crc8(decoded, dec_len - 1);
+                    
+                    // Re-encode back to 4b6b
+                    // Note: encode_4b6b writes to 'pkt_buf' which is global.
+                    // We need to be careful not to corrupt it if 'data' already points to it,
+                    // but here 'data' usually points to the BLE command buffer.
+                    
+                    int new_len = encode_4b6b(decoded, pkt_buf, dec_len);
+                    
+                    // Point 'data' to our new buffer
+                    data = pkt_buf;
+                    len = new_len;
+                    
+                    // IMPORTANT: We have already re-encoded it into 4b6b format in pkt_buf.
+                    // We must prevent the switch below from encoding it AGAIN (double encoding).
+                    // We can do this by temporarily setting encoding_type to NONE for this packet,
+                    // or by jumping over the switch.
+                    goto transmit_now;
+                }
+            }
+        }
+    }
+    // -----------------------------
+
+	cmd_log_radio_tx(data, len);
 	switch (encoding_type)
 	{
 	case ENCODING_NONE:
@@ -231,6 +314,8 @@ static void send(uint8_t *data, int len, int repeat_count, int delay_ms)
 		ESP_LOGE(TAG, "send: unknown encoding type %d", encoding_type);
 		break;
 	}
+
+transmit_now:
 	transmit(data, len);
 	while (repeat_count > 0)
 	{
@@ -250,6 +335,9 @@ static uint8_t raw_rssi(int rssi)
 
 static void rx_common(int n, int rssi)
 {
+	if (n > 0) {
+		last_pump_comm_time = esp_timer_get_time();
+	}
 	if (n == 0)
 	{
 		consecutive_rx_failures++;
@@ -273,6 +361,8 @@ static void rx_common(int n, int rssi)
 	}
 	// Also reset rfm95 mode failure counter on successful RX
 	rfm95_reset_failure_count();
+	
+	cmd_log_radio_rx(rx_buf.packet, n);
 	
 	set_pump_rssi(rssi);
 	rx_buf.rssi = raw_rssi(rssi);
@@ -302,6 +392,10 @@ static void rx_common(int n, int rssi)
 		ESP_LOGE(TAG, "RX: unknown encoding type %d", encoding_type);
 		break;
 	}
+	
+	// Выводим накопленные логи когда радио свободно
+	cmd_log_flush();
+	
 	send_bytes((uint8_t *)&rx_buf, 2 + n);
 }
 
@@ -359,6 +453,142 @@ static void send_packet(const uint8_t *buf, int len)
 	send_code(RESPONSE_CODE_SUCCESS);
 }
 
+// Wakeup burst strategies - adaptive frequency hopping
+#define WAKEUP_BURST_COUNT      180     // Total packets across all frequencies
+#define WAKEUP_RX_WINDOW_MS     40      // RX window after each packet
+#define WAKEUP_INTER_PKT_DELAY  150     // 150us between packets
+#define WAKEUP_PREAMBLE_MS      10      // Short preamble for burst packets
+
+// Frequencies to try during wakeup (Hz)
+// These will be reordered dynamically based on success
+static uint32_t wakeup_frequencies[] = {
+    868300000,  // Start with 868.3 MHz
+    868250000,  // Then 868.25 MHz  
+    868350000,  // Then 868.35 MHz
+};
+#define NUM_WAKEUP_FREQS (sizeof(wakeup_frequencies) / sizeof(wakeup_frequencies[0]))
+
+// Track last successful frequency for adaptive behavior
+static uint32_t last_successful_freq = 0;
+
+// Move successful frequency to front of list
+static void promote_frequency(uint32_t freq) {
+    for (int i = 1; i < NUM_WAKEUP_FREQS; i++) {
+        if (wakeup_frequencies[i] == freq) {
+            // Swap with first position
+            uint32_t tmp = wakeup_frequencies[0];
+            wakeup_frequencies[0] = freq;
+            wakeup_frequencies[i] = tmp;
+            ESP_LOGI(TAG, "Promoted freq %lu to primary", (unsigned long)freq);
+            break;
+        }
+    }
+    last_successful_freq = freq;
+}
+
+static int perform_wakeup_burst(const uint8_t *id_packet) {
+    uint8_t wakeup_pkt[7];
+    // Force Device Type to Carelink (0xA7)
+    wakeup_pkt[0] = 0xA7; 
+    // Force Pump ID to 907591
+    wakeup_pkt[1] = 0x90;
+    wakeup_pkt[2] = 0x75;
+    wakeup_pkt[3] = 0x91;
+    ESP_LOGD(TAG, "Using Pump ID 907591 (packet had %02X%02X%02X)", id_packet[1], id_packet[2], id_packet[3]);
+    wakeup_pkt[4] = 0x5D;
+    wakeup_pkt[5] = 0x00;
+    wakeup_pkt[6] = crc8(wakeup_pkt, 6);
+    
+    // Save current frequency to restore after wakeup
+    uint32_t original_freq = read_frequency();
+
+    uint8_t *tx_data = wakeup_pkt;
+    int tx_len = 7;
+    
+    // Always encode for Medtronic wakeup
+    tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
+    tx_data = pkt_buf;
+    
+    // Set short preamble for burst mode
+    rfm95_set_preamble_ms(WAKEUP_PREAMBLE_MS);
+    
+    int n = 0;
+    int total_attempts = 0;
+    uint32_t success_freq = 0;
+    
+    // Adaptive distribution: more packets on first (most likely) frequency
+    // 60% on first, 25% on second, 15% on third
+    int pkts_per_freq[] = {
+        (WAKEUP_BURST_COUNT * 60) / 100,  // First freq gets more attempts
+        (WAKEUP_BURST_COUNT * 25) / 100,
+        (WAKEUP_BURST_COUNT * 15) / 100,
+    };
+    
+    // Try each frequency in sequence
+    for (int freq_idx = 0; freq_idx < NUM_WAKEUP_FREQS && n == 0; freq_idx++) {
+        uint32_t try_freq = wakeup_frequencies[freq_idx];
+        set_frequency(try_freq);
+        
+        int pkts_this_freq = pkts_per_freq[freq_idx];
+        ESP_LOGI(TAG, "Wakeup burst on %lu Hz (%d pkts, attempt %d/%d)", 
+                 (unsigned long)try_freq, pkts_this_freq, freq_idx + 1, (int)NUM_WAKEUP_FREQS);
+        
+        for (int i = 0; i < pkts_this_freq; i++) {
+            total_attempts++;
+            
+            if (cancel_current_command) {
+                ESP_LOGW(TAG, "Wakeup burst cancelled at attempt %d", total_attempts);
+                goto wakeup_done;
+            }
+            
+            if (!transmit(tx_data, tx_len)) {
+                ESP_LOGE(TAG, "Wakeup TX failed at attempt %d", total_attempts);
+                break;
+            }
+            
+            // Small inter-packet delay helps receiver sync
+            if (WAKEUP_INTER_PKT_DELAY > 0) {
+                usleep(WAKEUP_INTER_PKT_DELAY);
+            }
+            
+            // Listen for ACK
+            n = receive(rx_buf.packet, sizeof(rx_buf.packet), WAKEUP_RX_WINDOW_MS);
+            
+            if (n > 0) {
+                int rssi = read_rssi();
+                ESP_LOGI(TAG, "Wakeup ACK at attempt %d, freq %lu Hz (RSSI: %d)", 
+                         total_attempts, (unsigned long)try_freq, rssi);
+                last_pump_comm_time = esp_timer_get_time();
+                success_freq = try_freq;
+                goto wakeup_done;
+            }
+            
+            // Yield occasionally to keep watchdog happy
+            if (i % 30 == 0) {
+                taskYIELD();
+            }
+        }
+        
+        // Brief pause between frequency switches
+        vTaskDelay(pdMS_TO_TICKS(30));
+    }
+    
+wakeup_done:
+    // Restore preamble to default
+    rfm95_set_preamble_ms(0);
+    
+    // If successful, promote that frequency for next time
+    if (n > 0 && success_freq != 0) {
+        promote_frequency(success_freq);
+        // Stay on successful frequency
+    } else {
+        ESP_LOGW(TAG, "Wakeup burst finished with NO response after %d attempts", total_attempts);
+        set_frequency(original_freq);
+    }
+    
+    return n;
+}
+
 static void send_and_listen(const uint8_t *buf, int len)
 {
 	send_and_listen_cmd_t *p = (send_and_listen_cmd_t *)buf;
@@ -399,38 +629,98 @@ static void send_and_listen(const uint8_t *buf, int len)
 	int rssi = 0;
 	int tries_used = 0;
 
-	// Longer preamble often reduces first-command latency by avoiding retries
-	// while the pump radio is still waking up.
-	rfm95_set_preamble_ms(p->preamble_ms);
+	// Check for WAKEUP command (0x5D)
+	// Packet structure: [DeviceType, PumpID0, PumpID1, PumpID2, Command, ...]
+	// Command is at index 4.
+    uint8_t pump_id[3];
+    uint8_t cmd_code;
+    bool is_minimed = extract_minimed_info(p->packet, len, pump_id, &cmd_code);
+	bool is_wakeup = (is_minimed && cmd_code == 0x5D);
 
-	for (int retries = p->retry_count + 1; retries > 0; retries--)
-	{
-		tries_used++;
-		ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)", 
-				 tries_used, p->retry_count + 1, (unsigned)p->preamble_ms, p->timeout_ms);
-		if (cancel_current_command)
-		{
-			break;
+	if (is_wakeup) {
+		ESP_LOGI(TAG, "send_and_listen: WAKEUP command detected, using burst mode");
+		int burst_n = perform_wakeup_burst(p->packet);
+		if (burst_n > 0) {
+			n = burst_n;
+			rssi = read_rssi();
 		}
-		send(p->packet, len, repeat_count, delay_ms);
-		if (cancel_current_command)
-		{
-			break;
+	} else {
+		// Auto-wakeup check - conservative to avoid interfering with normal operation
+		// Only trigger if pump has been silent for > 90 seconds
+		// Note: Don't auto-wakeup if client explicitly sends wakeup command - that's handled above
+		int64_t now = esp_timer_get_time();
+		int64_t silence_threshold = 90 * SECONDS;  // 90 seconds
+		
+		// Calculate actual silence duration
+		// If last_pump_comm_time == 0, pump never responded - but we only auto-wakeup
+		// if it's been >90s since boot to give normal commands a chance first
+		int64_t silence_duration;
+		if (last_pump_comm_time == 0) {
+			silence_duration = now;  // Time since boot
+		} else {
+			silence_duration = now - last_pump_comm_time;
 		}
-		n = receive(rx_buf.packet, sizeof(rx_buf.packet), p->timeout_ms);
-		rssi = read_rssi();
-		if (cancel_current_command)
-		{
-			break;
+		
+		if (silence_duration > silence_threshold) {
+			ESP_LOGI(TAG, "Auto-wakeup: silence=%llds (threshold=%ds)", 
+			         (long long)(silence_duration / SECONDS),
+			         (int)(silence_threshold / SECONDS));
+			perform_wakeup_burst(p->packet);
+			// Brief pause after wakeup to let pump stabilize
+			vTaskDelay(pdMS_TO_TICKS(100));
 		}
-		if (n != 0)
-		{
-			break;
+
+		// Standard logic for other commands
+		uint16_t current_preamble = p->preamble_ms;
+		if (current_preamble == 0) {
+			current_preamble = 60; // default
 		}
+
+		for (int retries = p->retry_count + 1; retries > 0; retries--)
+		{
+			tries_used++;
+			
+			// Adaptive preamble logic
+			uint16_t retry_preamble = current_preamble;
+			if (tries_used > 1) {
+				retry_preamble = current_preamble + ((tries_used - 1) * 50);
+				if (retry_preamble > 300) {
+					retry_preamble = 300;
+				}
+			}
+			
+			// Force minimum 100ms for first try if it's short
+			if (tries_used == 1 && retry_preamble < 100) {
+				retry_preamble = 100;
+			}
+			
+			rfm95_set_preamble_ms(retry_preamble);
+			
+			ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)", 
+					 tries_used, p->retry_count + 1, (unsigned)retry_preamble, p->timeout_ms);
+			if (cancel_current_command)
+			{
+				break;
+			}
+			send(p->packet, len, repeat_count, delay_ms);
+			if (cancel_current_command)
+			{
+				break;
+			}
+			n = receive(rx_buf.packet, sizeof(rx_buf.packet), p->timeout_ms);
+			rssi = read_rssi();
+			if (cancel_current_command)
+			{
+				break;
+			}
+			if (n != 0)
+			{
+				break;
+			}
+		}
+		// Restore default preamble
+		rfm95_set_preamble_ms(0);
 	}
-
-	// Restore default preamble to keep behavior consistent for other commands.
-	rfm95_set_preamble_ms(0);
 
 	// Call rx_common BEFORE unlocking radio, so reset_radio_if_needed() has the lock
 	if (!cancel_current_command)
@@ -606,6 +896,18 @@ int gnarl_request_pump_probe_isr(void)
 
 static uint8_t fr[3];
 
+// Convert frequency in Hz to CC111x register format (for iAPS compatibility)
+// Formula: f = (freq_hz * 2^16) / (24 MHz)
+static void freq_to_registers(uint32_t freq_hz)
+{
+	uint32_t f = (uint32_t)(((uint64_t)freq_hz << 16) / (24 * MHz));
+	fr[0] = (f >> 16) & 0xFF;
+	fr[1] = (f >> 8) & 0xFF;
+	fr[2] = f & 0xFF;
+	ESP_LOGD(TAG, "freq_to_registers: %lu Hz -> %02X %02X %02X", 
+	         (unsigned long)freq_hz, fr[0], fr[1], fr[2]);
+}
+
 static inline bool valid_frequency(uint32_t f)
 {
 	if (863 * MHz <= f && f <= 870 * MHz)
@@ -756,6 +1058,12 @@ void rfspy_command(const uint8_t *buf, int count, int rssi)
 	}
 	rfspy_cmd_t cmd = buf[1];
 
+    // Log the incoming command
+    ESP_LOGI(TAG, "BLE CMD: 0x%02X Len: %d", cmd, count);
+    if (count > 0) {
+        ESP_LOG_BUFFER_HEX(TAG, buf, count);
+    }
+
 	// GetPacket is used by Loop to wait for MySentry packets.
 	// It is fine to ignore subsequent calls if in_get_packet is true
 	// because we are already looping in the code to send a response.
@@ -868,6 +1176,10 @@ void start_gnarl_task(void)
 	}
 
 	request_queue = xQueueCreate(QUEUE_LENGTH, sizeof(rfspy_request_t));
+	
+	// Initialize frequency registers so iAPS can read them before any UpdateRegister command
+	freq_to_registers(PUMP_FREQUENCY);
+	
 	// Keep this task responsive, but avoid starving NimBLE/BT tasks.
 	// Too-high priority here can lead to periodic BLE disconnects under load.
 	xTaskCreate(gnarl_loop, "gnarl", 4096, 0, tskIDLE_PRIORITY + 10, &gnarl_loop_handle);

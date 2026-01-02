@@ -39,13 +39,13 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader/esp-idf/cmake_install.cmake")
+  include("/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader/esp-idf/cmake_install.cmake")
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader/install_local_manifest.txt"
+  file(WRITE "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -61,6 +61,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

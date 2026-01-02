@@ -158,7 +158,7 @@ uint32_t read_frequency(void);
 
 void set_frequency(uint32_t freq_hz);
 
-void transmit(uint8_t *buf, int count);
+bool transmit(uint8_t *buf, int count);
 
 int tx_packet_count(void);
 

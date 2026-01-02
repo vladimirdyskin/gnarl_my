@@ -1,4 +1,4 @@
-# Install script for directory: /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/components/u8g2
+# Install script for directory: /Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/components/u8g2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,6 +40,6 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/esp-idf/u8g2/install_local_manifest.txt"
+  file(WRITE "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/esp-idf/u8g2/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

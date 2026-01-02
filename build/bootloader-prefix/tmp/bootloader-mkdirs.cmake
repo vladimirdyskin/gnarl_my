@@ -10,18 +10,18 @@ if(NOT EXISTS "/Volumes/DataEx/esp/esp-idf/components/bootloader/subproject")
   file(MAKE_DIRECTORY "/Volumes/DataEx/esp/esp-idf/components/bootloader/subproject")
 endif()
 file(MAKE_DIRECTORY
-  "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader"
-  "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix"
-  "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix/tmp"
-  "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix/src/bootloader-stamp"
-  "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix/src"
-  "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix/src/bootloader-stamp"
+  "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader"
+  "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix"
+  "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix/tmp"
+  "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix/src/bootloader-stamp"
+  "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix/src"
+  "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

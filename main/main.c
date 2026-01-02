@@ -17,6 +17,7 @@
 #include "gnarl.h"
 #include "rfm95.h"
 #include "spi.h"
+#include "wakeup_test.h"
 
 static const char *reset_reason_str(esp_reset_reason_t reason)
 {
@@ -95,5 +96,6 @@ void app_main(void)
 	adc_init();
 	display_init();
 	gnarl_init();
+	// start_wakeup_test();
 	ESP_LOGI(TAG, "init complete; advertising should start soon");
 }

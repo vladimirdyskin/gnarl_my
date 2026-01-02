@@ -92,7 +92,7 @@ static inline uint8_t read_mode(void) {
 	return read_register(REG_OP_MODE) & OP_MODE_MASK;
 }
 
-#define MAX_WAIT	1000
+#define MAX_WAIT	2000
 
 static void set_mode(uint8_t mode) {
 	uint8_t cur_mode = read_mode();
@@ -364,22 +364,23 @@ static bool wait_for_fifo_room(void) {
 	return false;
 }
 
-static void wait_for_transmit_done(void) {
+static bool wait_for_transmit_done(void) {
 	uint8_t mode;
 	for (int w = 0; w < MAX_WAIT; w++) {
 		mode = read_mode();
 		if (mode == MODE_STDBY) {
 			ESP_LOGD(TAG, "RADIO TX: Transmission completed after %d iterations", w);
-			return;
+			return true;
 		}
 		usleep(1*MILLISECOND);
 	}
 	ESP_LOGE(TAG, "RADIO TX: Transmission timeout! Still in mode %d", mode);
 	sequencer_stop();
 	set_mode_sleep();
+	return false;
 }
 
-void transmit(uint8_t *buf, int count) {
+bool transmit(uint8_t *buf, int count) {
 	ESP_LOGD(TAG, "TX: %d bytes", count);
 	if (count > 0) {
 		ESP_LOG_BUFFER_HEX_LEVEL(TAG, buf, count, ESP_LOG_DEBUG);
@@ -418,15 +419,18 @@ void transmit(uint8_t *buf, int count) {
 		}
 	}
 	if (!wait_for_fifo_room()) {
-		return;
+		return false;
 	}
 	ESP_LOGD(TAG, "RADIO TX: Sending terminating byte");
 	xmit_byte(0);
 	ESP_LOGD(TAG, "RADIO TX: Waiting for transmission to complete");
-	wait_for_transmit_done();
+	bool ok = wait_for_transmit_done();
 	set_mode_standby();
-	tx_packets++;
-	ESP_LOGD(TAG, "TX: done (total: %d)", tx_packets);
+	if (ok) {
+		tx_packets++;
+		ESP_LOGD(TAG, "TX: done (total: %d)", tx_packets);
+	}
+	return ok;
 }
 
 static bool packet_seen(void) {
@@ -601,12 +605,15 @@ uint32_t read_frequency(void) {
 void set_frequency(uint32_t freq_hz) {
 	// Override frequency in 868-869 MHz range to 868.35 MHz (pump frequency for EU region)
 	// This matches original GNARL behavior - Loop may request different frequencies but pump uses fixed one
+	/*
 	if (freq_hz > 868000000 && freq_hz < 869000000) {
 		ESP_LOGD(TAG, "set_frequency: Overriding %lu Hz to 868350000 Hz", (unsigned long)freq_hz);
 		freq_hz = 868350000;
 	} else {
 		ESP_LOGD(TAG, "set_frequency: %lu Hz", (unsigned long)freq_hz);
 	}
+	*/
+	ESP_LOGD(TAG, "set_frequency: %lu Hz", (unsigned long)freq_hz);
 	uint32_t f = (((uint64_t)freq_hz << 19) + FXOSC/2) / FXOSC;
 	uint8_t frf[3];
 	frf[0] = f >> 16;

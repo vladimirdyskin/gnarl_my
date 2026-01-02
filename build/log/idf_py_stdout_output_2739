@@ -1,0 +1,1159 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15748
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3852
+entry 0x4008063c
+[0;32mI (30) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (30) boot: compile time Dec 31 2025 04:09:16[0m
+[0;32mI (30) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v1.1[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (38) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (50) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=2141ch (136220) map[0m
+[0;32mI (135) esp_image: segment 1: paddr=00031444 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (136) esp_image: segment 2: paddr=00031468 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (147) esp_image: segment 3: paddr=000365bc vaddr=40080000 size=09a5ch ( 39516) load[0m
+[0;32mI (162) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=6102ch (397356) map[0m
+[0;32mI (298) esp_image: segment 5: paddr=000a1054 vaddr=40089a5c size=133e8h ( 78824) load[0m
+[0;32mI (343) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (343) boot: Disabling RNG early entropy source...[0m
+[0;32mI (354) cpu_start: Multicore app[0m
+[0;32mI (362) cpu_start: Pro cpu start user code[0m
+[0;32mI (362) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (362) app_init: Application information:[0m
+[0;32mI (365) app_init: Project name:     gnarl[0m
+[0;32mI (370) app_init: App version:      75a4357-dirty[0m
+[0;32mI (375) app_init: Compile time:     Dec 31 2025 04:09:10[0m
+[0;32mI (381) app_init: ELF file SHA256:  b6b4095d9be0b51c...[0m
+[0;32mI (387) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (392) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (397) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (402) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (407) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (414) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (420) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (426) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (432) heap_init: At 3FFC6870 len 00019790 (101 KiB): DRAM[0m
+[0;32mI (438) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (444) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (451) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (459) spi_flash: detected chip: generic[0m
+[0;32mI (462) spi_flash: flash io: dio[0m
+[0;33mW (466) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (488) coexist: coex firmware version: e727207[0m
+[0;32mI (490) main_task: Started on CPU0[0m
+[0;32mI (490) main_task: Calling app_main()[0m
+[0;32mI (490) GNARL: ==== GNARL boot ====[0m
+[0;32mI (490) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (500) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (500) GNARL: heap free: 233684[0m
+[0;32mI (500) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (510) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: ENABLED[0m
+[0;32mI (520) GNARL: PM configured: min=20 max=80 light_sleep=1[0m
+[0;32mI (530) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (590) rfm95: RADIO: RFM95 Version: 0x12[0m
+[0;32mI (590) GNARL: radio ready; pump freq=868300000[0m
+[0;32mI (590) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (590) GNARL: display_init: starting[0m
+[0;32mI (600) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (610) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (610) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (620) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (630) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (640) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (650) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:ae[0m
+[0;32mI (650) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (1300) GNARL: BLE server_init[0m
+[0;32mI (1310) GNARL: BLE services registered[0m
+[0;32mI (1310) GNARL: BLE device name set to 'GNARL-32AE'[0m
+[0;32mI (1310) GNARL: NimBLE host task started[0m
+[0;32mI (1320) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1320) main_task: Returned from app_main()[0m
+[0;32mI (1370) GNARL: BLE sync_callback[0m
+[0;32mI (1370) GNARL: BLE addr: 88:13:bf:fd:32:ae[0m
+[0;32mI (1370) GNARL: BLE starting advertising[0m
+[0;32mI (1370) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (1390) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (1400) GNARL: BLE advertising started successfully[0m
+[0;32mI (1400) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (1410) GNARL: BLE connected successfully: handle=0x0000, RSSI=-58 dBm[0m
+[0;32mI (2050) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (2380) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=1[0m
+[0;32mI (2380) GNARL: BLE: Client enabled response count notifications[0m
+[0;32mI (2500) GNARL: BLE CMD: 0x02 Len: 2[0m
+[0;32mI (2500) GNARL: 01 02[0m
+[0;32mI (2710) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=1[0m
+[0;32mI (2710) GNARL: BLE: Client enabled timer tick notifications[0m
+[0;32mI (5950) GNARL: BLE CMD: 0x0D Len: 2[0m
+[0;32mI (5950) GNARL: 01 0d[0m
+[0;32mI (6100) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (6100) GNARL: 03 06 0c 59[0m
+[0;32mI (6220) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (6220) GNARL: 03 06 0f 62[0m
+[0;32mI (6340) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (6340) GNARL: 03 06 10 1a[0m
+[0;32mI (6460) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (6460) GNARL: 03 06 11 13[0m
+[0;32mI (6580) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (6580) GNARL: 03 06 0b dd[0m
+[0;32mI (7250) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (7250) GNARL: 03 06 0a 2d[0m
+[0;32mI (7370) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (7370) GNARL: 03 06 09 24[0m
+[0;32mI (7490) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (7490) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (7490) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;33mW (8130) GNARL: RX: timeout (failure #1, noise floor RSSI=-82)[0m
+[0;32mI (8240) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (8240) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (8240) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;33mW (8360) GNARL: RX: timeout (failure #2, noise floor RSSI=-82)[0m
+[0;32mI (8510) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (8510) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (8510) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;33mW (20630) GNARL: RX: timeout (failure #3, noise floor RSSI=-80)[0m
+[0;33mW (20630) GNARL: CmdSendAndListen took 12196 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=0)[0m
+[0;32mI (20750) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (20750) GNARL: 03 06 0b 77[0m
+[0;32mI (20870) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (20870) GNARL: 03 06 0a 2f[0m
+[0;32mI (20990) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (21000) GNARL: 03 06 09 24[0m
+[0;32mI (21120) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (21120) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (21120) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;33mW (21750) GNARL: RX: timeout (failure #4, noise floor RSSI=-98)[0m
+[0;32mI (21870) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (21870) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (21870) GNARL: 55 5a 56 71 94 d5 72 57 15 71 55 55 55 55 55 55[0m
+[0;32mI (21880) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (21880) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (21890) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (21900) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (21900) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (21910) GNARL: 55 55 55 55 55 55 55 35 90 00[0m
+[0;33mW (23510) GNARL: RX: timeout (failure #5, noise floor RSSI=-98)[0m
+[0;33mW (23510) GNARL: RADIO: 5 consecutive RX failures - approaching reset threshold[0m
+[0;32mI (23620) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (23620) GNARL: 03 06 0b 55[0m
+[0;32mI (23740) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (23740) GNARL: 03 06 0a 2d[0m
+[0;32mI (23860) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (23860) GNARL: 03 06 09 24[0m
+[0;32mI (23980) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (23980) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (23980) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;33mW (25130) GNARL: RX: timeout (failure #6, noise floor RSSI=-69)[0m
+[0;32mI (25240) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (25250) GNARL: 03 06 0b dd[0m
+[0;32mI (25400) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (25400) GNARL: 03 06 0a 2d[0m
+[0;32mI (25520) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (25520) GNARL: 03 06 09 24[0m
+[0;32mI (25640) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (25640) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (25640) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (25870) GNARL: RADIO: Successful RX after 6 failures[0m
+[0;32mI (25870) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (25870) CMD_LOG: >RF  a966555a567194d57257..[0m
+[0;32mI (25880) CMD_LOG: >RF  a966555a567194d57257..[0m
+[0;32mI (25880) CMD_LOG: >RF  a966555a567194d57257..[0m
+[0;32mI (25890) CMD_LOG: >RF  a966555a567194d57257..[0m
+[0;32mI (25890) CMD_LOG: <BLE 03060b55[0m
+[0;32mI (25900) CMD_LOG: <BLE 03060a2d[0m
+[0;32mI (25900) CMD_LOG: <BLE 03060924[0m
+[0;32mI (25900) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (25910) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (25910) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (25920) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (25920) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (25930) CMD_LOG: <BLE 03060bdd[0m
+[0;32mI (25930) CMD_LOG: <BLE 03060a2d[0m
+[0;32mI (25940) CMD_LOG: <BLE 03060924[0m
+[0;32mI (25940) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (25950) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (25950) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (26060) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (26060) GNARL: 03 06 0b 66[0m
+[0;32mI (26180) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (26180) GNARL: 03 06 0a 2e[0m
+[0;32mI (26330) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (26330) GNARL: 03 06 09 24[0m
+[0;32mI (26450) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (26450) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (26450) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (26690) CMD_LOG: >BLE ddfc01a966555a567168..[0m
+[0;32mI (26690) CMD_LOG: <BLE 03060b66[0m
+[0;32mI (26690) CMD_LOG: <BLE 03060a2e[0m
+[0;32mI (26690) CMD_LOG: <BLE 03060924[0m
+[0;32mI (26690) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (26700) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (26700) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (26810) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (26810) GNARL: 03 06 0b ee[0m
+[0;32mI (26930) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (26930) GNARL: 03 06 0a 2e[0m
+[0;32mI (27050) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (27060) GNARL: 03 06 09 24[0m
+[0;32mI (27180) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (27180) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (27180) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (28860) CMD_LOG: >BLE ddf202a966555a567168..[0m
+[0;32mI (28860) CMD_LOG: <BLE 03060bee[0m
+[0;32mI (28860) CMD_LOG: <BLE 03060a2e[0m
+[0;32mI (28860) CMD_LOG: <BLE 03060924[0m
+[0;32mI (28870) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (28870) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (28880) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (28990) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (28990) GNARL: 03 06 0b 77[0m
+[0;32mI (29110) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (29110) GNARL: 03 06 0a 2f[0m
+[0;32mI (29230) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (29230) GNARL: 03 06 09 24[0m
+[0;32mI (29350) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (29350) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (29350) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (29590) CMD_LOG: >BLE ddd003a966555a567168..[0m
+[0;32mI (29590) CMD_LOG: <BLE 03060b77[0m
+[0;32mI (29590) CMD_LOG: <BLE 03060a2f[0m
+[0;32mI (29590) CMD_LOG: <BLE 03060924[0m
+[0;32mI (29590) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (29600) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (29600) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (29710) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (29710) GNARL: 03 06 0b 00[0m
+[0;32mI (29830) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (29830) GNARL: 03 06 0a 30[0m
+[0;32mI (29950) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (29950) GNARL: 03 06 09 24[0m
+[0;32mI (30070) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (30080) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (30080) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (30310) CMD_LOG: >BLE dd4604a966555a567168..[0m
+[0;32mI (30310) CMD_LOG: <BLE 03060b00[0m
+[0;32mI (30310) CMD_LOG: <BLE 03060a30[0m
+[0;32mI (30310) CMD_LOG: <BLE 03060924[0m
+[0;32mI (30320) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (30320) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (30330) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (30440) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (30440) GNARL: 03 06 0b 88[0m
+[0;32mI (30560) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (30560) GNARL: 03 06 0a 30[0m
+[0;32mI (30680) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (30680) GNARL: 03 06 09 24[0m
+[0;32mI (30800) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (30800) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (30800) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (31030) CMD_LOG: >BLE dd4405a966555a567168..[0m
+[0;32mI (31030) CMD_LOG: <BLE 03060b88[0m
+[0;32mI (31040) CMD_LOG: <BLE 03060a30[0m
+[0;32mI (31040) CMD_LOG: <BLE 03060924[0m
+[0;32mI (31040) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (31050) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (31050) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (31160) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (31160) GNARL: 03 06 0b 11[0m
+[0;32mI (31280) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (31280) GNARL: 03 06 0a 31[0m
+[0;32mI (31400) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (31400) GNARL: 03 06 09 24[0m
+[0;32mI (31520) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (31520) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (31520) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;33mW (32670) GNARL: RX: timeout (failure #1, noise floor RSSI=-96)[0m
+[0;32mI (32790) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (32790) GNARL: 03 06 0b 99[0m
+[0;32mI (32910) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (32910) GNARL: 03 06 0a 31[0m
+[0;32mI (33030) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (33030) GNARL: 03 06 09 24[0m
+[0;32mI (33150) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (33150) GNARL: 19 05 00 00 00 00 00 00 00 00 82 03 00 00 a9 66[0m
+[0;32mI (33150) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;33mW (34300) GNARL: RX: timeout (failure #2, noise floor RSSI=-99)[0m
+[0;32mI (34410) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (34420) GNARL: 03 06 0b 88[0m
+[0;32mI (34540) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (34540) GNARL: 03 06 0a 30[0m
+[0;32mI (34660) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (34660) GNARL: 03 06 09 24[0m
+[0;32mI (36500) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (36500) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (36500) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (36740) GNARL: RADIO: Successful RX after 2 failures[0m
+[0;32mI (36740) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (36740) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36740) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36750) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36750) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36760) CMD_LOG: <BLE 03060b99[0m
+[0;32mI (36760) CMD_LOG: <BLE 03060a31[0m
+[0;32mI (36760) CMD_LOG: <BLE 03060924[0m
+[0;32mI (36770) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (36770) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36780) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36780) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36790) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36790) CMD_LOG: <BLE 03060b88[0m
+[0;32mI (36800) CMD_LOG: <BLE 03060a30[0m
+[0;32mI (36800) CMD_LOG: <BLE 03060924[0m
+[0;32mI (36810) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (36810) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (36820) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (37230) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (37230) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (37230) GNARL: 55 5a 56 71 5b 25 55 70 d0 00[0m
+[0;32mI (37460) CMD_LOG: >BLE ddd007a966555a567168..[0m
+[0;32mI (37460) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (37460) CMD_LOG: >RF  a966555a56715b255570..[0m
+[0;32mI (37460) CMD_LOG: <RF  a966555a56715b256355..[0m
+[0;32mI (37860) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (37860) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (37860) GNARL: 55 5a 56 71 b0 e5 55 aa c0 00[0m
+[0;32mI (38090) CMD_LOG: >BLE dd8408a966555a56715b..[0m
+[0;32mI (38100) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (38100) CMD_LOG: >RF  a966555a5671b0e555aa..[0m
+[0;32mI (38100) CMD_LOG: <RF  a966555a5671b0e56356..[0m
+[0;32mI (38520) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (38520) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (38520) GNARL: 55 5a 56 71 59 55 55 37 10 00[0m
+[0;32mI (38760) CMD_LOG: >BLE ddc009a966555a5671b0..[0m
+[0;32mI (38760) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (38760) CMD_LOG: >RF  a966555a567159555537..[0m
+[0;32mI (38760) CMD_LOG: <RF  a966555a5671595556c7..[0m
+[0;32mI (39190) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (39190) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (39190) GNARL: 55 5a 56 71 5a 35 55 38 b0 00[0m
+[0;32mI (39420) CMD_LOG: >BLE dd560aa966555a567159..[0m
+[0;32mI (39420) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (39420) CMD_LOG: >RF  a966555a56715a355538..[0m
+[0;32mI (39430) CMD_LOG: <RF  a966555a56715a357257..[0m
+[0;32mI (39930) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (39940) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (39940) GNARL: 55 5a 56 71 69 55 55 2f 20 00[0m
+[0;32mI (40110) CMD_LOG: >BLE dd520ba966555a56715a..[0m
+[0;32mI (40110) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (40110) CMD_LOG: >RF  a966555a56716955552f..[0m
+[0;32mI (40120) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (40540) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (40540) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (40540) GNARL: 55 5a 56 71 69 55 71 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (40550) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (40550) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (40560) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (40570) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (40570) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (40580) GNARL: 55 55 55 55 55 55 55 8c d0 00[0m
+[0;32mI (40880) CMD_LOG: >BLE dd520ca966555a567156..[0m
+[0;32mI (40880) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (40880) CMD_LOG: >RF  a966555a567169557155..[0m
+[0;32mI (40890) CMD_LOG: <RF  a966555a5671695571c5..[0m
+[0;32mI (41290) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (41290) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (41290) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (41530) CMD_LOG: >BLE dd560da966555a567169..[0m
+[0;32mI (41530) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (41530) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (41530) CMD_LOG: <RF  a966555a567169557255..[0m
+[0;32mI (41960) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (41960) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (41960) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (42190) CMD_LOG: >BLE dd440ea966555a567169..[0m
+[0;32mI (42190) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (42190) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (42200) CMD_LOG: <RF  a966555a567169556356..[0m
+[0;32mI (42530) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (42530) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (42530) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (42760) CMD_LOG: >BLE dd560fa966555a567169..[0m
+[0;32mI (42760) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (42770) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (42770) CMD_LOG: <RF  a966555a5671695574c8..[0m
+[0;32mI (43190) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (43190) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (43190) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (43430) CMD_LOG: >BLE dd4e10a966555a567169..[0m
+[0;32mI (43430) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (43430) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (43430) CMD_LOG: <RF  a966555a567169556555..[0m
+[0;32mI (43890) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (43890) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (43890) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (45350) CMD_LOG: >BLE dd8811a966555a567169..[0m
+[0;32mI (45350) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (45360) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (45360) CMD_LOG: <RF  a966555a567169556655..[0m
+[0;32mI (45730) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (45730) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (45730) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (45960) CMD_LOG: >BLE ddd012a966555a567169..[0m
+[0;32mI (45960) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (45970) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (45970) CMD_LOG: <RF  a966555a567169555655..[0m
+[0;32mI (46330) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (46330) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (46330) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (46570) CMD_LOG: >BLE dd3e13a966555a567169..[0m
+[0;32mI (46570) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (46570) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (46570) CMD_LOG: <RF  a966555a567169555a55..[0m
+[0;32mI (46970) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (46970) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (46970) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (47200) CMD_LOG: >BLE dd4a14a966555a567169..[0m
+[0;32mI (47200) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (47200) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (47210) CMD_LOG: <RF  a966555a567169555955..[0m
+[0;32mI (47570) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (47570) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (47570) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (47800) CMD_LOG: >BLE dd4c15a966555a567169..[0m
+[0;32mI (47810) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (47810) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (47810) CMD_LOG: <RF  a966555a567169556a55..[0m
+[0;32mI (48230) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (48240) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (48240) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (48470) CMD_LOG: >BLE dd3e16a966555a567169..[0m
+[0;32mI (48470) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (48470) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (48470) CMD_LOG: <RF  a966555a567169554b55..[0m
+[0;32mI (48870) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (48870) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (48870) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (49100) CMD_LOG: >BLE dd4a17a966555a567169..[0m
+[0;32mI (49100) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (49100) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (49110) CMD_LOG: <RF  a966555a567169556c55..[0m
+[0;32mI (49500) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (49500) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (49500) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (49740) CMD_LOG: >BLE dd3e18a966555a567169..[0m
+[0;32mI (49740) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (49740) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (49740) CMD_LOG: <RF  a966555a567169554d55..[0m
+[0;32mI (50170) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (50170) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (50170) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (51850) CMD_LOG: >BLE dd0419a966555a567169..[0m
+[0;32mI (51860) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (51860) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (51860) CMD_LOG: <RF  a966555a567169554e55..[0m
+[0;32mI (52250) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (52250) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (52250) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (52490) CMD_LOG: >BLE ddd01aa966555a567169..[0m
+[0;32mI (52490) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (52490) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (52490) CMD_LOG: <RF  a966555a567169555c55..[0m
+[0;32mI (52920) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (52920) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (52920) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (53150) CMD_LOG: >BLE dd4e1ba966555a567169..[0m
+[0;32mI (53150) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (53150) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (53160) CMD_LOG: <RF  a966555a567169565555..[0m
+[0;32mI (53550) GNARL: BLE CMD: 0x04 Len: 20[0m
+[0;32mI (53550) GNARL: 13 04 00 00 00 00 00 00 a9 66 55 5a 56 71 56 65[0m
+[0;32mI (53550) GNARL: 55 39 90 00[0m
+[0;32mI (359980) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (359980) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (359980) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (359980) GNARL: Auto-wakeup: silence=308s (threshold=90s)[0m
+[0;32mI (359990) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (362470) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (362470) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (362480) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (362550) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (365100) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (367650) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (368380) GNARL: RX: timeout (failure #1, noise floor RSSI=-74)[0m
+[0;33mW (368380) GNARL: CmdSendAndListen took 8419 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (368390) GNARL: Auto-wakeup: silence=317s (threshold=90s)[0m
+[0;32mI (368390) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (368490) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (368490) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (368490) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (370950) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (373500) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (376050) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (376260) GNARL: RX: timeout (failure #2, noise floor RSSI=-71)[0m
+[0;33mW (376260) GNARL: CmdSendAndListen took 7895 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=1, rx_len=0)[0m
+[0;32mI (376270) GNARL: Auto-wakeup: silence=324s (threshold=90s)[0m
+[0;32mI (376270) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (378830) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (381380) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (383930) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;32mI (386140) GNARL: RADIO: Successful RX after 2 failures[0m
+[0;32mI (386140) CMD_LOG: >BLE dd361ca966555a567169..[0m
+[0;32mI (386140) CMD_LOG: <BLE 1304000000000000a966..[0m
+[0;32mI (386140) CMD_LOG: >RF  0000a966555a56715665..[0m
+[0;32mI (386150) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (386150) CMD_LOG: <BLE 190500ff000000000000..[0m
+[0;32mI (386160) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (386160) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (386170) CMD_LOG: <BLE 190500ff00000000002e..[0m
+[0;32mI (386180) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (386180) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (386190) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;33mW (386190) GNARL: CmdSendAndListen took 9955 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=11)[0m
+[0;32mI (645690) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (645690) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=0[0m
+[0;32mI (645700) GNARL: BLE: Client disabled response count notifications[0m
+[0;32mI (645700) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=0[0m
+[0;32mI (645710) GNARL: BLE: Client disabled timer tick notifications[0m
+[0;32mI (645720) GNARL: BLE GAP_EVENT_DISCONNECT: reason=0x208 (was handle=0x0000)[0m
+[0;32mI (645730) GNARL: BLE disconnect reason: BLE_HS_ETIMEOUT (0x208)[0m
+[0;32mI (645730) GNARL: BLE restarting advertisement after short delay...[0m
+[0;32mI (645840) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (645850) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (645860) GNARL: BLE advertising started successfully[0m
+[0;32mI (649780) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (649780) GNARL: BLE connected successfully: handle=0x0000, RSSI=-109 dBm[0m
+[0;32mI (651180) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (651870) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=1[0m
+[0;32mI (651880) GNARL: BLE: Client enabled response count notifications[0m
+[0;32mI (652120) GNARL: BLE CMD: 0x02 Len: 2[0m
+[0;32mI (652120) GNARL: 01 02[0m
+[0;32mI (652930) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=1[0m
+[0;32mI (652930) GNARL: BLE: Client enabled timer tick notifications[0m
+[0;32mI (670030) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (670030) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=0[0m
+[0;32mI (670030) GNARL: BLE: Client disabled response count notifications[0m
+[0;32mI (670040) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=0[0m
+[0;32mI (670040) GNARL: BLE: Client disabled timer tick notifications[0m
+[0;32mI (670050) GNARL: BLE GAP_EVENT_DISCONNECT: reason=0x208 (was handle=0x0000)[0m
+[0;32mI (670060) GNARL: BLE disconnect reason: BLE_HS_ETIMEOUT (0x208)[0m
+[0;32mI (670070) GNARL: BLE restarting advertisement after short delay...[0m
+[0;32mI (670170) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (670180) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (670190) GNARL: BLE advertising started successfully[0m
+[0;32mI (705420) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (705420) GNARL: BLE connected successfully: handle=0x0000, RSSI=-106 dBm[0m
+[0;32mI (706800) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (707980) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=1[0m
+[0;32mI (707980) GNARL: BLE: Client enabled response count notifications[0m
+[0;32mI (708320) GNARL: BLE CMD: 0x02 Len: 2[0m
+[0;32mI (708320) GNARL: 01 02[0m
+[0;32mI (708710) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=1[0m
+[0;32mI (708710) GNARL: BLE: Client enabled timer tick notifications[0m
+[0;32mI (777840) GNARL: BLE CMD: 0x0D Len: 2[0m
+[0;32mI (777850) GNARL: 01 0d[0m
+[0;32mI (777970) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (777970) GNARL: 03 06 0c 59[0m
+[0;32mI (778090) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (778090) GNARL: 03 06 0f 62[0m
+[0;32mI (778210) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (778210) GNARL: 03 06 10 1a[0m
+[0;32mI (778330) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (778330) GNARL: 03 06 11 13[0m
+[0;32mI (778450) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (778450) GNARL: 03 06 0b 88[0m
+[0;32mI (778750) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (778750) GNARL: 03 06 0a 30[0m
+[0;32mI (778870) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (778870) GNARL: 03 06 09 24[0m
+[0;32mI (779050) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (779050) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (779050) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (779060) GNARL: Auto-wakeup: silence=394s (threshold=90s)[0m
+[0;32mI (779070) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (781580) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (781580) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (781580) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (781600) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (784150) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (786700) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (787430) GNARL: RX: timeout (failure #1, noise floor RSSI=-96)[0m
+[0;33mW (787430) GNARL: CmdSendAndListen took 8393 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (787440) GNARL: Auto-wakeup: silence=403s (threshold=90s)[0m
+[0;32mI (787440) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (787540) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (787540) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (787540) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (790000) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (792550) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (795100) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (795310) GNARL: RX: timeout (failure #2, noise floor RSSI=-98)[0m
+[0;33mW (795310) GNARL: CmdSendAndListen took 7900 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=1, rx_len=0)[0m
+[0;32mI (795320) GNARL: Auto-wakeup: silence=411s (threshold=90s)[0m
+[0;32mI (795320) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (797880) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (799820) GNARL: Wakeup ACK at attempt 89, freq 868250000 Hz (RSSI: -29)[0m
+[0;32mI (808760) GNARL: RADIO: Successful RX after 2 failures[0m
+[0;32mI (808760) CMD_LOG: >BLE dd737562675f72667370..[0m
+[0;32mI (808760) CMD_LOG: <BLE 0102[0m
+[0;32mI (808760) CMD_LOG: >BLE dd737562675f72667370..[0m
+[0;32mI (808770) CMD_LOG: <BLE 010d[0m
+[0;32mI (808770) CMD_LOG: <BLE 03060c59[0m
+[0;32mI (808780) CMD_LOG: <BLE 03060f62[0m
+[0;32mI (808780) CMD_LOG: <BLE 0306101a[0m
+[0;32mI (808780) CMD_LOG: <BLE 03061113[0m
+[0;32mI (808790) CMD_LOG: <BLE 03060b88[0m
+[0;32mI (808790) CMD_LOG: <BLE 03060a30[0m
+[0;32mI (808790) CMD_LOG: <BLE 03060924[0m
+[0;32mI (808800) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (808800) CMD_LOG: <BLE 190500ff000000000000..[0m
+[0;32mI (808810) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (808810) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (808820) CMD_LOG: <BLE 190500ff00000000002e..[0m
+[0;32mI (808820) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (808830) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (808840) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;33mW (808840) GNARL: CmdSendAndListen took 13608 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=11)[0m
+[0;32mI (826310) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (826310) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (826310) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (826850) CMD_LOG: >BLE dd4c1fa966555a567156..[0m
+[0;32mI (826860) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (826860) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (826860) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (826870) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (827210) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (827210) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (827210) GNARL: 55 5a 56 71 d0 d5 55 2d 90 00[0m
+[0;32mI (827710) CMD_LOG: >BLE ddd820a966555a567168..[0m
+[0;32mI (827710) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (827710) CMD_LOG: >RF  a966555a5671d0d5552d..[0m
+[0;32mI (827710) CMD_LOG: >RF  a966555a5671d0d5552d..[0m
+[0;32mI (827720) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (828050) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (828060) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (828060) GNARL: 55 5a 56 71 d0 d5 71 57 15 55 55 55 55 55 55 55[0m
+[0;32mI (828060) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (828070) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (828080) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (828080) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (828090) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (828100) GNARL: 55 55 55 55 55 55 55 64 d0 00[0m
+[0;32mI (828430) CMD_LOG: >BLE ddf621a966555a567156..[0m
+[0;32mI (828430) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (828430) CMD_LOG: >RF  a966555a5671d0d57157..[0m
+[0;32mI (828430) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (830800) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (830800) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (830800) GNARL: 55 5a 56 71 d0 d5 55 2d 90 00[0m
+[0;32mI (830970) CMD_LOG: >BLE dd4422a966555a567156..[0m
+[0;32mI (830970) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (830970) CMD_LOG: >RF  a966555a5671d0d5552d..[0m
+[0;32mI (830980) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (831340) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (831340) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (831340) GNARL: 55 5a 56 71 d0 d5 71 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (831350) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (831350) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (831360) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (831370) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (831370) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (831380) GNARL: 55 55 55 55 55 55 55 68 d0 00[0m
+[0;32mI (831670) CMD_LOG: >BLE dd4e23a966555a567156..[0m
+[0;32mI (831670) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (831670) CMD_LOG: >RF  a966555a5671d0d57155..[0m
+[0;32mI (831670) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (837310) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (837310) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (837310) GNARL: 55 5a 56 71 5b 25 55 70 d0 00[0m
+[0;32mI (838350) CMD_LOG: >BLE dd5024a966555a567156..[0m
+[0;32mI (838360) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (838360) CMD_LOG: >RF  a966555a56715b255570..[0m
+[0;32mI (838360) CMD_LOG: <RF  a966555a56715b256355..[0m
+[0;32mI (838700) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (838700) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (838700) GNARL: 55 5a 56 71 b0 e5 55 aa c0 00[0m
+[0;32mI (838930) CMD_LOG: >BLE ddc425a966555a56715b..[0m
+[0;32mI (838930) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (838930) CMD_LOG: >RF  a966555a5671b0e555aa..[0m
+[0;32mI (838940) CMD_LOG: <RF  a966555a5671b0e56356..[0m
+[0;32mI (839270) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (839270) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (839270) GNARL: 55 5a 56 71 59 55 55 37 10 00[0m
+[0;32mI (839500) CMD_LOG: >BLE dd5226a966555a5671b0..[0m
+[0;32mI (839510) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (839510) CMD_LOG: >RF  a966555a567159555537..[0m
+[0;32mI (839510) CMD_LOG: <RF  a966555a5671595556c7..[0m
+[0;32mI (839840) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (839840) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (839840) GNARL: 55 5a 56 71 5a 35 55 38 b0 00[0m
+[0;32mI (840080) CMD_LOG: >BLE dd5227a966555a567159..[0m
+[0;32mI (840080) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (840080) CMD_LOG: >RF  a966555a56715a355538..[0m
+[0;32mI (840080) CMD_LOG: <RF  a966555a56715a357257..[0m
+[0;32mI (840410) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (840410) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (840410) GNARL: 55 5a 56 71 69 55 55 2f 20 00[0m
+[0;32mI (840590) CMD_LOG: >BLE dd4428a966555a56715a..[0m
+[0;32mI (840590) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (840590) CMD_LOG: >RF  a966555a56716955552f..[0m
+[0;32mI (840590) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (840930) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (840930) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (840930) GNARL: 55 5a 56 71 69 55 71 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (840930) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (840940) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (840950) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (840950) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (840960) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (840970) GNARL: 55 55 55 55 55 55 55 8c d0 00[0m
+[0;32mI (841270) CMD_LOG: >BLE dd3829a966555a567156..[0m
+[0;32mI (841270) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (841270) CMD_LOG: >RF  a966555a567169557155..[0m
+[0;32mI (841270) CMD_LOG: <RF  a966555a5671695571c5..[0m
+[0;32mI (841620) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (841620) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (841620) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (842170) CMD_LOG: >BLE dd3e2aa966555a567169..[0m
+[0;32mI (842170) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (842180) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (842180) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (842180) CMD_LOG: <RF  a966555a567169557255..[0m
+[0;32mI (842580) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (842580) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (842580) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (842820) CMD_LOG: >BLE ddc02ba966555a567169..[0m
+[0;32mI (842820) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (842820) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (842820) CMD_LOG: <RF  a966555a567169556356..[0m
+[0;32mI (843150) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (843150) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (843160) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (844850) CMD_LOG: >BLE dd522ca966555a567169..[0m
+[0;32mI (844860) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (844860) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (844860) CMD_LOG: <RF  a966555a5671695574c8..[0m
+[0;32mI (845200) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (845200) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (845200) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (845440) CMD_LOG: >BLE ddfe2da966555a567169..[0m
+[0;32mI (845440) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (845440) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (845440) CMD_LOG: <RF  a966555a567169556555..[0m
+[0;32mI (845780) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (845780) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (845780) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (846010) CMD_LOG: >BLE dd4c2ea966555a567169..[0m
+[0;32mI (846010) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (846010) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (846020) CMD_LOG: <RF  a966555a567169556655..[0m
+[0;32mI (846350) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (846350) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (846350) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (846580) CMD_LOG: >BLE dd522fa966555a567169..[0m
+[0;32mI (846580) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (846580) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (846590) CMD_LOG: <RF  a966555a567169555655..[0m
+[0;32mI (846950) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (846950) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (846950) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (847180) CMD_LOG: >BLE dd4a30a966555a567169..[0m
+[0;32mI (847190) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (847190) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (847190) CMD_LOG: <RF  a966555a567169555a55..[0m
+[0;32mI (847550) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (847550) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (847550) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (847790) CMD_LOG: >BLE dd5031a966555a567169..[0m
+[0;32mI (847790) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (847790) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (847790) CMD_LOG: <RF  a966555a567169555955..[0m
+[0;32mI (848180) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (848190) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (848190) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (848420) CMD_LOG: >BLE dd3a32a966555a567169..[0m
+[0;32mI (848420) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (848420) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (848430) CMD_LOG: <RF  a966555a567169556a55..[0m
+[0;32mI (848760) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (848760) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (848760) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (848990) CMD_LOG: >BLE dd5033a966555a567169..[0m
+[0;32mI (848990) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (848990) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (849000) CMD_LOG: <RF  a966555a567169554b55..[0m
+[0;32mI (849330) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (849330) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (849330) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (849560) CMD_LOG: >BLE dd5234a966555a567169..[0m
+[0;32mI (849560) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (849560) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (849560) CMD_LOG: <RF  a966555a567169556c55..[0m
+[0;32mI (849900) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (849900) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (849900) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (851350) CMD_LOG: >BLE dd5235a966555a567169..[0m
+[0;32mI (851350) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (851360) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (851360) CMD_LOG: <RF  a966555a567169554d55..[0m
+[0;32mI (851710) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (851710) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (851710) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (851950) CMD_LOG: >BLE ddca36a966555a567169..[0m
+[0;32mI (851950) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (851950) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (851950) CMD_LOG: <RF  a966555a567169554e55..[0m
+[0;32mI (852280) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (852280) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (852290) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (852520) CMD_LOG: >BLE ddec37a966555a567169..[0m
+[0;32mI (852520) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (852520) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (852520) CMD_LOG: <RF  a966555a567169555c55..[0m
+[0;32mI (852860) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (852860) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (852860) GNARL: 55 5a 56 71 56 65 55 39 90 00[0m
+[0;32mI (853090) CMD_LOG: >BLE dd5238a966555a567169..[0m
+[0;32mI (853090) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (853090) CMD_LOG: >RF  a966555a567156655539..[0m
+[0;32mI (853090) CMD_LOG: <RF  a966555a567169565555..[0m
+[0;32mI (853430) GNARL: BLE CMD: 0x04 Len: 20[0m
+[0;32mI (853430) GNARL: 13 04 00 00 00 00 00 00 a9 66 55 5a 56 71 56 65[0m
+[0;32mI (853430) GNARL: 55 39 90 00[0m
+[0;32mI (1255500) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1255500) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (1255500) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (1255500) GNARL: Auto-wakeup: silence=404s (threshold=90s)[0m
+[0;32mI (1255510) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1258030) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1258030) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (1258030) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (1258070) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (1260620) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (1263170) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (1263900) GNARL: RX: timeout (failure #1, noise floor RSSI=-67)[0m
+[0;33mW (1263900) GNARL: CmdSendAndListen took 8419 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (1263910) GNARL: Auto-wakeup: silence=412s (threshold=90s)[0m
+[0;32mI (1263910) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1264020) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1264020) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (1264020) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (1265880) GNARL: Wakeup ACK at attempt 39, freq 868300000 Hz (RSSI: -56)[0m
+[0;33mW (1266090) GNARL: RX: timeout (failure #2, noise floor RSSI=-3)[0m
+[0;33mW (1266090) GNARL: CmdSendAndListen took 2192 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=1, rx_len=0)[0m
+[0;32mI (1266210) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (1266210) GNARL: 03 06 0b 77[0m
+[0;32mI (1268320) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (1268320) GNARL: 03 06 0b 55[0m
+[0;32mI (1274790) GNARL: RADIO: Successful RX after 2 failures[0m
+[0;32mI (1274790) CMD_LOG: >BLE dd4c39a966555a567169..[0m
+[0;32mI (1274790) CMD_LOG: <BLE 1304000000000000a966..[0m
+[0;32mI (1274800) CMD_LOG: >RF  0000a966555a56715665..[0m
+[0;32mI (1274800) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (1274810) CMD_LOG: <BLE 190500ff000000000000..[0m
+[0;32mI (1274810) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (1274820) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (1274820) CMD_LOG: <BLE 190500ff00000000002e..[0m
+[0;32mI (1274830) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (1274830) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (1274840) CMD_LOG: <BLE 03060b77[0m
+[0;32mI (1274840) CMD_LOG: <BLE 03060b55[0m
+[0;32mI (1274840) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;33mW (1274850) GNARL: CmdSendAndListen took 8790 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=11)[0m
+[0;32mI (1613630) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1613630) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (1613630) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (1613630) GNARL: Auto-wakeup: silence=340s (threshold=90s)[0m
+[0;32mI (1613640) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1616150) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1616150) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (1616160) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (1616200) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (1618750) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (1621300) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (1622030) GNARL: RX: timeout (failure #1, noise floor RSSI=-96)[0m
+[0;33mW (1622030) GNARL: CmdSendAndListen took 8421 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (1622040) GNARL: Auto-wakeup: silence=348s (threshold=90s)[0m
+[0;32mI (1622040) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1622140) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1622140) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (1622140) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (1624600) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (1627150) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (1629700) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (1629910) GNARL: RX: timeout (failure #2, noise floor RSSI=-95)[0m
+[0;33mW (1629910) GNARL: CmdSendAndListen took 7907 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=1, rx_len=0)[0m
+[0;32mI (1629920) GNARL: Auto-wakeup: silence=356s (threshold=90s)[0m
+[0;32mI (1629920) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1630010) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (1630010) GNARL: 03 06 0b 77[0m
+[0;32mI (1632090) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (1632090) GNARL: 03 06 0b 55[0m
+[0;32mI (1632480) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (1632670) GNARL: Wakeup ACK at attempt 54, freq 868250000 Hz (RSSI: -56)[0m
+[0;32mI (1641600) GNARL: RADIO: Successful RX after 2 failures[0m
+[0;32mI (1641600) CMD_LOG: >BLE dda83ba966555a567156..[0m
+[0;32mI (1641600) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (1641600) CMD_LOG: <BLE 190500ff000000000000..[0m
+[0;32mI (1641610) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (1641610) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (1641620) CMD_LOG: <BLE 190500ff00000000002e..[0m
+[0;32mI (1641620) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (1641630) CMD_LOG: <BLE 03060b77[0m
+[0;32mI (1641630) CMD_LOG: <BLE 03060b55[0m
+[0;32mI (1641640) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (1641640) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;33mW (1641650) GNARL: CmdSendAndListen took 11794 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=11)[0m
+[0;32mI (1659850) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1659850) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (1659850) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (1660080) CMD_LOG: >BLE dd383da966555a567156..[0m
+[0;32mI (1660080) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (1660090) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (1660090) CMD_LOG: <RF  a966555a567168d55956..[0m
+[0;32mI (1660420) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1660420) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (1660420) GNARL: 55 5a 56 71 d0 d5 55 2d 90 00[0m
+[0;32mI (1660600) CMD_LOG: >BLE ddc03ea966555a567168..[0m
+[0;32mI (1660600) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (1660600) CMD_LOG: >RF  a966555a5671d0d5552d..[0m
+[0;32mI (1660600) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (1660960) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (1660960) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (1660960) GNARL: 55 5a 56 71 d0 d5 71 57 15 55 55 55 55 55 55 55[0m
+[0;32mI (1660970) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1660980) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1660980) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1660990) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1661000) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1661000) GNARL: 55 55 55 55 55 55 55 64 d0 00[0m
+[0;32mI (1661340) CMD_LOG: >BLE dd2c3fa966555a567156..[0m
+[0;32mI (1661340) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (1661340) CMD_LOG: >RF  a966555a5671d0d57157..[0m
+[0;32mI (1661350) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (1662650) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1662650) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (1662650) GNARL: 55 5a 56 71 d0 d5 55 2d 90 00[0m
+[0;32mI (1663300) CMD_LOG: >BLE dd3040a966555a567156..[0m
+[0;32mI (1663300) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (1663300) CMD_LOG: >RF  a966555a5671d0d5552d..[0m
+[0;32mI (1663300) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (1663640) GNARL: BLE CMD: 0x05 Len: 122[0m
+[0;32mI (1663650) GNARL: 79 05 00 00 00 00 00 00 00 00 c8 03 00 00 a9 66[0m
+[0;32mI (1663650) GNARL: 55 5a 56 71 d0 d5 71 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1663650) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1663660) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1663670) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1663670) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1663680) GNARL: 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55[0m
+[0;32mI (1663690) GNARL: 55 55 55 55 55 55 55 68 d0 00[0m
+[0;32mI (1663970) CMD_LOG: >BLE dd0c41a966555a567156..[0m
+[0;32mI (1663970) CMD_LOG: <BLE 79050000000000000000..[0m
+[0;32mI (1663970) CMD_LOG: >RF  a966555a5671d0d57155..[0m
+[0;32mI (1663980) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;32mI (1836540) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1836540) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (1836540) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (1836540) GNARL: Auto-wakeup: silence=173s (threshold=90s)[0m
+[0;32mI (1836550) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1839000) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1839000) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (1839000) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (1839110) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (1841660) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (1844210) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (1844940) GNARL: RX: timeout (failure #1, noise floor RSSI=-69)[0m
+[0;33mW (1844940) GNARL: CmdSendAndListen took 8421 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (1844950) GNARL: Auto-wakeup: silence=181s (threshold=90s)[0m
+[0;32mI (1844950) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1845050) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (1845050) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (1845050) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (1847510) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (1850060) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (1852610) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (1852820) GNARL: RX: timeout (failure #2, noise floor RSSI=-73)[0m
+[0;33mW (1852820) GNARL: CmdSendAndListen took 7902 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=1, rx_len=0)[0m
+[0;32mI (1852830) GNARL: Auto-wakeup: silence=189s (threshold=90s)[0m
+[0;32mI (1852830) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (1852940) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (1852940) GNARL: 03 06 0b 77[0m
+[0;32mI (13) boot: ESP-IDF v5.4.1 2nd stage bootloader[0m
+[0;32mI (13) boot: compile time Dec 31 2025 04:09:16[0m
+[0;32mI (13) boot: Multicore bootloader[0m
+[0;32mI (13) boot: chip revision: v1.1[0m
+[0;32mI (16) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (20) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (23) boot.esp32: SPI Flash Size : 8MB[0m
+[0;32mI (27) boot: Enabling RNG early entropy source...[0m
+[0;32mI (31) boot: Partition Table:[0m
+[0;32mI (34) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (40) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (47) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (53) boot:  2 factory          factory app      00 00 00010000 00200000[0m
+[0;32mI (60) boot: End of partition table[0m
+[0;32mI (63) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=2141ch (136220) map[0m
+[0;32mI (117) esp_image: segment 1: paddr=00031444 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (117) esp_image: segment 2: paddr=00031468 vaddr=3ffbdb60 size=0514ch ( 20812) load[0m
+[0;32mI (129) esp_image: segment 3: paddr=000365bc vaddr=40080000 size=09a5ch ( 39516) load[0m
+[0;32mI (144) esp_image: segment 4: paddr=00040020 vaddr=400d0020 size=6102ch (397356) map[0m
+[0;32mI (280) esp_image: segment 5: paddr=000a1054 vaddr=40089a5c size=133e8h ( 78824) load[0m
+[0;32mI (325) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (325) boot: Disabling RNG early entropy source...[0m
+[0;32mI (336) cpu_start: Multicore app[0m
+[0;32mI (344) cpu_start: Pro cpu start user code[0m
+[0;32mI (344) cpu_start: cpu freq: 80000000 Hz[0m
+[0;32mI (344) app_init: Application information:[0m
+[0;32mI (347) app_init: Project name:     gnarl[0m
+[0;32mI (352) app_init: App version:      75a4357-dirty[0m
+[0;32mI (357) app_init: Compile time:     Dec 31 2025 04:09:10[0m
+[0;32mI (363) app_init: ELF file SHA256:  b6b4095d9be0b51c...[0m
+[0;32mI (369) app_init: ESP-IDF:          v5.4.1[0m
+[0;32mI (374) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (378) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (383) efuse_init: Chip rev:         v1.1[0m
+[0;32mI (389) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (395) heap_init: At 3FFAFF10 len 000000F0 (0 KiB): DRAM[0m
+[0;32mI (401) heap_init: At 3FFB6388 len 00001C78 (7 KiB): DRAM[0m
+[0;32mI (407) heap_init: At 3FFB9A20 len 00004108 (16 KiB): DRAM[0m
+[0;32mI (414) heap_init: At 3FFC6870 len 00019790 (101 KiB): DRAM[0m
+[0;32mI (420) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (426) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (433) heap_init: At 4009CE44 len 000031BC (12 KiB): IRAM[0m
+[0;32mI (441) spi_flash: detected chip: generic[0m
+[0;32mI (444) spi_flash: flash io: dio[0m
+[0;33mW (448) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (470) coexist: coex firmware version: e727207[0m
+[0;32mI (472) main_task: Started on CPU0[0m
+[0;32mI (472) main_task: Calling app_main()[0m
+[0;32mI (472) GNARL: ==== GNARL boot ====[0m
+[0;32mI (472) GNARL: reset reason: 1 (POWERON)[0m
+[0;32mI (482) GNARL: chip: model=1 rev=101 cores=2[0m
+[0;32mI (482) GNARL: heap free: 233684[0m
+[0;32mI (482) GNARL: firmware: subg_rfspy 2.2 / ble_rfspy 2.0[0m
+[0;32mI (492) pm: Frequency switching config: CPU_MAX: 80, APB_MAX: 80, APB_MIN: 20, Light sleep: ENABLED[0m
+[0;32mI (502) GNARL: PM configured: min=20 max=80 light_sleep=1[0m
+[0;32mI (512) rfm95: RADIO: Initializing RFM95 radio module[0m
+[0;32mI (572) rfm95: RADIO: RFM95 Version: 0x12[0m
+[0;32mI (572) GNARL: radio ready; pump freq=868300000[0m
+[0;32mI (572) ADC: adc_init: starting task, BATTERY_ADC=37[0m
+[0;32mI (572) GNARL: display_init: starting[0m
+[0;32mI (582) gpio: GPIO[16]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (592) GNARL: display_init: button ISR configured on GPIO 0[0m
+[0;32mI (592) GNARL: display_init: shutdown timer started (15s)[0m
+[0;32mI (602) GNARL: pump_bg_listen: started (interval=5000ms timeout=1500ms)[0m
+[0;32mI (612) GNARL: gnarl_init: NVS + NimBLE[0m
+[0;32mI (632) BTDM_INIT: BT controller compile version [dc1cd58][0m
+[0;32mI (632) BTDM_INIT: Bluetooth MAC: 88:13:bf:fd:32:ae[0m
+[0;32mI (632) phy_init: phy_version 4860,6b7a6e5,Feb  6 2025,14:47:07[0m
+[0;32mI (1252) GNARL: BLE server_init[0m
+[0;32mI (1262) GNARL: BLE services registered[0m
+[0;32mI (1262) GNARL: BLE device name set to 'GNARL-32AE'[0m
+[0;32mI (1262) GNARL: NimBLE host task started[0m
+[0;32mI (1272) GNARL: init complete; advertising should start soon[0m
+[0;32mI (1272) main_task: Returned from app_main()[0m
+[0;32mI (1322) GNARL: BLE sync_callback[0m
+[0;32mI (1322) GNARL: BLE addr: 88:13:bf:fd:32:ae[0m
+[0;32mI (1322) GNARL: BLE starting advertising[0m
+[0;32mI (1322) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (1342) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (1352) GNARL: BLE advertising started successfully[0m
+[0;32mI (1352) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (1362) GNARL: BLE connected successfully: handle=0x0000, RSSI=-58 dBm[0m
+[0;32mI (1982) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (2562) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=1[0m
+[0;32mI (2562) GNARL: BLE: Client enabled response count notifications[0m
+[0;32mI (2682) GNARL: BLE CMD: 0x02 Len: 2[0m
+[0;32mI (2682) GNARL: 01 02[0m
+[0;32mI (2912) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=1[0m
+[0;32mI (2922) GNARL: BLE: Client enabled timer tick notifications[0m
+[0;32mI (359952) GNARL: BLE CMD: 0x0D Len: 2[0m
+[0;32mI (359952) GNARL: 01 0d[0m
+[0;32mI (360072) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360072) GNARL: 03 06 0c 59[0m
+[0;32mI (360192) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360192) GNARL: 03 06 0f 62[0m
+[0;32mI (360312) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360312) GNARL: 03 06 10 1a[0m
+[0;32mI (360432) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360442) GNARL: 03 06 11 13[0m
+[0;32mI (360562) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360562) GNARL: 03 06 0b 88[0m
+[0;32mI (360712) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360712) GNARL: 03 06 0a 30[0m
+[0;32mI (360832) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (360832) GNARL: 03 06 09 24[0m
+[0;32mI (360982) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (360982) GNARL: 19 05 00 00 00 00 00 00 00 00 c8 01 00 00 a9 66[0m
+[0;32mI (360982) GNARL: 55 5a 56 71 68 d5 55 d2 c0 00[0m
+[0;32mI (360982) GNARL: Auto-wakeup: silence=362s (threshold=90s)[0m
+[0;32mI (360992) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (363552) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (363562) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (363572) GNARL: 19 05 00 ff 00 00 00 00 00 00 01 00 00 00 a9 66[0m
+[0;32mI (363572) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (366102) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (368652) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (369382) GNARL: RX: timeout (failure #1, noise floor RSSI=-72)[0m
+[0;33mW (369382) GNARL: CmdSendAndListen took 8419 ms (tries=2, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=200, rx_len=0)[0m
+[0;32mI (369392) GNARL: Auto-wakeup: silence=370s (threshold=90s)[0m
+[0;32mI (369392) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (369492) GNARL: BLE CMD: 0x05 Len: 26[0m
+[0;32mI (369492) GNARL: 19 05 00 ff 00 00 00 00 00 2e e0 00 00 00 a9 66[0m
+[0;32mI (369492) GNARL: 55 5a 56 71 94 d5 55 d3 20 00[0m
+[0;32mI (371952) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (374502) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (377052) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;33mW (377262) GNARL: RX: timeout (failure #2, noise floor RSSI=-72)[0m
+[0;33mW (377262) GNARL: CmdSendAndListen took 7902 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=1, rx_len=0)[0m
+[0;32mI (377272) GNARL: Auto-wakeup: silence=378s (threshold=90s)[0m
+[0;32mI (377272) GNARL: Wakeup burst on 868300000 Hz (attempt 1/3)[0m
+[0;32mI (377382) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (377392) GNARL: 03 06 0b 77[0m
+[0;32mI (379492) GNARL: BLE CMD: 0x06 Len: 4[0m
+[0;32mI (379492) GNARL: 03 06 0b 55[0m
+[0;32mI (379832) GNARL: Wakeup burst on 868250000 Hz (attempt 2/3)[0m
+[0;32mI (382382) GNARL: Wakeup burst on 868350000 Hz (attempt 3/3)[0m
+[0;33mW (384932) GNARL: Wakeup burst finished with NO response after 150 attempts[0m
+[0;32mI (391552) GNARL: RADIO: Successful RX after 2 failures[0m
+[0;32mI (391552) CMD_LOG: >BLE dd737562675f72667370..[0m
+[0;32mI (391552) CMD_LOG: <BLE 010d[0m
+[0;32mI (391552) CMD_LOG: <BLE 03060c59[0m
+[0;32mI (391562) CMD_LOG: <BLE 03060f62[0m
+[0;32mI (391562) CMD_LOG: <BLE 0306101a[0m
+[0;32mI (391572) CMD_LOG: <BLE 03061113[0m
+[0;32mI (391572) CMD_LOG: <BLE 03060b88[0m
+[0;32mI (391572) CMD_LOG: <BLE 03060a30[0m
+[0;32mI (391582) CMD_LOG: <BLE 03060924[0m
+[0;32mI (391582) CMD_LOG: <BLE 19050000000000000000..[0m
+[0;32mI (391592) CMD_LOG: <BLE 190500ff000000000000..[0m
+[0;32mI (391592) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (391602) CMD_LOG: >RF  a966555a567168d555d2..[0m
+[0;32mI (391602) CMD_LOG: <BLE 190500ff00000000002e..[0m
+[0;32mI (391612) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (391612) CMD_LOG: <BLE 03060b77[0m
+[0;32mI (391622) CMD_LOG: <BLE 03060b55[0m
+[0;32mI (391622) CMD_LOG: >RF  a966555a567194d555d3..[0m
+[0;32mI (391632) CMD_LOG: <RF  a966555a567156655539..[0m
+[0;33mW (391632) GNARL: CmdSendAndListen took 14419 ms (tries=1, send_ch=0, listen_ch=0, repeat=0, delay_ms=0, preamble_ms=0, timeout_ms=12000, rx_len=11)[0m
+[0;32mI (571872) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0008, notify=0[0m
+[0;32mI (571872) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0012, notify=0[0m
+[0;32mI (571882) GNARL: BLE: Client disabled response count notifications[0m
+[0;32mI (571882) GNARL: BLE subscribe: conn_handle=0x0000, attr=0x0015, notify=0[0m
+[0;32mI (571892) GNARL: BLE: Client disabled timer tick notifications[0m
+[0;32mI (571902) GNARL: BLE GAP_EVENT_DISCONNECT: reason=0x208 (was handle=0x0000)[0m
+[0;32mI (571912) GNARL: BLE disconnect reason: BLE_HS_ETIMEOUT (0x208)[0m
+[0;32mI (571912) GNARL: BLE restarting advertisement after short delay...[0m
+[0;32mI (572022) GNARL: BLE advertise(): starting advertisement setup[0m
+[0;32mI (572032) GNARL: BLE advertising: name='GNARL-32AE' short='GNARL'[0m
+[0;32mI (572042) GNARL: BLE advertising started successfully[0m
+[0;32mI (599602) GNARL: BLE GAP_EVENT_CONNECT: status=0, conn_handle=0x0000[0m
+[0;32mI (599602) GNARL: BLE connected successfully: handle=0x0000, RSSI=-111 dBm[0m
+[0;32mI (600752) GNARL: BLE GAP_EVENT_DISCONNECT: reason=0x208 (was handle=0x0000)[0m
+[0;32mI (600752) GNARL: BLE disconnect reason: BLE_HS_ETIMEOUT (0x208)[0m
+[0;32mI (600762) GNARL: BLE restarting advertisement after short delay...[0m
+[0;32mI (600862) GNARL: BLE advertise(): starting advertisem

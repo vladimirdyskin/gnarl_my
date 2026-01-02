@@ -21,6 +21,7 @@
 
 #include "adc.h"
 #include "commands.h"
+#include "cmd_log.h"
 
 #define MAX_DATA 150
 
@@ -464,6 +465,7 @@ void send_bytes(const uint8_t *buf, int count)
 	data_out[0] = RESPONSE_CODE_SUCCESS;
 	memcpy(data_out + 1, buf, count);
 	data_out_len = count + 1;
+	cmd_log_ble_tx(data_out, data_out_len);
 	ESP_LOGD(TAG, "BLE total data length with response code: %d bytes", data_out_len);
 	ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_out, data_out_len, ESP_LOG_DEBUG);
 	response_notify();
@@ -529,6 +531,7 @@ static int data_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_ga
 	case BLE_GATT_ACCESS_OP_WRITE_CHR:
 		err = ble_hs_mbuf_to_flat(ctxt->om, data_in, sizeof(data_in), &data_in_len);
 		assert(!err);
+		cmd_log_ble_rx(data_in, data_in_len);
 		ESP_LOGD(TAG, "BLE data_access WRITE: command received, %d bytes", data_in_len);
 		ESP_LOG_BUFFER_HEX_LEVEL(TAG, data_in, data_in_len, ESP_LOG_DEBUG);
 		ble_gap_conn_rssi(conn_handle, &rssi);
@@ -700,6 +703,7 @@ static void host_task(void *arg)
 void gnarl_init(void)
 {
 	start_gnarl_task();
+	cmd_log_init();
 	ESP_LOGI(TAG, "gnarl_init: NVS + NimBLE");
 
 	// Create a PM lock to keep advertising discoverable while still allowing
@@ -712,6 +716,10 @@ void gnarl_init(void)
 	}
 
 	ESP_ERROR_CHECK(nvs_flash_init());
+	
+	// Отключаем verbose логи NimBLE чтобы не мешать радиопередаче
+	esp_log_level_set("NimBLE", ESP_LOG_ERROR);
+	
 	nimble_port_init();
 
 	ble_hs_cfg.sync_cb = sync_callback;

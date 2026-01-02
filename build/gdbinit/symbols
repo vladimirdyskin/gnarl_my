@@ -18,8 +18,8 @@ end
 
 # Load bootloader symbols
 set confirm off
-    add-symbol-file /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/bootloader/bootloader.elf
+    add-symbol-file /Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/bootloader/bootloader.elf
 set confirm on
 
 # Load application symbols
-file /Volumes/DataEx/DocumentsOffline/dev/gnarl_my/build/gnarl.elf
+file /Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build/gnarl.elf

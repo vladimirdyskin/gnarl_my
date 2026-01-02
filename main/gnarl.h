@@ -15,8 +15,8 @@
 
 #define MHz 1000000
 
-// Track github.com/ps2/rileylink/firmware/ble113_rfspy/gatt.xml
-#define BLE_RFSPY_VERSION "ble_rfspy 2.0"
+// EmaLink-compatible version - iAPS detects EmaLink when version starts with "3"
+#define BLE_RFSPY_VERSION "ble_rfspy 3.0"
 
 #define STATE_OK "OK"
 
