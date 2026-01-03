@@ -1,6 +1,7 @@
 #include "gnarl.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -24,6 +25,16 @@
 #define MAX_PACKET_LEN (107)
 
 #define CARELINK_DEVICE 0xA7
+#define MINIMED_CMD_MODEL 0x8D
+#define WAKEUP_BURST_DEFAULT_MS 8000u
+#define WAKEUP_FIRST_TIMEOUT_MS 25000u
+#define QUICK_MODEL_PROBE_MS 100u
+
+// Optimized wakeup parameters (tested working values)
+#define WAKEUP_BURST_COUNT 400
+#define WAKEUP_BURST_DELAY_US 100
+#define WAKEUP_RX_WINDOW_MS 30
+#define WAKEUP_EARLY_TIMEOUT_US 9000000 // 9 seconds
 
 static const char* cmd_name(uint8_t cmd) {
     switch(cmd) {
@@ -47,8 +58,8 @@ static bool extract_minimed_info(const uint8_t *encoded, uint8_t len,
     pump_id[2] = decoded[3];
     *cmd = decoded[4];
     
-	    ESP_LOGD(TAG, "Minimed: PumpID=%02X%02X%02X Cmd=0x%02X (%s)", 
-		    pump_id[0], pump_id[1], pump_id[2], *cmd, cmd_name(*cmd));
+    ESP_LOGD(TAG, "Minimed: PumpID=%02X%02X%02X Cmd=0x%02X (%s)", 
+             pump_id[0], pump_id[1], pump_id[2], *cmd, cmd_name(*cmd));
     
     return true;
 }
@@ -80,8 +91,12 @@ static TaskHandle_t gnarl_loop_handle = NULL;
 
 static TaskHandle_t pump_probe_handle = NULL;
 
+static TaskHandle_t wakeup_task_handle = NULL;
+
 static volatile bool cancel_current_command;
 static volatile bool pump_awake = false;
+static volatile bool wakeup_in_progress = false;
+static volatile bool wakeup_early_timeout_sent = false;
 
 static inline bool pump_is_asleep(void) {
 	// Consider pump awake only if we have a recent successful RX.
@@ -268,68 +283,53 @@ static void send(uint8_t *data, int len, int repeat_count, int delay_ms)
 		len--;
 	}
 
-    // --- ID SUBSTITUTION HACK ---
-    // Check if this is a Minimed packet and substitute the ID if needed.
-    // This handles ALL transmissions (Wakeup, Model, Status, etc.)
-    uint8_t pump_id[3];
-    uint8_t cmd_code;
-    // Only try to decode if it looks like 4b6b (length check roughly)
-    if (encoding_type == ENCODING_4B6B && len > 10) {
-        if (extract_minimed_info(data, len, pump_id, &cmd_code)) {
-            // Check if ID matches the "wrong" one (66555A)
-            if (pump_id[0] == 0x66 && pump_id[1] == 0x55 && pump_id[2] == 0x5A) {
-                ESP_LOGW(TAG, "HACK: Substituting ID 66555A -> 907591 in TX packet");
-                
-                // We need to decode, modify, and re-encode because of 4b6b
-                uint8_t decoded[96];
-                int dec_len = decode_4b6b(data, decoded, len);
-                
-                if (dec_len > 0) {
-                    // Modify ID in decoded buffer
-                    decoded[1] = 0x90;
-                    decoded[2] = 0x75;
-                    decoded[3] = 0x91;
-                    
-                    // Re-calculate CRC (last byte)
-                    decoded[dec_len - 1] = crc8(decoded, dec_len - 1);
-                    
-                    // Re-encode back to 4b6b
-                    // Note: encode_4b6b writes to 'pkt_buf' which is global.
-                    // We need to be careful not to corrupt it if 'data' already points to it,
-                    // but here 'data' usually points to the BLE command buffer.
-                    
-                    int new_len = encode_4b6b(decoded, pkt_buf, dec_len);
-                    
-                    // Point 'data' to our new buffer
-                    data = pkt_buf;
-                    len = new_len;
-                    
-                    // IMPORTANT: We have already re-encoded it into 4b6b format in pkt_buf.
-                    // We must prevent the switch below from encoding it AGAIN (double encoding).
-                    // We can do this by temporarily setting encoding_type to NONE for this packet,
-                    // or by jumping over the switch.
-                    goto transmit_now;
-                }
-            }
-        }
-    }
-    // -----------------------------
+	bool skip_encoding = false;  // Set true if we've already produced encoded bytes.
+
+	// --- ID SUBSTITUTION HACK ---
+	// Force ID rewrite even if host did not request ENCODING_4B6B.
+	// Strategy: try decode->rewrite->encode; if decode fails but header looks like Carelink, rewrite and encode anyway.
+	if (len > 6) {
+		uint8_t decoded[96];
+		int dec_len = decode_4b6b(data, decoded, len);
+		bool decoded_ok = (dec_len > 0 && dec_len <= (int)sizeof(decoded));
+		uint8_t *payload = decoded_ok ? decoded : data;
+		int payload_len = decoded_ok ? dec_len : len;
+		if (payload_len > 6 && payload[0] == CARELINK_DEVICE) {
+			uint8_t pid0 = payload[1];
+			uint8_t pid1 = payload[2];
+			uint8_t pid2 = payload[3];
+			if (pid0 == 0x66 && pid1 == 0x55 && pid2 == 0x5A) {
+				ESP_LOGI(TAG, "HACK: Substituting ID 66555A -> 907591 in TX packet");
+				payload[1] = 0x90;
+				payload[2] = 0x75;
+				payload[3] = 0x91;
+				payload[payload_len - 1] = crc8(payload, payload_len - 1);
+				int new_len = encode_4b6b(payload, pkt_buf, payload_len);
+				data = pkt_buf;
+				len = new_len;
+				skip_encoding = true;
+			}
+		}
+	}
+	// -----------------------------
 
 	cmd_log_radio_tx(data, len);
-	switch (encoding_type)
+	if (!skip_encoding)
 	{
-	case ENCODING_NONE:
-		break;
-	case ENCODING_4B6B:
-		len = encode_4b6b(data, pkt_buf, len);
-		data = pkt_buf;
-		break;
-	default:
-		ESP_LOGE(TAG, "send: unknown encoding type %d", encoding_type);
-		break;
+		switch (encoding_type)
+		{
+		case ENCODING_NONE:
+			break;
+		case ENCODING_4B6B:
+			len = encode_4b6b(data, pkt_buf, len);
+			data = pkt_buf;
+			break;
+		default:
+			ESP_LOGE(TAG, "send: unknown encoding type %d", encoding_type);
+			break;
+		}
 	}
 
-transmit_now:
 	transmit(data, len);
 	while (repeat_count > 0)
 	{
@@ -410,6 +410,11 @@ static void rx_common(int n, int rssi)
 	}
 
 	cmd_log_flush();
+	uint8_t rx_pid[3];
+	uint8_t rx_cmd;
+	if (extract_minimed_info(rx_buf.packet, n, rx_pid, &rx_cmd)) {
+		ESP_LOGD(TAG, "RX Minimed dev=%02X id=%02X%02X%02X cmd=0x%02X", CARELINK_DEVICE, rx_pid[0], rx_pid[1], rx_pid[2], rx_cmd);
+	}
 	send_bytes((uint8_t *)&rx_buf, 2 + n);
 }
 
@@ -478,232 +483,522 @@ static void send_packet(const uint8_t *buf, int len)
 	send_code(RESPONSE_CODE_SUCCESS);
 }
 
-static int perform_wakeup_burst(const uint8_t *id_packet) {
-    uint8_t wakeup_pkt[7];
-    // Force Device Type to Carelink (0xA7)
-    wakeup_pkt[0] = 0xA7; 
-    // Force Pump ID to 907591
-    wakeup_pkt[1] = 0x90;
-    wakeup_pkt[2] = 0x75;
-    wakeup_pkt[3] = 0x91;
-	ESP_LOGD(TAG, "Forcing Pump ID to 907591 (overriding %02X%02X%02X)", id_packet[1], id_packet[2], id_packet[3]);
-    wakeup_pkt[4] = 0x5D;
-    wakeup_pkt[5] = 0x00;
-    wakeup_pkt[6] = crc8(wakeup_pkt, 6);
-    
-    ESP_LOGI(TAG, "Starting Wakeup Burst (ID: %02X%02X%02X, Freq: %lu)", 
-             wakeup_pkt[1], wakeup_pkt[2], wakeup_pkt[3], read_frequency());
+static bool quick_model_probe(const uint8_t *pkt, int pkt_len, uint32_t timeout_ms) {
+	if (pkt_len < 4) {
+		return false;
+	}
 
-    // Force frequency to PUMP_FREQUENCY (868.25 MHz) for wakeup
-    // The phone app might have set it to 868.35 MHz, but we know better.
-    uint32_t current_freq = read_frequency();
-    if (current_freq != PUMP_FREQUENCY) {
-		ESP_LOGD(TAG, "Forcing frequency to %lu Hz (was %lu Hz)", (unsigned long)PUMP_FREQUENCY, current_freq);
-        set_frequency(PUMP_FREQUENCY);
-    }
+	if (timeout_ms == 0) {
+		timeout_ms = QUICK_MODEL_PROBE_MS;
+	}
 
-    uint8_t *tx_data = wakeup_pkt;
-    int tx_len = 7;
-    
-    // Always encode for Medtronic wakeup, regardless of global setting
-    // if (encoding_type == ENCODING_4B6B) {
-        tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
-        tx_data = pkt_buf;
-    // }
-    
+	uint32_t prev_freq = read_frequency();
+	if (prev_freq != PUMP_FREQUENCY) {
+		set_frequency(PUMP_FREQUENCY);
+	}
+
+	uint8_t probe_pkt[7];
+	probe_pkt[0] = CARELINK_DEVICE;
+	probe_pkt[1] = pkt[1];
+	probe_pkt[2] = pkt[2];
+	probe_pkt[3] = pkt[3];
+	probe_pkt[4] = MINIMED_CMD_MODEL;
+	probe_pkt[5] = 0;
+	probe_pkt[6] = crc8(probe_pkt, 6);
+
+	uint8_t encoded[16];
+	int tx_len = encode_4b6b(probe_pkt, encoded, sizeof(probe_pkt));
+	if (tx_len <= 0) {
+		if (prev_freq != PUMP_FREQUENCY) {
+			set_frequency(prev_freq);
+		}
+		return false;
+	}
+
+	uint8_t rx_tmp[150];
+	transmit(encoded, tx_len);
+	int n = receive(rx_tmp, sizeof(rx_tmp), timeout_ms);
+
+	if (prev_freq != PUMP_FREQUENCY) {
+		set_frequency(prev_freq);
+	}
+
+	if (n > 0) {
+		pump_awake = true;
+		last_pump_comm_time = esp_timer_get_time();
+		return true;
+	}
+
+	return false;
+}
+
+// Helper: Parse and byte-swap the command structure in-place
+static void parse_sl_cmd(send_and_listen_cmd_t *p) {
+	uint16_t delay, preamble;
+	uint32_t timeout;
+	
+	memcpy(&delay, &p->delay_ms, 2);
+	memcpy(&timeout, &p->timeout_ms, 4);
+	memcpy(&preamble, &p->preamble_ms, 2);
+	
+	reverse_two_bytes(&delay);
+	reverse_four_bytes(&timeout);
+	reverse_two_bytes(&preamble);
+	
+	p->delay_ms = delay;
+	p->timeout_ms = timeout;
+	p->preamble_ms = preamble;
+}
+
+// Async wakeup task - runs in background
+// IMPORTANT: Uses tight loop like wakeup_test.c - no per-iteration radio_lock!
+static void async_wakeup_task(void *unused) {
+	ESP_LOGI(TAG, "ASYNC_WAKEUP: Task started");
+	
+	// Flags already set in start_async_wakeup()
+	
+	// Use LOCAL buffer - don't pollute global rx_buf!
+	uint8_t local_rx[128];
+	
+	// Prepare WAKEUP packet
+	uint8_t wakeup_pkt[7] = { 0xA7, 0x90, 0x75, 0x91, 0x5D, 0x00, 0x00 };
+	wakeup_pkt[6] = crc8(wakeup_pkt, 6);
+	
+	// Use local TX buffer too
+	uint8_t local_tx[16];
+	int tx_len = encode_4b6b(wakeup_pkt, local_tx, 7);
+	
+	int64_t start_time = esp_timer_get_time();
+	int64_t deadline = start_time + ((int64_t)WAKEUP_FIRST_TIMEOUT_MS * MILLISECONDS);
+	
 	int n = 0;
-	int64_t t_start = esp_timer_get_time();
-	// Faster fail/return: cap to ~8s and fewer packets, widen RX window a bit.
-	const int max_packets = 80;
-	const int rx_window_ms = 30;
-	for (int i = 0; i < max_packets; i++) {
-        if (cancel_current_command) {
-            ESP_LOGW(TAG, "Wakeup burst cancelled at %d", i);
-            break;
-        }
-        
-        if (!transmit(tx_data, tx_len)) {
-            ESP_LOGE(TAG, "Wakeup burst %d: TX failed", i);
-            break;
-        }
-        // No delay (0 us) to maximize packet density
-        // usleep(500); 
-        
-		// Increased RX window to 30ms to catch the pump's ACK
-		n = receive(rx_buf.packet, sizeof(rx_buf.packet), rx_window_ms);
-        
-        if (n > 0) {
-            ESP_LOGI(TAG, "Wakeup ACK received at burst %d (RSSI: %d)", i, read_rssi());
-            last_pump_comm_time = esp_timer_get_time();
-            break;
-        }
-
-		// Stop early if we've spent ~8s already
-		if ((esp_timer_get_time() - t_start) > 8 * SECONDS) {
-			ESP_LOGW(TAG, "Wakeup burst timeout after %d packets (~%lld ms)",
-					 i + 1, (long long)((esp_timer_get_time() - t_start) / 1000));
+	
+	// Take radio lock ONCE at start (like wakeup_test.c - tight loop!)
+	if (!radio_lock(pdMS_TO_TICKS(5000))) {
+		ESP_LOGE(TAG, "ASYNC_WAKEUP: Cannot get radio lock!");
+		wakeup_in_progress = false;
+		wakeup_task_handle = NULL;
+		vTaskDelete(NULL);
+		return;
+	}
+	
+	// CRITICAL: Set frequency before burst! (like wakeup_test.c)
+	set_frequency(PUMP_FREQUENCY);
+	
+	ESP_LOGI(TAG, "ASYNC_WAKEUP: Starting burst (count=%d, delay=%dus, rx=%dms) at %lu Hz", 
+			 WAKEUP_BURST_COUNT, WAKEUP_BURST_DELAY_US, WAKEUP_RX_WINDOW_MS,
+			 (unsigned long)PUMP_FREQUENCY);
+	
+	for (int i = 0; i < WAKEUP_BURST_COUNT && wakeup_in_progress; i++) {
+		int64_t now = esp_timer_get_time();
+		
+		if (now >= deadline) {
+			ESP_LOGW(TAG, "ASYNC_WAKEUP: Timeout at burst %d", i);
 			break;
 		}
-        
-        if (i % 20 == 0) {
-             // Keep watchdog happy and allow other tasks (like BLE) to run briefly
-             // But don't sleep too long
-             // taskYIELD();
-        }
-    }
-    
-	if (n == 0) {
-		ESP_LOGW(TAG, "Wakeup burst finished with NO response");
-	} else {
-		pump_awake = true;
+		
+		// Send early timeout at 9 seconds (do this OUTSIDE tight loop timing)
+		if (!wakeup_early_timeout_sent && (now - start_time) > WAKEUP_EARLY_TIMEOUT_US) {
+			ESP_LOGI(TAG, "ASYNC_WAKEUP: Sending early timeout to phone at 9s (burst %d)...", i);
+			send_code(RESPONSE_CODE_RX_TIMEOUT);
+			wakeup_early_timeout_sent = true;
+		}
+		
+		// Tight loop like wakeup_test.c - NO radio_lock per iteration!
+		transmit(local_tx, tx_len);
+		
+		if (WAKEUP_BURST_DELAY_US > 0) {
+			usleep(WAKEUP_BURST_DELAY_US);
+		}
+		
+		n = receive(local_rx, sizeof(local_rx), WAKEUP_RX_WINDOW_MS);
+		
+		if (n > 0) {
+			ESP_LOGI(TAG, "ASYNC_WAKEUP: Response at burst %d! (RSSI: %d)", i, read_rssi());
+			pump_awake = true;
+			last_pump_comm_time = esp_timer_get_time();
+			
+			// CRITICAL: Clear early timeout flag so next command executes!
+			wakeup_early_timeout_sent = false;
+			
+			// NOTE: Do NOT send GetModel here! It interferes with iAPS commands.
+			// The pump is already awake after responding to WAKEUP.
+			// iAPS will send its own commands.
+			
+			break;
+		}
+		
+		// Yield every 50 bursts to let other tasks run (was 20 - too often)
+		if (i % 50 == 0 && i > 0) {
+			taskYIELD();
+		}
 	}
-    
-    return n;
+	
+	// Release radio lock at the end
+	radio_unlock();
+	
+	int64_t total_time = (esp_timer_get_time() - start_time) / 1000;
+	
+	if (n == 0) {
+		ESP_LOGW(TAG, "ASYNC_WAKEUP: Failed (no response after %d bursts, %lld ms)", 
+				 WAKEUP_BURST_COUNT, (long long)total_time);
+	} else {
+		ESP_LOGI(TAG, "ASYNC_WAKEUP: Success in %lld ms", (long long)total_time);
+	}
+	
+	wakeup_in_progress = false;
+	ESP_LOGI(TAG, "ASYNC_WAKEUP: Task finished (pump_awake=%d)", pump_awake);
+	
+	wakeup_task_handle = NULL;
+	vTaskDelete(NULL);
+}
+
+// Start async wakeup if not already running
+static void start_async_wakeup(void) {
+	if (wakeup_in_progress) {
+		ESP_LOGD(TAG, "Async wakeup already in progress");
+		return;
+	}
+	
+	if (wakeup_task_handle != NULL) {
+		ESP_LOGW(TAG, "Wakeup task handle not null, cleaning up");
+		wakeup_task_handle = NULL;
+	}
+	
+	// Set flag BEFORE creating task so callers know wakeup is starting
+	wakeup_in_progress = true;
+	wakeup_early_timeout_sent = false;
+	
+	ESP_LOGI(TAG, "Starting async wakeup task...");
+	xTaskCreate(async_wakeup_task, "async_wake", 4096, NULL, tskIDLE_PRIORITY + 8, &wakeup_task_handle);
+}
+
+// Helper: Handle explicit WAKEUP command logic
+static void handle_wakeup_request(const uint8_t *packet, int len, uint32_t timeout_ms, 
+                                int *n, int *rssi, int *tries, bool *early_timeout_sent) {
+	bool asleep = pump_is_asleep();
+	
+	// If pump is already awake, just send one wakeup packet and get quick response
+	if (!asleep) {
+		ESP_LOGI(TAG, "WAKEUP: Pump already awake, sending quick wakeup");
+		*tries = 1;
+		
+		// Need radio lock for quick TX/RX
+		if (!radio_lock(pdMS_TO_TICKS(1000))) {
+			ESP_LOGW(TAG, "WAKEUP: Radio busy");
+			*n = 0;
+			return;
+		}
+		
+		display_set_radio_active(true);
+		
+		// Prepare and send single wakeup packet
+		uint8_t wakeup_pkt[7] = { 0xA7, 0x90, 0x75, 0x91, 0x5D, 0x00, 0x00 };
+		wakeup_pkt[6] = crc8(wakeup_pkt, 6);
+		int tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
+		
+		transmit(pkt_buf, tx_len);
+		*n = receive(rx_buf.packet, sizeof(rx_buf.packet), 200);
+		
+		if (*n > 0) {
+			*rssi = read_rssi();
+			pump_awake = true;
+			last_pump_comm_time = esp_timer_get_time();
+		}
+		
+		display_set_radio_active(false);
+		radio_unlock();
+		return;
+	}
+	
+	// Check if async wakeup is already running (second command from iAPS)
+	if (wakeup_in_progress) {
+		ESP_LOGI(TAG, "WAKEUP: Async wakeup in progress, waiting for completion...");
+		
+		// Wait for async wakeup to COMPLETE (check every 1 sec)
+		while (wakeup_in_progress) {
+			vTaskDelay(pdMS_TO_TICKS(1000)); // wait 1 sec
+			ESP_LOGD(TAG, "WAKEUP: Still waiting for async wakeup... (pump_awake=%d)", pump_awake);
+		}
+		
+		// Async wakeup finished - check result
+		if (pump_awake) {
+			ESP_LOGI(TAG, "WAKEUP: Async wakeup completed successfully!");
+			
+			// Send quick wakeup packet to get response for iAPS
+			if (!radio_lock(pdMS_TO_TICKS(1000))) {
+				ESP_LOGW(TAG, "WAKEUP: Radio busy after async wakeup");
+				*n = 0;
+				return;
+			}
+			
+			display_set_radio_active(true);
+			
+			uint8_t wakeup_pkt[7] = { 0xA7, 0x90, 0x75, 0x91, 0x5D, 0x00, 0x00 };
+			wakeup_pkt[6] = crc8(wakeup_pkt, 6);
+			int tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
+			
+			transmit(pkt_buf, tx_len);
+			*n = receive(rx_buf.packet, sizeof(rx_buf.packet), 200);
+			
+			if (*n > 0) {
+				*rssi = read_rssi();
+				last_pump_comm_time = esp_timer_get_time();
+				ESP_LOGI(TAG, "WAKEUP: Got response, sending OK to iAPS");
+			} else {
+				ESP_LOGW(TAG, "WAKEUP: No response after async wakeup, but pump should be awake");
+				// Still report success since async wakeup succeeded
+			}
+			
+			display_set_radio_active(false);
+			radio_unlock();
+			*tries = 1;
+			return;
+		}
+		
+		// Async wakeup finished but pump didn't wake
+		ESP_LOGW(TAG, "WAKEUP: Async wakeup finished but pump not responding");
+		*early_timeout_sent = true; // Signal timeout
+		*tries = 1;
+		*n = 0;
+		return;
+	}
+	
+	// First WAKEUP command - pump is asleep and no async wakeup running
+	// Start async wakeup and wait for early timeout (9 seconds)
+	ESP_LOGI(TAG, "WAKEUP: Starting async wakeup burst...");
+	start_async_wakeup();
+	
+	// Wait for either:
+	// 1. Early timeout at 9 seconds (async task will send it)
+	// 2. Pump wakes up before 9 seconds
+	// 3. Async wakeup completes
+	ESP_LOGI(TAG, "WAKEUP: Waiting for early timeout or pump response...");
+	while (wakeup_in_progress && !wakeup_early_timeout_sent && !pump_awake) {
+		vTaskDelay(pdMS_TO_TICKS(100));
+	}
+	
+	// Check what happened
+	if (pump_awake) {
+		// Pump woke up before 9 seconds! Send quick response
+		ESP_LOGI(TAG, "WAKEUP: Pump woke up before timeout!");
+		
+		if (!radio_lock(pdMS_TO_TICKS(1000))) {
+			ESP_LOGW(TAG, "WAKEUP: Radio busy");
+			*n = 0;
+			return;
+		}
+		
+		display_set_radio_active(true);
+		
+		uint8_t wakeup_pkt[7] = { 0xA7, 0x90, 0x75, 0x91, 0x5D, 0x00, 0x00 };
+		wakeup_pkt[6] = crc8(wakeup_pkt, 6);
+		int tx_len = encode_4b6b(wakeup_pkt, pkt_buf, 7);
+		
+		transmit(pkt_buf, tx_len);
+		*n = receive(rx_buf.packet, sizeof(rx_buf.packet), 200);
+		
+		if (*n > 0) {
+			*rssi = read_rssi();
+			last_pump_comm_time = esp_timer_get_time();
+		}
+		
+		display_set_radio_active(false);
+		radio_unlock();
+		*tries = 1;
+		return;
+	}
+	
+	// Early timeout was sent by async task at 9 seconds
+	// Let iAPS retry with second command
+	ESP_LOGI(TAG, "WAKEUP: Early timeout sent at 9s, waiting for iAPS retry");
+	*early_timeout_sent = true;
+	*tries = 1;
+	*n = 0;
+	
+	// Don't send another timeout - async task already sent it
+}
+
+// Helper: Standard command retry loop
+static void run_standard_loop(send_and_listen_cmd_t *p, int len, int repeat_count, int delay_ms,
+                            bool woke_now, int *n, int *rssi, int *tries) {
+	
+	uint16_t base_preamble = (p->preamble_ms > 0) ? p->preamble_ms : 60;
+	if (woke_now && base_preamble < 180) base_preamble = 180;
+	
+	if (woke_now) vTaskDelay(pdMS_TO_TICKS(20));
+	
+	for (int i = 0; i <= p->retry_count; i++) {
+		if (cancel_current_command) break;
+		
+		(*tries)++;
+		
+		// Adaptive preamble
+		uint16_t current_preamble = base_preamble;
+		if (i > 0) {
+			current_preamble += (i * 50);
+			if (current_preamble > 300) current_preamble = 300;
+		}
+		if (i == 0 && current_preamble < 100) current_preamble = 100; // Min start
+		
+		rfm95_set_preamble_ms(current_preamble);
+		
+		ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u, timeout=%lu)", 
+				 i+1, p->retry_count+1, current_preamble, (unsigned long)p->timeout_ms);
+		
+		send(p->packet, len, repeat_count, delay_ms);
+		
+		if (!cancel_current_command) {
+			*n = receive(rx_buf.packet, sizeof(rx_buf.packet), p->timeout_ms);
+			if (*n > 0) {
+				*rssi = read_rssi();
+				break;
+			}
+		}
+	}
+	rfm95_set_preamble_ms(0);
 }
 
 static void send_and_listen(const uint8_t *buf, int len)
 {
 	send_and_listen_cmd_t *p = (send_and_listen_cmd_t *)buf;
-	uint16_t delay_ms_val, preamble_ms_val;
-	uint32_t timeout_ms_val;
-	memcpy(&delay_ms_val, &p->delay_ms, sizeof(delay_ms_val));
-	memcpy(&timeout_ms_val, &p->timeout_ms, sizeof(timeout_ms_val));
-	memcpy(&preamble_ms_val, &p->preamble_ms, sizeof(preamble_ms_val));
-	reverse_two_bytes(&delay_ms_val);
-	reverse_four_bytes(&timeout_ms_val);
-	reverse_two_bytes(&preamble_ms_val);
-	memcpy(&p->delay_ms, &delay_ms_val, sizeof(delay_ms_val));
-	memcpy(&p->timeout_ms, &timeout_ms_val, sizeof(timeout_ms_val));
-	memcpy(&p->preamble_ms, &preamble_ms_val, sizeof(preamble_ms_val));
+	parse_sl_cmd(p);
 	uint32_t original_timeout_ms = p->timeout_ms;
+
+	int payload_len = len - (p->packet - (uint8_t *)p);
+	uint8_t pump_id[3];
+	uint8_t cmd_code;
+	bool is_minimed = extract_minimed_info(p->packet, payload_len, pump_id, &cmd_code);
+	bool is_wakeup = (is_minimed && cmd_code == 0x5D);
+	
+	// Fallback: still treat as WAKEUP if the raw 5th byte matches
+	if (!is_wakeup && payload_len >= 5 && p->packet[4] == 0x5D) {
+		is_wakeup = true;
+	}
+	
 	bool pump_asleep = pump_is_asleep();
 	if (pump_asleep) {
-		const uint32_t min_timeout_ms = 45000u; // hard minimum for first try
-		if (p->timeout_ms < min_timeout_ms) {
-			p->timeout_ms = min_timeout_ms;
+		if (is_wakeup) {
+			if (p->timeout_ms < WAKEUP_FIRST_TIMEOUT_MS) {
+				p->timeout_ms = WAKEUP_FIRST_TIMEOUT_MS;
+			}
+		} else if (p->timeout_ms == 0) {
+			p->timeout_ms = 45000u;
 		}
 	}
-	ESP_LOGD(TAG, "send_and_listen: len %d send_channel %d repeat_count %d delay_ms %d",
-			 len, p->send_channel, p->repeat_count, p->delay_ms);
-	ESP_LOGD(TAG, "send_and_listen: listen_channel %d timeout_ms %lu (raw %lu%s) retry_count %d preamble_ms %u",
-			 p->listen_channel, p->timeout_ms, (unsigned long)original_timeout_ms,
-			 pump_asleep ? ", min 45000ms (pump asleep)" : "",
+
+	ESP_LOGD(TAG, "send_and_listen: len %d ch %d/%d repeat %d delay %d timeout %lu (raw %lu) retry %d preamble %u",
+			 len, p->send_channel, p->listen_channel, p->repeat_count, p->delay_ms,
+			 (unsigned long)p->timeout_ms, (unsigned long)original_timeout_ms,
 			 p->retry_count, (unsigned)p->preamble_ms);
-	len -= (p->packet - (uint8_t *)p);
 
-	int repeat_count = p->repeat_count;
+	int repeat_count = (p->repeat_count == 0xFF) ? 0 : p->repeat_count;
 	int delay_ms = p->delay_ms;
-	if (repeat_count == 0xFF || delay_ms == 0) {
-		repeat_count = 0;
-	}
 
-	if (!radio_lock(portMAX_DELAY))
-	{
+	int64_t t0 = esp_timer_get_time();
+	int n = 0;
+	int rssi = 0;
+	int tries_used = 0;
+	bool early_timeout_sent = false;
+
+	// Handle wakeup request (may use async task)
+	if (is_wakeup) {
+		// For WAKEUP, we handle without holding radio lock initially
+		// because async wakeup task needs the lock
+		handle_wakeup_request(p->packet, payload_len, p->timeout_ms, &n, &rssi, &tries_used, &early_timeout_sent);
+		
+		// If early timeout sent, respond now
+		if (early_timeout_sent) {
+			ESP_LOGI(TAG, "WAKEUP: Early timeout, sending RX_TIMEOUT to phone");
+			// Already sent in async task or handle_wakeup_request
+			int64_t dt = esp_timer_get_time() - t0;
+			ESP_LOGD(TAG, "CmdSendAndListen (WAKEUP async) took %lld ms", (long long)(dt / 1000));
+			return;
+		}
+		
+		// Got response, send it
+		if (n > 0 && !cancel_current_command) {
+			rx_common(n, rssi);
+		}
+		
+		int64_t dt = esp_timer_get_time() - t0;
+		if (dt > 2 * SECONDS) {
+			ESP_LOGW(TAG, "CmdSendAndListen (WAKEUP) took %lld ms (tries=%d, n=%d)", (long long)(dt / 1000), tries_used, n);
+		}
+		return;
+	}
+	
+	// Non-wakeup command - check if pump is asleep or wakeup in progress
+	if (pump_is_asleep() || wakeup_in_progress) {
+		// Start async wakeup if not already running
+		if (!wakeup_in_progress) {
+			ESP_LOGI(TAG, "CMD: Pump is asleep, starting async wakeup...");
+			start_async_wakeup();
+		} else {
+			ESP_LOGI(TAG, "CMD: Async wakeup already in progress, waiting...");
+		}
+		
+		// ALWAYS wait for async wakeup to COMPLETE (don't skip early!)
+		// This ensures we execute the command when pump wakes up
+		int wait_count = 0;
+		while (wakeup_in_progress && wait_count < 300) { // max 30 sec
+			vTaskDelay(pdMS_TO_TICKS(100));
+			wait_count++;
+			
+			// Check if pump woke up - exit loop early
+			if (pump_awake) {
+				ESP_LOGI(TAG, "CMD: Pump woke up! (waited %d ms)", wait_count * 100);
+				break;
+			}
+		}
+		
+		// Check result
+		if (pump_awake) {
+			ESP_LOGI(TAG, "CMD: Pump is awake, executing command");
+			wakeup_early_timeout_sent = false;
+		} else {
+			ESP_LOGW(TAG, "CMD: Wakeup failed (timeout after %d ms)", wait_count * 100);
+			send_code(RESPONSE_CODE_RX_TIMEOUT);
+			return;
+		}
+	} else {
+		// Pump is awake - reset early timeout flag so commands execute normally
+		if (wakeup_early_timeout_sent) {
+			ESP_LOGD(TAG, "CMD: Pump awake, clearing early_timeout flag");
+			wakeup_early_timeout_sent = false;
+		}
+	}
+	
+	// Now take radio lock for the actual command
+	if (!radio_lock(portMAX_DELAY)) {
 		ESP_LOGW(TAG, "send_and_listen: radio mutex unavailable");
 		return;
 	}
 
 	display_set_radio_active(true);
-
-	int64_t t0 = esp_timer_get_time();
-
-	int n = 0;
-	int rssi = 0;
-	int tries_used = 0;
-
-	// Check for WAKEUP command (0x5D)
-	// Packet structure: [DeviceType, PumpID0, PumpID1, PumpID2, Command, ...]
-	// Command is at index 4.
-	uint8_t pump_id[3];
-	uint8_t cmd_code;
-	bool is_minimed = extract_minimed_info(p->packet, len, pump_id, &cmd_code);
-	bool is_wakeup = (is_minimed && cmd_code == 0x5D);
-
-	if (is_wakeup) {
-		ESP_LOGI(TAG, "send_and_listen: WAKEUP command detected, using burst mode");
-		int burst_n = perform_wakeup_burst(p->packet);
-		if (burst_n > 0) {
-			n = burst_n;
-			rssi = read_rssi();
-		}
-	} else {
-		// Auto-wakeup check
-		if (last_pump_comm_time == 0 || (esp_timer_get_time() - last_pump_comm_time > 60 * SECONDS)) {
-			ESP_LOGD(TAG, "Auto-wakeup triggered (last_comm=%lld, now=%lld)", (long long)last_pump_comm_time, (long long)esp_timer_get_time());
-			perform_wakeup_burst(p->packet);
-		}
-
-		// Standard logic for other commands
-		uint16_t current_preamble = p->preamble_ms;
-		if (current_preamble == 0) {
-			current_preamble = 60; // default
-		}
-
-		for (int retries = p->retry_count + 1; retries > 0; retries--)
-		{
-			tries_used++;
-
-			uint16_t retry_preamble = current_preamble;
-			if (tries_used > 1) {
-				retry_preamble = current_preamble + ((tries_used - 1) * 50);
-				if (retry_preamble > 300) {
-					retry_preamble = 300;
-				}
-			}
-
-			if (tries_used == 1 && retry_preamble < 100) {
-				retry_preamble = 100;
-			}
-
-			rfm95_set_preamble_ms(retry_preamble);
-
-			ESP_LOGD(TAG, "SendAndListen: try %d/%d (preamble=%u ms, timeout=%lu ms)",
-				 tries_used, p->retry_count + 1, (unsigned)retry_preamble, p->timeout_ms);
-			if (cancel_current_command)
-			{
-				break;
-			}
-			send(p->packet, len, repeat_count, delay_ms);
-			if (cancel_current_command)
-			{
-				break;
-			}
-			n = receive(rx_buf.packet, sizeof(rx_buf.packet), p->timeout_ms);
-			rssi = read_rssi();
-			if (cancel_current_command)
-			{
-				break;
-			}
-			if (n != 0)
-			{
-				break;
-			}
-		}
-		rfm95_set_preamble_ms(0);
+	
+	// NOTE: Do NOT use quick_model_probe here!
+	// If async_wakeup succeeded, pump is already awake.
+	// quick_model_probe sends GetModel which causes "Unexpected response GetPumpModel(722)" error in iAPS.
+	bool woke_now = false;
+	
+	if (woke_now && p->timeout_ms < 500) {
+		ESP_LOGD(TAG, "Bumping timeout after wake to 500ms");
+		p->timeout_ms = 500;
 	}
+	
+	run_standard_loop(p, payload_len, repeat_count, delay_ms, woke_now, &n, &rssi, &tries_used);
 
-	if (!cancel_current_command)
-	{
+	if (!cancel_current_command) {
 		rx_common(n, rssi);
 	}
 
 	display_set_radio_active(false);
-
 	radio_unlock();
 
 	int64_t dt = esp_timer_get_time() - t0;
-	if (dt > 2 * SECONDS)
-	{
-		ESP_LOGW(TAG, "CmdSendAndListen took %lld ms (tries=%d, send_ch=%u, listen_ch=%u, repeat=%u, delay_ms=%u, preamble_ms=%u, timeout_ms=%lu, rx_len=%d)",
-			 (long long)(dt / 1000),
-			 tries_used,
-			 (unsigned)p->send_channel,
-			 (unsigned)p->listen_channel,
-			 (unsigned)repeat_count,
-			 (unsigned)delay_ms,
-			 (unsigned)p->preamble_ms,
-			 (unsigned long)p->timeout_ms,
-			 n);
+	if (dt > 2 * SECONDS) {
+		ESP_LOGW(TAG, "CmdSendAndListen took %lld ms (tries=%d, n=%d)", (long long)(dt / 1000), tries_used, n);
 	}
 }
 
@@ -712,7 +1007,7 @@ static void pump_bg_listen_task(void *unused)
 	ESP_LOGI(TAG, "pump_bg_listen: started (interval=%dms timeout=%dms)",
 			 PUMP_BG_LISTEN_INTERVAL_MS, PUMP_BG_LISTEN_TIMEOUT_MS);
 
-			display_set_radio_active(false);
+	display_set_radio_active(false);
 
 	uint32_t loops = 0;
 
@@ -878,7 +1173,7 @@ static void check_frequency(void)
 	uint32_t freq = (uint32_t)(((uint64_t)f * 24 * MHz) >> 16);
 	if (valid_frequency(freq))
 	{
-			ESP_LOGD(TAG, "setting frequency to %lu Hz", freq);
+		ESP_LOGD(TAG, "setting frequency to %lu Hz", freq);
 		set_frequency(freq);
 	}
 	else
@@ -1008,8 +1303,23 @@ void rfspy_command(const uint8_t *buf, int count, int rssi)
 	}
 	rfspy_cmd_t cmd = buf[1];
 
-	// Log the incoming command (debug only, to reduce noise).
-	ESP_LOGD(TAG, "BLE CMD: 0x%02X Len: %d", cmd, count);
+	// Log ALL incoming BLE commands at INFO level for debugging
+	ESP_LOGI(TAG, ">>> BLE CMD: 0x%02X (%s) Len: %d", cmd, 
+			 cmd == 0x00 ? "GetState" :
+			 cmd == 0x01 ? "GetVersion" :
+			 cmd == 0x02 ? "GetPacket" :
+			 cmd == 0x03 ? "SendPacket" :
+			 cmd == 0x04 ? "SendAndListen" :
+			 cmd == 0x05 ? "UpdateRegister" :
+			 cmd == 0x06 ? "Reset" :
+			 cmd == 0x07 ? "LED" :
+			 cmd == 0x08 ? "ReadRegister" :
+			 cmd == 0x09 ? "SetModeReg" :
+			 cmd == 0x0A ? "SetSWEncoding" :
+			 cmd == 0x0B ? "SetPreamble" :
+			 cmd == 0x0C ? "ResetRadio" :
+			 cmd == 0x0D ? "GetStatistics" : "Unknown",
+			 count);
 
 	// GetPacket is used by Loop to wait for MySentry packets.
 	// It is fine to ignore subsequent calls if in_get_packet is true
@@ -1043,7 +1353,7 @@ void rfspy_command(const uint8_t *buf, int count, int rssi)
 		statistics.rx_fifo_overflow += 1;
 		return;
 	}
-	ESP_LOGD(TAG, "rfspy_command 0x%x, queue length %d", cmd, uxQueueMessagesWaiting(request_queue));
+	ESP_LOGI(TAG, ">>> BLE queued 0x%02X, queue=%d", cmd, uxQueueMessagesWaiting(request_queue));
 }
 
 static void gnarl_loop(void *unused)
@@ -1060,23 +1370,23 @@ static void gnarl_loop(void *unused)
 		switch (req.command)
 		{
 		case CmdGetState:
-			ESP_LOGD(TAG, "CmdGetState");
+			ESP_LOGI(TAG, "<<< EXEC: CmdGetState");
 			send_bytes((const uint8_t *)STATE_OK, strlen(STATE_OK));
 			break;
 		case CmdGetVersion:
-			ESP_LOGD(TAG, "CmdGetVersion");
+			ESP_LOGI(TAG, "<<< EXEC: CmdGetVersion");
 			send_bytes((const uint8_t *)SUBG_RFSPY_VERSION, strlen(SUBG_RFSPY_VERSION));
 			break;
 		case CmdGetPacket:
-			ESP_LOGD(TAG, "CmdGetPacket");
+			ESP_LOGI(TAG, "<<< EXEC: CmdGetPacket");
 			get_packet(req.data, req.length);
 			break;
 		case CmdSendPacket:
-			ESP_LOGD(TAG, "CmdSendPacket");
+			ESP_LOGI(TAG, "<<< EXEC: CmdSendPacket");
 			send_packet(req.data, req.length);
 			break;
 		case CmdSendAndListen:
-			ESP_LOGD(TAG, "CmdSendAndListen");
+			ESP_LOGI(TAG, "<<< EXEC: CmdSendAndListen");
 			send_and_listen(req.data, req.length);
 			break;
 		case CmdUpdateRegister:
@@ -1111,6 +1421,53 @@ static void gnarl_loop(void *unused)
 	}
 }
 
+static void initial_pump_probe_task(void *unused) {
+    ESP_LOGI(TAG, "Initial Probe: Waiting for radio init...");
+    vTaskDelay(pdMS_TO_TICKS(1000)); // Wait for radio setup
+
+    if (!radio_lock(portMAX_DELAY)) {
+        vTaskDelete(NULL);
+        return;
+    }
+
+    ESP_LOGI(TAG, "Initial Probe: Checking pump state (GetModel)...");
+
+    // Parse PUMP_ID string to bytes
+    const char *id_str = PUMP_ID;
+    uint8_t id[3];
+    if (strlen(id_str) == 6) {
+        char tmp[3] = {0};
+        for (int i = 0; i < 3; i++) {
+            tmp[0] = id_str[i*2];
+            tmp[1] = id_str[i*2+1];
+            id[i] = (uint8_t)strtol(tmp, NULL, 16);
+        }
+    } else {
+        ESP_LOGE(TAG, "Invalid PUMP_ID format");
+        radio_unlock();
+        vTaskDelete(NULL);
+        return;
+    }
+
+    // Construct dummy packet for quick_model_probe
+    // It expects [?, ID0, ID1, ID2, ...]
+    uint8_t dummy_pkt[10];
+    dummy_pkt[1] = id[0];
+    dummy_pkt[2] = id[1];
+    dummy_pkt[3] = id[2];
+
+    bool awake = quick_model_probe(dummy_pkt, 4, 200); // 200ms timeout
+
+    if (awake) {
+        ESP_LOGI(TAG, "Initial Probe: Pump is AWAKE");
+    } else {
+        ESP_LOGI(TAG, "Initial Probe: Pump is ASLEEP (no response)");
+    }
+
+    radio_unlock();
+    vTaskDelete(NULL);
+}
+
 void start_gnarl_task(void)
 {
 	// Configure Medtronic pump ID for active probe and other optional uses.
@@ -1130,15 +1487,10 @@ void start_gnarl_task(void)
 	// Background short listen to populate pump RSSI after reboot.
 	xTaskCreate(pump_bg_listen_task, "pump_bg", 3072, 0, tskIDLE_PRIORITY + 6, NULL);
 
+	// One-time initial probe to check pump state
+	xTaskCreate(initial_pump_probe_task, "init_probe", 3072, 0, tskIDLE_PRIORITY + 6, NULL);
+
 	// Active probe disabled - causes too much radio traffic
 	// Loop/phone commands provide enough activity to keep pump RSSI updated
-	// BaseType_t ok = xTaskCreate(pump_active_probe_task, "pump_probe", 4096, 0, tskIDLE_PRIORITY + 6, &pump_probe_handle);
-	pump_probe_handle = NULL;  // Task not created
-	/*
-	if (ok != pdPASS)
-	{
-		ESP_LOGW(TAG, "pump_active_probe: task create failed");
-		pump_probe_handle = NULL;
-	}
-	*/
+	pump_probe_handle = NULL;
 }

@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <esp_chip_info.h>
 #include <esp_log.h>
 #include <esp_pm.h>
@@ -51,20 +54,22 @@ static const char *reset_reason_str(esp_reset_reason_t reason)
 }
 
     
-
+// Uncomment to enable wakeup test mode instead of normal operation
+// #define ENABLE_WAKEUP_TEST
 void app_main(void)
 {
 	esp_log_level_set("*", ESP_LOG_INFO);
-
+    
 	// Disable brownout detector early to avoid resets.
 	// Note: This can mask real power problems. If you can, keep it enabled and
 	// fix the supply/battery/decoupling instead.
+    printf("\033[2J\033[H");  // Очистить терминал
 	WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-
+    
 	ESP_LOGI(TAG, "==== GNARL boot ====");
 	esp_reset_reason_t reason = esp_reset_reason();
 	ESP_LOGI(TAG, "reset reason: %d (%s)", (int)reason, reset_reason_str(reason));
-
+    
 	esp_chip_info_t chip;
 	esp_chip_info(&chip);
 	ESP_LOGI(TAG, "chip: model=%d rev=%d cores=%d", (int)chip.model, (int)chip.revision, (int)chip.cores);
@@ -95,7 +100,15 @@ void app_main(void)
 	ESP_LOGI(TAG, "radio ready; pump freq=%lu", (unsigned long)PUMP_FREQUENCY);
 	adc_init();
 	display_init();
+
+#ifdef ENABLE_WAKEUP_TEST
+	ESP_LOGI(TAG, "*** WAKEUP TEST MODE ENABLED ***");
+	start_wakeup_test();
+#else
 	gnarl_init();
-	// start_wakeup_test();
 	ESP_LOGI(TAG, "init complete; advertising should start soon");
+#endif
+    while (1) {
+        vTaskDelay(pdMS_TO_TICKS(10000));
+    }
 }

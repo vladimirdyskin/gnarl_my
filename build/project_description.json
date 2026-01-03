@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "gnarl",
-    "project_version":    "fa985e8-dirty",
+    "project_version":    "88bee35-dirty",
     "project_path":       "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!",
     "idf_path":           "/Volumes/DataEx/esp/esp-idf",
     "build_dir":          "/Volumes/DataEx/DocumentsOffline/dev/pumptestnew/gnarl_my_works!!!/build",

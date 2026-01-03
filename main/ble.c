@@ -395,12 +395,8 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 		}
 		ESP_LOGI(TAG, "BLE disconnect reason: %s (0x%03x)", reason_str, e->disconnect.reason);
 		ESP_LOGI(TAG, "BLE restarting advertisement after short delay...");
-		
-		// Small delay to allow BLE stack to clean up before restarting advertising
-		// This helps prevent "already advertising" or "busy" errors on quick reconnects
-		vTaskDelay(pdMS_TO_TICKS(100));
-		
-		advertise();
+		// Do not sleep inside the GAP callback (can stall host task); schedule retry instead.
+		schedule_adv_retry(100, "disconnect");
 		break;
 	case BLE_GAP_EVENT_ADV_COMPLETE:
 		ESP_LOGI(TAG, "BLE advertising complete, reason=0x%x", e->adv_complete.reason);
@@ -414,26 +410,26 @@ static int handle_gap_event(struct ble_gap_event *e, void *arg)
 		advertise();
 		break;
 	case BLE_GAP_EVENT_SUBSCRIBE:
-		ESP_LOGI(TAG, "BLE subscribe: conn_handle=0x%04X, attr=0x%04X, notify=%d", 
+		ESP_LOGD(TAG, "BLE subscribe: conn_handle=0x%04X, attr=0x%04X, notify=%d", 
 		         e->subscribe.conn_handle, e->subscribe.attr_handle, e->subscribe.cur_notify);
 		
 		if (e->subscribe.attr_handle == response_count_notify_handle)
 		{
-			ESP_LOGI(TAG, "BLE: Client %s response count notifications", 
+			ESP_LOGD(TAG, "BLE: Client %s response count notifications", 
 			         e->subscribe.cur_notify ? "enabled" : "disabled");
 			response_count_notify_state = e->subscribe.cur_notify;
 			break;
 		}
 		if (e->subscribe.attr_handle == timer_tick_notify_handle)
 		{
-			ESP_LOGI(TAG, "BLE: Client %s timer tick notifications", 
+			ESP_LOGD(TAG, "BLE: Client %s timer tick notifications", 
 			         e->subscribe.cur_notify ? "enabled" : "disabled");
 			timer_tick_notify_state = e->subscribe.cur_notify;
 			break;
 		}
 		if (e->subscribe.attr_handle == battery_level_notify_handle)
 		{
-			ESP_LOGI(TAG, "BLE: Client %s battery level notifications", 
+			ESP_LOGD(TAG, "BLE: Client %s battery level notifications", 
 			         e->subscribe.cur_notify ? "enabled" : "disabled");
 			battery_level_notify_state = e->subscribe.cur_notify;
 			break;

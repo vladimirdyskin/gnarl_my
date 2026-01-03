@@ -1,0 +1,13 @@
+BLOCKER: ID substitution not applying
+
+What is wrong:
+- RF packets still use pump ID 66555A; no "HACK: Substituting..." log appears.
+- Without ID swap, host sees invalid/unexpected responses and wakeups often fail on first attempts.
+
+Probable cause:
+- In send(), we strip a trailing 0 byte before trying to decode 4b6b. If that byte is part of the encoded frame, decode_4b6b fails and the substitution path exits. Alternatively, the host sends 4b6b data that our decode rejects; we then skip substitution.
+
+Next steps (not yet done):
+- Do substitution before trimming the last byte, or remove the trim entirely.
+- If decode fails, still force ID/CRC rewrite on the raw buffer (without dropping a byte), then encode and set skip_encoding.
+- After that, confirm logs show TX/RX with ID 907591 and the INFO log "HACK: Substituting...".

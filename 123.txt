@@ -1,0 +1,194 @@
+Первая попытка (от iAPS): Мы запускаем wakeup_burst максимум на 9 секунд. не максимум 9!!!!! 
+wakeup_burst надо запустить пока он не сработает 11-12 сек примерно может меньше не важно!!!!! 
+мы не останавливаем wakeup_burst!!!!! мы просто через 9 сек по ble отправляем таймаут и ждем 2 команды от iaps!!!!
+
+
+I (501) WAKEUP_TEST: 
+
+I (511) WAKEUP_TEST: ========================================
+I (511) WAKEUP_TEST: ===   WAKEUP TEST SUITE STARTING    ===
+I (521) WAKEUP_TEST: ========================================
+I (531) WAKEUP_TEST: Pump ID: 907591
+I (531) WAKEUP_TEST: Default Freq: 868300000 Hz
+I (531) WAKEUP_TEST: 
+
+I (1541) WAKEUP_TEST: 
+=== WAKEUP STRATEGIES TEST ===
+
+I (1541) WAKEUP_TEST: 
+--- Strategy 1: FAST_DENSE ---
+I (1541) WAKEUP_TEST: 
+=== WAKEUP BURST [FAST_DENSE] ===
+I (1541) WAKEUP_TEST: Config: 200 pkts, delay=0us, rx_window=10ms
+.........
+W (7571) WAKEUP_TEST: ✗ No ACK after 200 bursts
+W (7571) WAKEUP_TEST: ✗ Strategy 'FAST_DENSE' failed
+I (9571) WAKEUP_TEST: 
+--- Strategy 2: PATIENT ---
+I (9571) WAKEUP_TEST: 
+=== WAKEUP BURST [PATIENT] ===
+I (9571) WAKEUP_TEST: Config: 100 pkts, delay=0us, rx_window=25ms
+....
+W (13571) WAKEUP_TEST: ✗ No ACK after 100 bursts
+W (13571) WAKEUP_TEST: ✗ Strategy 'PATIENT' failed
+I (15571) WAKEUP_TEST: 
+--- Strategy 3: SPACED ---
+I (15571) WAKEUP_TEST: 
+=== WAKEUP BURST [SPACED] ===
+I (15571) WAKEUP_TEST: Config: 150 pkts, delay=5000us, rx_window=30ms
+...I (19531) WAKEUP_TEST: ✓ WAKEUP ACK at burst 78! RSSI=-64
+I (19531) WAKEUP_TEST: ✓ Strategy 'SPACED' succeeded!
+I (19631) WAKEUP_TEST: TX Model (0x8D)...
+I (19651) WAKEUP_TEST: RX...
+I (19801) WAKEUP_TEST: ✓ Response: 71 bytes, RSSI=-109
+I (19801) WAKEUP_TEST: a7 90 75 91 8d 09 03 37 32 32 00 00 00 00 00 00
+I (19801) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (19811) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (19821) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (19821) WAKEUP_TEST: 00 00 00 00 00 00 17
+I (19831) WAKEUP_TEST: ✓ Post-wakeup command succeeded!
+I (19831) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (31841) WAKEUP_TEST: 
+--- Strategy 4: GNARL_STYLE ---
+I (31841) WAKEUP_TEST: 
+=== WAKEUP BURST [GNARL_STYLE] ===
+I (31841) WAKEUP_TEST: Config: 200 pkts, delay=500us, rx_window=30ms
+........I (40551) WAKEUP_TEST: ✓ WAKEUP ACK at burst 173! RSSI=-78
+I (40551) WAKEUP_TEST: ✓ Strategy 'GNARL_STYLE' succeeded!
+I (40651) WAKEUP_TEST: TX Model (0x8D)...
+I (40671) WAKEUP_TEST: RX...
+I (40821) WAKEUP_TEST: ✓ Response: 71 bytes, RSSI=-100
+I (40821) WAKEUP_TEST: a7 90 75 91 8d 09 03 37 32 32 00 00 00 00 00 00
+I (40821) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (40831) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (40841) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (40841) WAKEUP_TEST: 00 00 00 00 00 00 17
+I (40851) WAKEUP_TEST: ✓ Post-wakeup command succeeded!
+I (40851) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (52861) WAKEUP_TEST: 
+--- Strategy 5: SLOW_CAREFUL ---
+I (52861) WAKEUP_TEST: 
+=== WAKEUP BURST [SLOW_CAREFUL] ===
+I (52861) WAKEUP_TEST: Config: 100 pkts, delay=10000us, rx_window=50ms
+....
+W (60861) WAKEUP_TEST: ✗ No ACK after 100 bursts
+W (60861) WAKEUP_TEST: ✗ Strategy 'SLOW_CAREFUL' failed
+I (62861) WAKEUP_TEST: 
+=== WAKEUP STRATEGIES COMPLETE ===
+
+I (122861) WAKEUP_TEST: 
+=== WAKEUP STRATEGIES TEST ===
+
+I (122861) WAKEUP_TEST: 
+--- Strategy 1: FAST_DENSE ---
+I (122861) WAKEUP_TEST: 
+=== WAKEUP BURST [FAST_DENSE] ===
+I (122861) WAKEUP_TEST: Config: 200 pkts, delay=0us, rx_window=10ms
+.........
+W (128871) WAKEUP_TEST: ✗ No ACK after 200 bursts
+W (128871) WAKEUP_TEST: ✗ Strategy 'FAST_DENSE' failed
+I (130871) WAKEUP_TEST: 
+--- Strategy 2: PATIENT ---
+I (130871) WAKEUP_TEST: 
+=== WAKEUP BURST [PATIENT] ===
+I (130871) WAKEUP_TEST: Config: 100 pkts, delay=0us, rx_window=25ms
+I (131551) WAKEUP_TEST: ✓ WAKEUP ACK at burst 16! RSSI=-75
+I (131551) WAKEUP_TEST: ✓ Strategy 'PATIENT' succeeded!
+I (131651) WAKEUP_TEST: TX Model (0x8D)...
+I (131671) WAKEUP_TEST: RX...
+I (131821) WAKEUP_TEST: ✓ Response: 71 bytes, RSSI=-36
+I (131821) WAKEUP_TEST: a7 90 75 91 8d 09 03 37 32 32 00 00 00 00 00 00
+I (131821) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (131831) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (131841) WAKEUP_TEST: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+I (131841) WAKEUP_TEST: 00 00 00 00 00 00 17
+I (131851) WAKEUP_TEST: ✓ Post-wakeup command succeeded!
+I (131851) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (143861) WAKEUP_TEST: 
+--- Strategy 3: SPACED ---
+I (143861) WAKEUP_TEST: 
+=== WAKEUP BURST [SPACED] ===
+I (143861) WAKEUP_TEST: Config: 150 pkts, delay=5000us, rx_window=30ms
+.......
+W (151371) WAKEUP_TEST: ✗ No ACK after 150 bursts
+W (151371) WAKEUP_TEST: ✗ Strategy 'SPACED' failed
+I (153371) WAKEUP_TEST: 
+--- Strategy 4: GNARL_STYLE ---
+I (153371) WAKEUP_TEST: 
+=== WAKEUP BURST [GNARL_STYLE] ===
+I (153371) WAKEUP_TEST: Config: 200 pkts, delay=500us, rx_window=30ms
+.........
+W (163381) WAKEUP_TEST: ✗ No ACK after 200 bursts
+W (163381) WAKEUP_TEST: ✗ Strategy 'GNARL_STYLE' failed
+I (165381) WAKEUP_TEST: 
+--- Strategy 5: SLOW_CAREFUL ---
+I (165381) WAKEUP_TEST: 
+=== WAKEUP BURST [SLOW_CAREFUL] ===
+I (165381) WAKEUP_TEST: Config: 100 pkts, delay=10000us, rx_window=50ms
+....
+W (173391) WAKEUP_TEST: ✗ No ACK after 100 bursts
+W (173391) WAKEUP_TEST: ✗ Strategy 'SLOW_CAREFUL' failed
+I (175391) WAKEUP_TEST: 
+=== WAKEUP STRATEGIES COMPLETE ===
+
+
+
+тут я добавил задежку в не зависимости от того удачно выполнена или нет
+
+I (511) WAKEUP_TEST: ========================================
+I (511) WAKEUP_TEST: ===   WAKEUP TEST SUITE STARTING    ===
+I (521) WAKEUP_TEST: ========================================
+I (531) WAKEUP_TEST: Pump ID: 907591
+I (531) WAKEUP_TEST: Default Freq: 868300000 Hz
+I (531) WAKEUP_TEST: 
+
+I (1541) WAKEUP_TEST: 
+=== WAKEUP STRATEGIES TEST ===
+
+I (1541) WAKEUP_TEST: 
+--- Strategy 1: FAST_DENSE ---
+I (1541) WAKEUP_TEST: 
+=== WAKEUP BURST [FAST_DENSE] ===
+I (1541) WAKEUP_TEST: Config: 200 pkts, delay=0us, rx_window=10ms
+.........
+W (7561) WAKEUP_TEST: ✗ No ACK after 200 bursts
+W (7561) WAKEUP_TEST: ✗ Strategy 'FAST_DENSE' failed
+I (7561) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (19561) WAKEUP_TEST: 
+--- Strategy 2: PATIENT ---
+I (19561) WAKEUP_TEST: 
+=== WAKEUP BURST [PATIENT] ===
+I (19561) WAKEUP_TEST: Config: 100 pkts, delay=0us, rx_window=25ms
+....
+W (23561) WAKEUP_TEST: ✗ No ACK after 100 bursts
+W (23561) WAKEUP_TEST: ✗ Strategy 'PATIENT' failed
+I (23561) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (35561) WAKEUP_TEST: 
+--- Strategy 3: SPACED ---
+I (35561) WAKEUP_TEST: 
+=== WAKEUP BURST [SPACED] ===
+I (35561) WAKEUP_TEST: Config: 150 pkts, delay=5000us, rx_window=30ms
+.......
+W (43081) WAKEUP_TEST: ✗ No ACK after 150 bursts
+W (43081) WAKEUP_TEST: ✗ Strategy 'SPACED' failed
+I (43081) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (55081) WAKEUP_TEST: 
+--- Strategy 4: GNARL_STYLE ---
+I (55081) WAKEUP_TEST: 
+=== WAKEUP BURST [GNARL_STYLE] ===
+I (55081) WAKEUP_TEST: Config: 200 pkts, delay=500us, rx_window=30ms
+.........
+W (65091) WAKEUP_TEST: ✗ No ACK after 200 bursts
+W (65091) WAKEUP_TEST: ✗ Strategy 'GNARL_STYLE' failed
+I (65091) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (77101) WAKEUP_TEST: 
+--- Strategy 5: SLOW_CAREFUL ---
+I (77101) WAKEUP_TEST: 
+=== WAKEUP BURST [SLOW_CAREFUL] ===
+I (77101) WAKEUP_TEST: Config: 100 pkts, delay=10000us, rx_window=50ms
+....
+W (85101) WAKEUP_TEST: ✗ No ACK after 100 bursts
+W (85101) WAKEUP_TEST: ✗ Strategy 'SLOW_CAREFUL' failed
+I (85101) WAKEUP_TEST: Waiting 10 seconds for pump to sleep...
+I (87111) WAKEUP_TEST: 
+=== WAKEUP STRATEGIES COMPLETE ===
